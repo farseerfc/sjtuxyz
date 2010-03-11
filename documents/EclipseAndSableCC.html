@@ -1,0 +1,309 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=GB2312">
+<title>SableCC and Eclipse, the easy way</title>
+<style type="text/css">
+<!--
+.info {
+	font-family: "Bookman Old Style", Helvetica, sans-serif;
+	font-size: 16px;
+	color: #000000;
+	text-align: left;
+}
+.subtitle {
+	font-family: "Bookman Old Style", Helvetica, sans-serif;
+	font-size: 20px;
+	font-style: italic;
+	font-weight: bold;
+	color: #000000;
+	text-align: left;
+}
+.title {
+	font-family: "Times New Roman", Helvetica, sans-serif;
+	font-size: 32px;
+	font-weight: bold;
+	color: #000000;
+	text-align: center;
+}
+.code {
+	font-family: "Courier New", Helvetica, sans-serif;
+	font-size: 16px;
+	color: #000000;
+	text-align: left;
+}
+
+
+-->
+</style>
+</head><body bgcolor="#ffffff">
+<div class="title">Beginner's Guide to Using SableCC with Eclipse</div>
+<br>&nbsp;
+<div class="info">
+<hr>
+<div class="subtitle">Introduction</div><hr>
+This tutorial has arisen out of the greatest dichotomy I've ever seen in
+ regards to ease of use:
+<br>1) SableCC is one of the easiest to use compiler-compilers out 
+there, and its design decisions were motivated by careful research.
+<br>2) SableCC is bloody hard to install if you don't know precisely 
+what you're doing, and any documentation out there seems to assume that 
+you're either using Linux or are intimately familiar with how Eclipse 
+works.
+<br>Contrast this to, say, Antlr (an LL(k) parser-generator that kind of
+ evolved into being, but has incredible amounts of useful documentation 
+and tutorials), and you'll see what I mean. So, my aim is to level the 
+playing field a bit. SableCC is an effective means of rapidly developing
+ a fast compiler, and I mean to teach you how to use it fluidly in 
+Eclipse with minimal pain.
+<br>&nbsp;
+<hr>
+<div class="subtitle">Initial Setup</div><hr>
+First of all, there's something you need to know about Eclipse: it 
+defines its own "classpath" variable. So don't bother setting any 
+environment variables unless you want to use SableCC outside of Eclipse.
+ Rather, here's what you need to do:
+<br>1) Download <a href="http://www.eclipse.org/" target="_TOP">Eclipse</a>
+ and install it.
+<br>2) Download <a href="http://sablecc.org/" target="_TOP">SableCC</a> 
+and unzip it (I reccomend <a href="http://www.rarlabs.com/" 
+target="_TOP">WinRAR</a>, as it can unzip practically anything, and can 
+compress to a greater degree than most other formats.) Extract SableCC 
+to whatever directory you choose (mine went to <b>C:/sablecc-2.18.2</b>.)
+<br>&nbsp;
+<hr>
+<div class="subtitle">The Testing Ground</div><hr>
+3) Start Eclipse, and create a new project called "Test Sable Project"
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a) Go to File-&gt;New-&gt;Project
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/newproject.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b) Expand "Java" and choose "Java 
+Project".
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/javaproject.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c) In the next window, type "Test 
+Sable Project" for the Project name, create it wherever you want to, and
+ set whatever project laout you desire. Click "Finish"
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/nameproject.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>4) Add a new file to your project (right click on your project in 
+the Package Explorer, choose New-&gt;File) named <b>simpleAdder.sable</b>
+ That's right, we're making the most basic thing ever. Click "Finish"
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/createfile.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>5) What follows is a very simple Sable grammar that takes 
+expressions of the form [INT] + [INT]; and prints the result. Copy and 
+paste it into your new file, and save it.
+<table class="code" bgcolor="#e0e0e0" border="1">
+	<tbody><tr>
+		<td>
+		/* simpleAdder.sable - A very simple program that recognizes two 
+integers being added. */
+		<br>Package simpleAdder ;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;
+		<br>Helpers
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Our helpers */
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;digit = ['0' .. '9'] ;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;sp = ' ' ;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;nl = 10 ;
+		<br>&nbsp;
+		<br>Tokens
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Our simple token definition(s). */
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;integer = digit+ sp*;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;plus = '+' sp*;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;semi = ';' nl?;
+		<br>&nbsp;
+		<br>Productions
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;/* Our super-simple grammar */
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;program = [left]:integer plus 
+[right]:integer semi;
+		</td>
+	</tr>
+</tbody></table>
+<br>6) Time to invoke SableCC. Remember how I told you earlier that 
+Eclipse manages its own classpath variables? Well, these change from 
+project to project. We'll alter the classpath now to save you some 
+headaches later. Right-click on your project, click "Properties", and 
+then select "Java Build Path" from the menu on the left. Select the 
+"Libraries" tag, and click "Add External Jars...".
+<br>7) Browse to the directory you unzipped Sable to, and double-click 
+on "lib". Then, click on the "sablecc.jar" file (the only jar in there) 
+and click "Open". Voila! It's now in the build path! Click "OK".
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/addexternaljar.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>&nbsp;
+<hr>
+<div class="subtitle">Creating a SableCC Tool</div><hr>
+8) Now that you've set the path, we'll create a tool to help you quickly
+ compile <i>any</i> .sable file. This will save you tons of time in the 
+future, since you only need to do it once. Select your simpleAdder.sable
+ file, click on Run -&gt; External Tools -&gt; External Tools..., then 
+click on "Program" and hit "New".
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/runexternaltools.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>9) I called my tool "SableCC Compiler", but you can take some 
+artistic license here. The location should be set to the location of 
+your sdk's javaw.exe file (mine is <b>C:\j2sdk1.4.2_06\bin\javaw.exe</b>),
+ and the working directory should be set to <b>${container_loc}</b>. Set
+ the arguments to <b>-classpath C:\sablecc-2.18.2\lib\sablecc.jar 
+org.sablecc.sablecc.SableCC ${resource_name}</b>, which translates as 
+follows:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a)<em>-classpath</em> means you're 
+setting the classpath.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b)<em>C:\sablecc-2.18.2\lib\sablecc.jar</em>
+ is the location of the .jar file we specified earlier.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c)<em>org.sablecc.sablecc.SableCC</em>
+ is the file that contains the Main class for invoking SableCC. It took 
+me ages to find this, although I guess I should have checked the meta 
+info first. Regarless, this shouldn't change for your project.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a)<em>${resource_name}</em> is the 
+file loaded by the tool any given time it's invoked.
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/toolsettings.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>10) Click "Apply", then "Run". You should get a whole bunch of 	
+console text explaining what SableCC's doing. Now, hit "F5" to refresh 
+your project's listing in the Package Explorer; there should be several 
+new folders just recently created by SableCC.
+<br>&nbsp;
+<hr>
+<div class="subtitle">Testing our Compiled Compiler</div><hr>
+11) Now, to test if our grammar was added correctly, we need an 
+Interpreter. Right-click on your project, select New-&gt;Package, and 
+name this package simpleAdder.interpret
+<a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/newpackage.png"
+ target="_TOP"><img src="EclipseAndSableCC_files/link.gif"></a>
+<br>12) Right-click on your new package, and select New-&gt;Class. Call 
+your class <b>Interpreter</b>, and enter the following code:
+<table class="code" bgcolor="#e0e0e0" border="1">
+	<tbody><tr>
+		<td>
+		<br>/* An interpreter for the simple math language we all espouse. */
+		<br>package simpleAdder.interpret;
+		<br>&nbsp;
+		<br>import simpleAdder.node.* ;
+		<br>import simpleAdder.analysis.* ;
+		<br>import java.lang.System;
+		<br>&nbsp;
+		<br>public class Interpreter extends DepthFirstAdapter {
+		<br>&nbsp;
+		<br>&nbsp;&nbsp;&nbsp;public void caseAProgram(AProgram node)  {
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String lhs = 
+node.getLeft().getText().trim();
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String rhs = 
+node.getRight().getText().trim();
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int result = (new 
+Integer(lhs)).intValue() + (new Integer(rhs)).intValue();
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(lhs + "+" +
+ rhs + "=" + result);
+		<br>&nbsp;&nbsp;&nbsp;}
+		<br>}
+		</td>
+	</tr>
+</tbody></table>
+<br>13) Now, we need a Main file for running the whole shebang. 
+Right-click on your project, choose New-&gt;Class, and call it <b>Main</b>.
+ Enter the following code:
+<table class="code" bgcolor="#e0e0e0" border="1">
+	<tbody><tr>
+		<td>
+		<br>/* Create an AST, then invoke our interpreter. */
+		<br>import simpleAdder.interpret.Interpreter;
+		<br>import simpleAdder.parser.* ;
+		<br>import simpleAdder.lexer.* ;
+		<br>import simpleAdder.node.* ;
+		<br>&nbsp;
+		<br>import java.io.* ;
+		<br>&nbsp;
+		<br>public class Main {
+		<br>&nbsp;&nbsp;&nbsp;public static void main(String[] args) {
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (args.length &gt; 0) {
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+ Form our AST */
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lexer
+ lexer = new Lexer (new PushbackReader(
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new
+ FileReader(args[0]), 1024));
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parser
+ parser = new Parser(lexer);
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start
+ ast = parser.parse() ;
+		<br>&nbsp;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*
+ Get our Interpreter going. */
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interpreter
+ interp = new Interpreter () ;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast.apply(interp)
+ ;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch 
+(Exception e) {
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println
+ (e) ;
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.err.println("usage:
+ java simpleAdder inputFile");
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(1);
+
+		<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+		<br>&nbsp;&nbsp;&nbsp;}
+		<br>}
+		</td>
+	</tr>
+</tbody></table>
+
+<br>14) Time for you to run this monster. Right-click on your Main.java 
+file and select Run-&gt;Run... Click "New", and a configuration should 
+be created automatically for your project. Tab over to "Arguments", and 
+enter "tester.sa" in the "Program Arguments" box. (You'll need to 
+download this file <a 
+href="http://www.comp.nus.edu.sg/%7Esethhetu/rooms/Tutorials/Data/tester.sa"
+ target="_TOP">here</a>, or supply a similar test file. Alternatively, 
+you could map the user's input.) Click "Run" and watch your program 
+execute. Ta-da!
+<br>&nbsp;
+<hr>
+<div class="subtitle">More Stuff</div><hr>
+15) Anytime you change your grammar (in our case, simpleAdder.sable), 
+you'll need to run your SableCC tool on it to re-generate the files for 
+your parser/lexer/etc.
+<br>16) If you're just changing the interpreter, you merely need to 
+recompile the java code. This is one of the great strengths of SableCC.
+<br>17) It is a Very Good Idea to clean (read: "delete") any files 
+SableCC has generated before re-generating your grammar. Otherwise, you 
+might get old (and probably incorrect) code conflicting with new 
+(correct) code.
+
+<br>&nbsp;
+<hr>
+<div class="subtitle">Epilogue</div><hr>
+Special thanks to Alan Oursland's <a 
+href="http://www.oursland.net/tutorials/antlr/AntlrEclipse.html" 
+target="_TOP">online tutorial</a> for setting up Antlr. Midway through 
+reading his guide, I realized exactly what I was doing wrong with 
+SableCC.
+<br>Thanks also is extended to James Handley, for explaining how Sable's
+ walker class works. Sample code on this page is an (extremely) 
+dumbed-down version of that provided for his class.
+<br>Also, I take no responsibility for the computational brevity (or, 
+for that matter, accuracy) of this tutorial. There are probably better 
+ways of invoking Sable then I've detailed here (Apache Ant seems a 
+likely alternative.) Moreover, the actual example used here is morbidly 
+simple, and not a good example of what Sable's really good for. However,
+ in the interest of helping out struggling coders, I'm afraid that the 
+blind will have the lead the blind for a while.
+
+<br>&nbsp;<hr>
+<br>Got comments or suggestions relating to this guide? Feel free to <a 
+href="mailto:hetus@rpi.edu">Mail Me</a> your thoughts.
+<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;
+
+</div>
+</body></html>
