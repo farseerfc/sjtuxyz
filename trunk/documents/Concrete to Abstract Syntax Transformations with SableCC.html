@@ -1,0 +1,462 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Mistaeks I Hav Made: Concrete to Abstract Syntax Transformations 
+with SableCC </title>
+
+<link rel="stylesheet" 
+href="Concrete%20to%20Abstract%20Syntax%20Transformations%20with%20SableCC_files/styles-site.css"
+ type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" 
+href="http://nat.truemesh.com/index.rdf">
+
+<link rel="start" href="http://nat.truemesh.com/" title="Home">
+<link rel="prev" href="http://nat.truemesh.com/archives/000522.html" 
+title="Stair Master">
+
+<link rel="next" href="http://nat.truemesh.com/archives/000532.html" 
+title="Don't Judge a Book by its Title">
+
+
+<script type="text/javascript" language="javascript">
+<!--
+
+function OpenTrackback (c) {
+    window.open(c,
+                    'trackback',
+                    'width=480,height=480,scrollbars=yes,status=yes');
+}
+
+var HOST = 'nat.truemesh.com';
+
+// Copyright (c) 1996-1997 Athenia Associates.
+// http://www.webreference.com/js/
+// License is granted if and only if this entire
+// copyright notice is included. By Tomer Shiran.
+
+function setCookie (name, value, expires, path, domain, secure) {
+    var curCookie = name + "=" + escape(value) + ((expires) ? "; expires=" + expires.toGMTString() : "") + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + ((secure) ? "; secure" : "");
+    document.cookie = curCookie;
+}
+
+function getCookie (name) {
+    var prefix = name + '=';
+    var c = document.cookie;
+    var nullstring = '';
+    var cookieStartIndex = c.indexOf(prefix);
+    if (cookieStartIndex == -1)
+        return nullstring;
+    var cookieEndIndex = c.indexOf(";", cookieStartIndex + prefix.length);
+    if (cookieEndIndex == -1)
+        cookieEndIndex = c.length;
+    return unescape(c.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+}
+
+function deleteCookie (name, path, domain) {
+    if (getCookie(name))
+        document.cookie = name + "=" + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+}
+
+function fixDate (date) {
+    var base = new Date(0);
+    var skew = base.getTime();
+    if (skew > 0)
+        date.setTime(date.getTime() - skew);
+}
+
+function rememberMe (f) {
+    var now = new Date();
+    fixDate(now);
+    now.setTime(now.getTime() + 365 * 24 * 60 * 60 * 1000);
+    setCookie('mtcmtauth', f.author.value, now, '', HOST, '');
+    setCookie('mtcmtmail', f.email.value, now, '', HOST, '');
+    setCookie('mtcmthome', f.url.value, now, '', HOST, '');
+}
+
+function forgetMe (f) {
+    deleteCookie('mtcmtmail', '', HOST);
+    deleteCookie('mtcmthome', '', HOST);
+    deleteCookie('mtcmtauth', '', HOST);
+    f.email.value = '';
+    f.author.value = '';
+    f.url.value = '';
+}
+
+//-->
+</script>
+
+
+
+
+
+</head><body>
+<div id="banner">
+  <a href="http://nat.truemesh.com/"><img id="logo" alt="Logo: boy 
+crying over spilt milk" 
+src="Concrete%20to%20Abstract%20Syntax%20Transformations%20with%20SableCC_files/logo.jpg"
+ height="128" width="96"></a>
+  <h1><a href="http://nat.truemesh.com/" accesskey="1">Mistaeks I Hav 
+Made</a></h1>
+
+  <p class="description"><q>Good judgement is the result of experience 
+... Experience is the result of bad judgement.</q> —&nbsp;<author>Fred&nbsp;Brooks</author></p>
+</div>
+
+
+<div id="container">
+
+<div id="menu">
+<a href="http://nat.truemesh.com/">Main</a> |
+<a href="http://nat.truemesh.com/archives/cat_tools.html">All articles 
+about Tools</a>
+
+</div>
+
+<div class="blog">
+
+  <div class="blogbody">
+    
+    <h2 name="000531" class="title">
+      Concrete to Abstract Syntax Transformations with SableCC 
+    </h2>
+
+    <div class="ImgPanel"><img alt="Concrete Mixer" 
+src="Concrete%20to%20Abstract%20Syntax%20Transformations%20with%20SableCC_files/mixer.jpg"
+ border="0" height="160" width="160"></div>
+
+<p>I'm known to grumble about Java technologies, especially those used 
+for enterprise development but I have to grudgingly admit that there are
+ some pretty cool Java things out there that don't suffer from 
+"enterprise quality".
+One example is <a href="http://www.sablecc.org/">SableCC</a>, my top 
+choice of parser generator.  I often use SableCC to define the syntax of
+ configuration files and other data formats that must be read and/or 
+edited by people. It makes for formats that are more human-friendly than
+ XML but are still easy to parse and process.</p>
+
+<h3>Why SableCC?</h3>
+
+<p>SableCC has an elegant design that cleanly separates the grammar 
+definition from the programming language used to implement the parser, 
+meaning you don't have to embed Java code into the grammar.  Instead, 
+SableCC creates classes to represent the syntax tree and abstract <a 
+href="http://www.c2.com/cgi/wiki?VisitorPattern">visitor</a> classes 
+that you extend to perform transformations, semantic analysis and other 
+processing by walking the tree.</p>
+
+<p>The main drawback of the current release of SableCC, 2.18.3, is that 
+the generated classes represent the <em>concrete</em> syntax tree, not 
+the <em>abstract</em> syntax tree that you really want to work with.  
+Defining the abstract syntax tree and writing transformations from to 
+concrete to abstract tree is quite an effort, and then you have to write
+ your own visitor classes to process that tree.</p>
+
+<p>The latest beta version of SableCC has a feature that addresses this 
+problem: you can define an abstract syntax in the grammar and specify 
+how the concrete syntax relates to the abstract syntax.  The generated 
+parser translates from the concrete syntax to the abstract syntax as it 
+parses and returns you the abstract syntax tree. The generated visitor 
+classes all work on the abstract syntax tree so your software is 
+shielded from the complexities of the concrete syntax.</p>
+
+<p>Currently this feature has virtually no documentation, so here's a 
+short tutorial.  I assume you already have some experience of using 
+SableCC.  If not, give it a try; I think it's really good.</p>
+
+<h3>Concrete vs. Abstract Syntax</h3>
+
+<p>What's so great about concrete to abstract syntax transformations?  
+Let's use the following grammar of simple arithmetic expressions as an 
+example.</p>
+
+<pre class="SableCC">Tokens
+
+add = '+';
+sub = '-';
+mul = '*';
+div = '/';
+left_paren = '(';
+right_paren = ')';
+number = [0-9]+;
+whitespace = (' ')+;
+
+
+Ignored Tokens
+
+whitespace;
+
+
+Productions
+
+expr = {add} [left]:expr add [right]:factor
+     | {sub} [left]:expr sub [right]:factor
+     | {factor} factor;
+
+factor= {mul} [left]:factor mul [right]:value
+        | {div} [left]:factor div [right]:value
+        | {value} value;
+
+value = {number} number
+      | {parens} left_paren expr right_paren;
+</pre>
+
+<p>Using this grammar to parse the expression "(1 + 2) * 3" produces the
+ following concrete syntax tree.</p>
+
+<pre>AFactorExpr
+|
++- factor : AMulFactor
+   |
+   +- left : AValueFactor
+   |  |
+   |  +- value : AParenValue
+   |     |
+   |     +- "("
+   |     |
+   |     +- expr : AAddExpr
+   |     |  |
+   |     |  +- left : AFactorExpr
+   |     |  |  |
+   |     |  |  +- factor : AValueFactor
+   |     |  |     |
+   |     |  |     +- value : ANumberValue "1"
+   |     |  |
+   |     |  +- "+"
+   |     |  |
+   |     |  +- right : AValueFactor
+   |     |     |
+   |     |     +- value : ANumberValue "2"
+   |     |
+   |     +- ")"
+   |
+   +- "*"
+   |
+   +- right : AValueFactor
+      |
+      +- value : ANumberValue "3"
+</pre>
+
+<p>As you can see, the concrete syntax tree is pretty complex.  This 
+complication affects code that analyses this tree and couples that code 
+to the operator precedence rules defined by the grammar.  One result of 
+this coupling is that the analysis code will frequently break when we 
+change the language.</p>
+
+<p>Ideally, our code would process the tree below, which represents the 
+expressions themselves rather than the particular notation we use to 
+represent expressions.</p>
+
+<pre>AMulExpr
+ |
+ +- left : AAddExpr
+ |   |
+ |   +- left : ANumberExpr "1"
+ |   |
+ |   +- right : ANumberExpr "2"
+ |
+ +- right : ANumberExpr "3"
+</pre>
+
+<p>This is the abstract syntax tree of the concrete syntax tree shown 
+above. The abstract syntax of our expression language can be also be 
+represented as a grammar:</p>
+
+<pre class="SableCC">expr = {add} [left]:expr [right]:expr
+     | {sub} [left]:expr [right]:expr
+     | {mul} [left]:expr [right]:expr
+     | {div} [left]:expr [right]:expr
+     | {number} number;
+</pre>
+
+<p>If only we could tell the parser how to translate the concrete syntax
+ to this abstract tree...</p>
+
+<p>With SableCC 3 we can!  A SableCC 3 grammar specifies both the 
+concrete and abstract syntaxes with the same notation and annotates the 
+concrete syntax to define how it is translated to the abstract syntax.</p>
+
+<h3>CST to AST Transformations</h3>
+
+<p>The abstract syntax tree is defined in a new section called "Abstract
+ Syntax Tree" that goes after the productions in the grammar file.  Once
+ we've defined our abstract syntax tree, we then annotate the concrete 
+syntax tree with translations to the abstract syntax tree.</p>
+
+<p>The translation for each concrete production is specified in two 
+parts: the concrete production is annotated to specify which abstract 
+production it maps to and each alternative of the production is 
+annotated to specify how to translate it to an alternative of the 
+abstract production.</p>
+
+<p>Starting with the concrete expr production, we want to translate that
+ into the abstract expr production we have defined in our "Abstract 
+Syntax Tree" section.  To do so, we use the following annotation written
+ between curly braces:</p>
+
+<pre class="SableCC">expr <strong class="Highlight">{-&gt; expr}</strong> = ...
+</pre>
+
+<div class="Note">
+Note that the concrete and abstract grammars have separate namespaces: a
+ production in the "Productions" section can have the same name as one 
+in the "Abstract Syntax Tree" section. 
+</div>
+
+<p>We then need to specify how the alternatives of the concrete expr 
+production map to those of the abstract expr production.  We must map 
+the concrete add and sub productions to new nodes of the appropriate 
+abstract type. Here's what these transformations look like:</p>
+
+<pre class="SableCC">expr {-&gt; expr} = 
+    {add} [left]:expr add [right]:factor  <strong class="Highlight">{-&gt; New expr.add(left.expr, right.expr)}</strong>
+  | {sub} [left]:expr sub [right]:factor  <strong class="Highlight">{-&gt; New expr.sub(left.expr, right.expr)}</strong>
+  ...
+</pre>
+
+<p>Again, the transformations are specified in curly braces and preceded
+ by an arrow.  New nodes are created with the <tt>New</tt> keyword 
+followed by the name of the node of the abstract syntax tree to create 
+and its children, if any, as arguments.  The identifier of an abstract 
+syntax tree node is the name of the production suffixed with the name of
+ the alternative. E.g. "expr.add" identifies the add alternative of the 
+expr abstract production, "expr.sub" identifies the sub alternative.</p>
+
+<p>The child nodes passes as arguments have already been transformed to 
+abstract syntax by the time they are passed to the new node. You 
+identify a transformed node by the name of the child in the concrete 
+grammar suffixed by the type that it has been transformed to.  E.g. 
+"left.expr" identifies the left subexpression that has been transformed 
+to an abstract expr production.</p>
+
+<p>The last alternative of the concrete expr production is expr.factor. 
+ This exists in the concrete syntax to define operator precedence and 
+doesn't exist in our abstract syntax.  We want to replace it with the 
+transformation of it's only subtree, also named factor.</p>
+
+<pre class="SableCC">expr {-&gt; expr} =
+    {add} [left]:expr add [right]:factor  {-&gt; New expr.add(left.expr, right.expr)}
+  | {sub} [left]:expr sub [right]:factor  {-&gt; New expr.sub(left.expr, right.expr)}
+  | {factor} factor                       <strong class="Highlight">{-&gt; factor.expr}</strong>;
+
+factor {-&gt; expr} =
+    {mul} [left]:factor mul [right]:value {-&gt; New expr.mul(left.expr, right.expr)}
+  | {div} [left]:factor div [right]:value {-&gt; New expr.div(left.expr, right.expr)}
+  | {value} value                         {-&gt; value.expr};
+
+value {-&gt; expr} =
+    {number} number                       {-&gt; New expr.number(number)}
+  | {parens} left_paren expr right_paren  {-&gt; expr.expr};
+</pre>
+
+<p>The transformations of the factor and value productions follow the 
+same pattern.</p>
+
+<h3>Transforming Lists</h3>
+
+<p>Another common difficulty with SableCC concrete syntax trees is that 
+arbitrarily sized lists often have an unwieldy representation in the 
+generated Java code.  As an illustration, let's extend the expression 
+language to support functions:</p>
+
+<pre>value = {number} number
+  | {parens} left_paren expr right_paren
+<strong class="Highlight">  | {function} [name]:identifier left_paren [args]:arg_list right_paren;
+  
+arg_list = 
+    {single} [arg]:expr
+  | {multiple} [arg]:expr comma [rest]:arg_list;</strong>
+</pre>
+
+<p>The concrete definition of argument lists is pretty awkward.  Our 
+analyser has to deal with the "single" and "multiple" alternatives and 
+follow the "rest" link in the multiple alternative to collect all the 
+arguments. It would be much easier to analyse if the argument 
+expressions were stored in a collection.</p>
+
+<p>Again, SableCC 3 come to the rescue.  We can transform the concrete 
+arg_list into a list of exprs.  In the generated code, this list is 
+stored in a standard Java List.</p>
+
+<p>Firstly, we'll need to add a function alternative to our abstract 
+syntax:</p>
+
+<pre class="SableCC">expr = {add} [left]:expr [right]:expr
+     | {sub} [left]:expr [right]:expr
+     | {mul} [left]:expr [right]:expr
+     | {div} [left]:expr [right]:expr
+     | {number} number
+     <strong class="Highlight">| {function} [name]:identifier [args]:expr*</strong>;
+</pre>
+
+<p>The "expr*" type indicates a list of zero or more expr clauses.</p>
+
+<p>Now we need to annotate the concrete function syntax with the 
+transformation to the abstract syntax:</p>
+
+<pre class="SableCC">value {-&gt; expr} = 
+    {number} number                                                     {-&gt; New expr.number(number)}
+  | {parens} left_paren expr right_paren                                {-&gt; expr.expr}
+  | {constant} [name]:identifier                                        {-&gt; New expr.constant(name)}
+  | {function} [name]:identifier left_paren [args]:arg_list right_paren <strong class="Highlight">{-&gt; New expr.function(name,[args.expr])}</strong>;
+</pre>
+
+<p>Note the square brackets around the "[args.expr]" argument.  They 
+indicate that the "args" clause is translated into a list of exprs, not a
+ single expr.</p>
+
+<p>Finally we need to define how the different alternatives of the 
+args_list are collected into a single list.</p>
+
+<pre class="SableCC">arg_list <strong class="Highlight">{-&gt; expr*}</strong> = 
+    {single} [arg]:expr                         <strong class="Highlight">{-&gt; [arg.expr]}</strong>
+  | {multiple} [arg]:expr comma [rest]:arg_list <strong class="Highlight">{-&gt; [arg.expr, rest.expr]}</strong>;
+</pre>
+
+<p>The annotation of the arg_list production "{-&gt; expr*}" indicates 
+that it is translated to a list of expr elements.  The annotations of 
+the "single" and "multiple" alternatives specify how to build that.  The
+ single transformation builds a list with one element, the subexpression
+ named arg.  The multiple transformation prepends the subexpression 
+named arg to the list created by transforming the rest of the arg_list.</p>
+
+<h3>Conclusion</h3>
+
+<p>That covers the basics of concrete-to-abstract syntax transformations
+ in SableCC 3.  I hope this overview sheds some light on a powerful but 
+underdocumented feature. Concrete-to-abstract syntax transformations let
+ SableCC shine in an iterative development process.  By working on the 
+abstract syntax, analysis code is shielded from changes to concrete 
+syntax. You can add to or change the grammar during the project without 
+breaking a lot of existing code.  I've found it easy to design a 
+language test-first, repeatedly writing unit tests to specify  syntax 
+and semantics and then changing the grammar and interpreter to make the 
+tests pass.  This has let me play with language design and quickly 
+experiment with new language features.</p>
+
+<p>All the source code used in the examples above and IntelliJ project 
+files are available in a <a 
+href="http://nat.truemesh.com/archives/cst-to-ast.zip">Zip archive</a>.</p>
+
+<p><strong>Update 28/09/2005:</strong> SableCC 3.0 is now a stable 
+release, so you can happily use it in production systems.</p>
+	
+    
+
+    <div class="copyright">Copyright © 2005
+      Nat Pryce
+    </div>
+    
+    <div class="posted">Posted on September  2, 2005
+      [ <a href="http://nat.truemesh.com/archives/000531.html">Permalink</a>
+        | <a 
+href="http://tech.groups.yahoo.com/group/mistaeks-i-hav-made/messages">Comments</a>
+    ]</div> <!-- class="posted" -->
+   
+  </div> <!-- class="blogbody" -->
+</div>
+</div>
+</body></html>

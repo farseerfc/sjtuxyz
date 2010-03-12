@@ -1,0 +1,5817 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+
+
+
+ 
+  <meta http-equiv="Content-Type" content="text/html; 
+charset=ISO-8859-1">
+  <meta name="Keywords" content="sablecc,java,parser,compiler,ast,sable">
+  <meta name="Description" content="SableCC is a parser generator 
+written in Java">
+  <meta name="rating" content="General">
+
+  <title>
+    SABLECC, AN OBJECT-ORIENTED COMPILER FRAMEWORK  </title>
+
+  <link rel="author" href="mailto:webmaster@sablecc.org">
+  <link rel="icon" 
+href="http://sablecc.sourceforge.net/images/favicon.gif">
+  <link rel="stylesheet" href="thesis_files/default.css" type="text/css">
+  <link rel="stylesheet" href="thesis_files/tabs.css" type="text/css">
+
+    </head><body>
+
+  <!-- top navigation bar -->
+  <div id="topnav">
+    <img id="sablecc-logo" src="thesis_files/sablecc-logo.jpg" 
+alt="SableCC">
+    <img id="parser-generator" src="thesis_files/parser-generator.jpg" 
+alt="java parser generator">
+    <div id="tabnav">
+     <div><a href="http://sablecc.sourceforge.net/index.html">home</a></div>
+     <div><a href="http://sablecc.sourceforge.net/features.html">features</a></div>
+     <div>
+       <a href="http://sablecc.sourceforge.net/documentation.html">documentation</a>
+     </div>
+     <div><a href="http://sablecc.sourceforge.net/grammars.html">grammars</a></div>
+     <div><a href="http://sablecc.sourceforge.net/downloads.html">downloads</a></div>
+    </div> <!-- tabnav -->
+  </div> <!-- topnav -->
+
+  <!-- left navigation bar -->
+  <div id="leftnav">
+
+    <div id="sf">
+     <div id="sfimg">
+       <a href="http://sourceforge.net/projects/sablecc/">
+         <img src="thesis_files/sflogo.png" alt="SourceForge.net Logo" 
+border="0" height="31" width="88">
+       </a>
+        <br>
+        <a href="http://jigsaw.w3.org/css-validator/check/referer">
+          <img style="border: 0pt none; width: 88px; height: 31px;" 
+src="thesis_files/vcss.gif" alt="Valid CSS!">
+        </a>
+              </div>
+     </div>
+
+    <div id="ninthave">
+     site originally designed by <a href="http://www.ninthave.net/">ninth
+ ave</a>
+    </div>
+
+  </div> <!-- leftnav -->
+
+  <!-- main content area -->
+  <div id="main">
+
+<strong><a name="PAGEI">Page i</a></strong> <a href="#PAGEII">ii</a>
+<br>
+<h1><center>SABLECC, AN OBJECT-ORIENTED COMPILER FRAMEWORK</center></h1>
+<p>
+<i>by
+Étienne Gagnon</i>
+</p><p>
+School of Computer Science<br>
+McGill University, Montreal
+</p><p>
+March 1998
+</p><p>
+A thesis submitted to the Faculty of Graduate Studies and Research
+in partial fulfillment of the requirements for the degree of
+Master of Science
+</p><p>
+Copyright © 1997,1998 by Étienne Gagnon
+
+
+</p><hr>
+
+<a href="#PAGEI">i</a><strong><a name="PAGEII"> Page ii</a></strong> <a 
+href="#PAGEIII">iii</a>
+<br>
+<h1>Abstract</h1>
+<p>
+In this thesis, we introduce <i>SableCC</i>, an object-oriented 
+framework that generates
+compilers (and interpreters) in the Java programming language. This 
+framework
+is based on two fundamental design decisions. Firstly, the framework 
+uses object-oriented techniques to automatically build a strictly-typed 
+abstract syntax tree that
+matches the grammar of the compiled language and simplifies debugging. 
+Secondly,
+the framework generates tree-walker classes using an extended version of
+ the visitor
+design pattern which enables the implementation of actions on the nodes 
+of the ab-
+stract syntax tree using inheritance. These two design decisions lead to
+ a tool that
+supports a shorter development cycle for constructing compilers.
+</p><p>
+To demonstrate the simplicity of the framework, we discuss the 
+implementation
+of a state-of-the-art almost linear time <i>points-to</i> analysis. We 
+also provide a brief
+description of other systems that have been implemented using the <i>SableCC</i>
+ tool.
+</p><p>
+We conclude that the use of object-oriented techniques significantly 
+reduces the
+length of the programmer written code, can shorten the development time 
+and finally,
+makes the code easier to read and maintain.
+</p><p>
+</p><center>ii</center>
+
+<hr>
+
+<a href="#PAGEII">ii</a><strong><a name="PAGEIII"> Page iii</a></strong>
+ <a href="#PAGEIV">iv</a>
+<br>
+<h1>Résumé</h1>
+<p>
+Dans cette thèse, nous présentons <i>SableCC</i>, unenvironnement 
+orienté-objet qui sert
+à construire des compilateurs et des interpréteurs dans le langage de 
+programmation
+Java. Deux décisions fondamentales forment les assises de cet 
+environnement. En
+premier lieux, l'utilisation de techniques orientées-objet sert à 
+construire un <i>arbre
+syntaxique strictement typé</i> qui est conforme à la syntaxe du langage
+ compilé etqui
+simplifie le déverminage des programmes. En second lieux, 
+l'environnement génère
+des classes qui traversent l'arbre syntaxique. Ces classes utilisent une
+ version amendée
+du <i>modèle de conception</i> orienté-objet "le visiteur". Ceci permet 
+d'ajouter des <i>actions</i>
+à exécuter sur les noeuds de l'arbre syntaxique en utilisant les 
+techniques d'héritage
+objet. Ces deux décisions font de <i>SableCC</i> un outil qui permet 
+d'abréger le cycle de
+programmation du développement d'un compilateur.
+</p><p>
+Pour démontrer la simplicité de <i>SableCC</i>, nous expliquons les 
+étapes de program-
+mation d'une analyse à la fine pointe des techniques de compilation 
+appelée "analyse
+de pointeurs en temps presque linéaire". De plus, nous décrivons 
+brièvement d'autres
+systèmes qui ont Été bâtis avec <i>SableCC</i>.
+</p><p>
+Nous concluons que l'utilisation de techniques orientées-objet permet de
+ réduire
+substantiellement la quantité du code écrit par le programmeur tout en 
+écourtant
+possiblement le temps de développement. Le code s'en trouve plus lisible
+ et facile à
+maintenir.
+</p><p>
+</p><center>iii</center>
+
+<hr>
+
+<a href="#PAGEIII">iii</a><strong><a name="PAGEIV"> Page iv</a></strong>
+ <a href="#PAGEV">v</a>
+<br>
+<h1>Acknowledgments</h1>
+<p>
+I cannot thank enough Professor Laurie Hendren, for her technical and 
+financial
+support throughout the course of my study at McGill University. She was 
+always
+there to listen and help. THANKS Laurie.
+</p><p>
+I would like to thanks the students of the fall 1997 edition of the 
+CS-308-621A
+course that used <i>SableCC</i> and gave me the essential feedback to 
+improve <i>SableCC</i>.
+Specially, I would like to thank Amar Goudjil for implementing his 
+course project
+using <i>SableCC</i>, and for all the long discussions that led to many 
+changes in the de-
+sign of <i>SableCC</i>. I would like to also thank the students of the 
+winter 1998 edition
+of the CS-308-521B course. More specially, Iam thankful to Dmitri 
+Pasyutin, Mon-
+ica Potlog, Navindra Umanee, Vijay Sundaresan, Youhua Chen and Xiaobo 
+Fan for
+implementing their object-oriented compiler for the WIG (<i>Web 
+Interface Generator</i>)
+language using <i>SableCC</i>. Iwould like to thank them for their help 
+finding and fixing
+a few discrepancies in <i>SableCC</i> and testing the framework.
+</p><p>
+I would like to say a special thank to the <i>Sable Research Group</i> 
+members who
+made a friendly environment to work together, in particular, Raja 
+Vallee-Rai, Fady
+Habra, Laleh Tajrobehkar, Vijay Sundaresan and Chrislain Razafimahefa. I
+ would
+like to thank also Zhu Yingchun, Rakesh Ghyia and the unforgettable 
+Christopher
+Lapkowski of the ACAPS Research Group.
+</p><p>
+Further, I would like to thank my wife Gladys Iodio for her incredible 
+patience
+and her support in the long hours spent writing this thesis. Without her
+ constant
+presence, this thesis would not be.
+</p><p>
+</p><center>iv</center>
+
+<hr>
+
+<a href="#PAGEIV">iv</a><strong><a name="PAGEV"> Page v</a></strong> <a 
+href="#PAGEVI">vi</a>
+<p>
+</p><center>
+Dedicated to my wife, Gladys V. Iodio
+</center>
+<p>
+</p><center>v</center>
+
+<hr>
+
+<a href="#PAGEV">v</a><strong><a name="PAGEVI"> Page vi</a></strong> <a 
+href="#PAGEVII">vii</a>
+<br>
+<h1>Contents</h1>
+<p>
+</p><pre>Abstract                                                                        ii
+Résumé                                                                         iii
+Acknowledgments                                                                 iv
+1 Introduction                                                                   <a href="#PAGE1">1</a>
+1.1 Related Work  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  2
+    1.1.1 Lex/YACC  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  3
+    1.1.2 PCCTS . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
+1.2 Thesis Contribution . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+1.3 Thesis Organization . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+<p>
+2 Background                                                                    <a href="#PAGE13">13</a>
+2.1 Regular Expressions and Deterministic Finite Automata (DFA) . . . . . . . . 13
+2.2 Grammars  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+2.3 The Java Type System  . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+</p><p>
+3 SableCC                                                                       <a href="#PAGE21">21</a>
+3.1 Introduction to SableCC . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+3.2 General Steps to Build a Compiler Using SableCC . . . . . . . . . . . . . . 22
+3.3 SableCC Specification Files . . . . . . . . . . . . . . . . . . . . . . . . 23
+</p></pre>
+<p>
+</p><center>vi</center>
+
+<hr>
+
+<a href="#PAGEVI">vi</a><strong><a name="PAGEVII"> Page vii</a></strong>
+ <a href="#PAGEVIII">viii</a>
+<br>
+<pre>3.4 SableCC Generated Files . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+3.5 Compiler Development Cycle  . . . . . . . . . . . . . . . . . . . . . . . . 24
+3.6 Example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+<p>
+4 Lexer                                                                         <a href="#PAGE31">31</a>
+4.1 Package Declaration . . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+4.2 Characters and Character Sets . . . . . . . . . . . . . . . . . . . . . . . 32
+4.3 Regular Expressions, Helpers and Tokens . . . . . . . . . . . . . . . . . . 33
+4.4 States  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+4.5 The Lexer Class . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+4.6 Example Lexer . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+4.7 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+</p><p>
+5 Parser                                                                        <a href="#PAGE41">41</a>
+5.1 Package and Tokens  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+5.2 Ignored Tokens  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42
+5.3 Productions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+5.4 Implementation Details  . . . . . . . . . . . . . . . . . . . . . . . . . . 48
+5.5 The Parser Class  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+5.6 Customized Parsers  . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50
+5.7 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 51
+</p><p>
+6 Framework                                                                     <a href="#PAGE52">52</a>
+6.1 The Visitor Design Pattern Revisited  . . . . . . . . . . . . . . . . . . . 52
+6.2 Extending the Visitor Design Pattern  . . . . . . . . . . . . . . . . . . . 56
+6.3 SableCC and Visitors  . . . . . . . . . . . . . . . . . . . . . . . . . . . 57
+6.4 AST Walkers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58
+6.5 Additional Features . . . . . . . . . . . . . . . . . . . . . . . . . . . . 61
+6.6 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 62
+</p></pre>
+<p>
+</p><center>vii</center>
+
+<hr>
+
+<a href="#PAGEVII">vii</a><strong><a name="PAGEVIII"> Page viii</a></strong>
+ <a href="#PAGEIX">ix</a>
+<br>
+<pre>7 Case Studies                                                                  <a href="#PAGE63">63</a>
+7.1 SableCC with SableCC  . . . . . . . . . . . . . . . . . . . . . . . . . . . 63
+7.2 Code profiling  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 64
+7.3 A JavaFront End . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 66
+7.4 Fast Points-to Analysis of SIMPLE C Programs  . . . . . . . . . . . . . . . 67
+7.5 A Framework for Storing and Retrieving Analysis Information . . . . . . . . 72
+<p>
+8 Conclusion and Future Work                                                    <a href="#PAGE74">74</a>
+8.1 Summary and Conclusions . . . . . . . . . . . . . . . . . . . . . . . . . . 74
+8.2 Future work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 75
+</p><p>
+A SableCC Online Resources                                                      <a href="#PAGE76">76</a>
+B SableCC 2.0 Grammar                                                           <a href="#PAGE77">77</a>
+C Simple C Grammar                                                              <a href="#PAGE83">83</a>
+D Customized Parser                                                             <a href="#PAGE94">94</a>
+</p></pre>
+<p>
+</p><center>viii</center>
+
+<hr>
+
+<a href="#PAGEVIII">viii</a><strong><a name="PAGEIX"> Page ix</a></strong>
+ <a href="#PAGEX">x</a>
+<br>
+<h1>List of Figures</h1>
+<p>
+</p><pre>1.1 A small LL(1) grammar and its parsing functions . . . . . . . . . . . . . .  7
+2.1 Graphical DFA accepting a<sup>+ </sup>|b<sup>+</sup> . . . . . . . . . . . . . . . . . . . . . . . 16
+2.2 Another notation for DFA accepting a<sup>+ </sup>|b<sup>+</sup>  . . . . . . . . . . . . . . . . . 16
+3.1 Steps to create a compiler using SableCC  . . . . . . . . . . . . . . . . . 23
+3.2 Traditional versus SableCC actions debugging cycle  . . . . . . . . . . . . 25
+3.3 postfix.grammar . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26
+3.4 SableCC execution on Windows 95 . . . . . . . . . . . . . . . . . . . . . . 27
+3.5 postfixnTranslation.java  . . . . . . . . . . . . . . . . . . . . . . . . . 28
+3.6 postfixnCompiler.java . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+3.7 Compiling and executing the Syntax Translation program  . . . . . . . . . . 30
+3.8 Typed AST of expression (45 + 36/2) * 3 + 5 * 2 . . . . . . . . . . . . . . 30
+7.1 Framework for storing and retrieving analysis information . . . . . . . . . 73
+</pre>
+<p>
+</p><center>ix</center>
+
+<hr>
+
+<a href="#PAGEIX">ix</a><strong><a name="PAGEX"> Page x</a></strong> <a 
+href="#PAGE1">1</a>
+<br>
+<h1>List of Tables</h1>
+<pre>2.1 Operations on languages . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+6.1 Methods available on all nodes  . . . . . . . . . . . . . . . . . . . . . . 62
+</pre>
+<p>
+</p><center>x</center>
+
+<hr>
+
+<a href="#PAGEX">x</a><strong><a name="PAGE1"> Page 1</a></strong> <a 
+href="#PAGE2">2</a>
+<br>
+<h1>Chapter 1</h1>
+<p>
+</p><h1>Introduction</h1>
+<p>
+The number of computer languages in use today is overwhelming. Ranging 
+from
+general purpose to highly specialized, they are present in almost all 
+areas of
+computing. There are mainstream programming languages like C, Fortran, 
+Pascal, but
+also many other languages used in domain-specific applications. Computer
+ languages
+can be used to describe many things, other than computer processing. For
+example, HTML[W3C97] or TeX[Knu84] are used to describe formatted 
+documents. A
+domain-specific languages like HL7[ANS97] is used to exchange health 
+care
+information uniformly across the world. It would impossible to list all 
+the uses here, but it
+is worth noting that these languages are often embedded in larger 
+applications. For
+example, many word processing applications have their own small macro or
+ scripting
+language to allow the automation of commands.
+</p><p>
+In the 1950's, writing a compiler was very diffcult. It took 18 
+staff-years to
+implement the first FORTRAN compiler[BBB + 57]. Since then, advances in 
+the theory
+of compilers and the development of many compiler tools have simplified 
+this task
+greatly. Writing a compiler is now a feasible task for any programmer 
+with minimal
+knowledge of compiler techniques. This simplicity isachieved due to the 
+use of
+<i>compiler compilers</i>. A compiler compiler is a program that 
+translates a specification into
+a compiler for the programming language described in the specification. 
+This relieves
+the programmer from the burden of writing the lexical and syntactical 
+analysis code.
+</p><p>
+Over the years, many compiler compilers have been developed. The scope 
+of
+these tools varies. While some will build a complete compiler (<i>end-to-end</i>),
+ others
+will only build the <i>front-end</i> of a compiler (lexer and/or 
+parser). It may seem, at
+first glance, that an end-to-end compiler compiler will be more 
+powerful. However, in
+practice, <i>front-end</i> compiler compilers are normally integrated 
+with a general purpose
+</p><p>
+</p><center>1</center>
+
+<hr>
+
+<a href="#PAGE1">1</a><strong><a name="PAGE2"> Page 2</a></strong> <a 
+href="#PAGE3">3</a>
+<p>
+programming language. This way, the implementation of complex data 
+structures,
+optimizations or code analyses is easier because it is done in the 
+programmer's
+native programming language. Front-end compiler compilers exist for 
+almost all major
+programming languages in use today.
+</p><p>
+In the last few years, the <i>Java<sup>TM</sup></i> programming 
+language[GJS96], developed and
+trademarked by <i>Sun Microsystems inc.</i>, has gained a remarkable 
+popularity on the
+Internet. Although superficially Java has a syntax similar to C++, Java 
+also has many
+additional features of modern high-level object-oriented programming 
+languages. For
+example, Java has a garbage collector, a cleaner inheritance mechanism 
+with classes
+and interfaces, and a rich standard cross-platform library with support 
+for graphical
+user interfaces and network programming. One of the most interesting 
+properties of
+Java is the portability of object code. Java source files are compiled 
+to platform
+independent <i>ByteCode</i> instructions[LF97]. At runtime, these 
+ByteCodes are interpreted
+by a <i>Java Virtual Machine</i>[LF97] to perform the actual 
+computation.
+</p><p>
+It is no surprise that existing compiler compilers have been ported to 
+Java. For
+example CUP[Hud97] is a Java version of YACC and ANTLR[Ins97] is a Java 
+version
+of PCCTS. But, because these tools were designed with a different target
+ language
+in mind, they fail to take advantage of many new features of Java.
+</p><p>
+The topic of this thesis is <i>SableCC</i>, a new compiler compiler for 
+Java. <i>SableCC</i>
+sits in the middle between front-end and end-to-end compiler compilers. 
+It not only
+generates a lexer and a parser, but it also builds a complete set of 
+Java classes.
+</p><p>
+In the following sections we will discuss related work, then we will 
+state the
+contributions of this thesis. Finally, we will outline the general 
+organization of the remaining
+chapters of the thesis.
+</p><p>
+</p><h2>1.1 Related Work</h2>
+The most widely used compiler compilers today fall into two main 
+families: Lex[Les75]
+/ YACC[Joh75] and PCCTS[Par97]. Keeping in mind that many compilers are
+written by <i>normal programmers</i> to compile mini-languages, we 
+discover that while many
+languages like LISP, ML and other languages are sometime used as the 
+accompanying
+general purpose programming language, the most used languages are C, C++
+ and
+more recently Java. C is probably most used because of its undeniable 
+popularity.
+This popularity is due to its relative simplicity and mostly, its speed 
+performance.
+C is fast because it has been designed as a portable intermediate-level 
+programming
+language for implementing the Unix operating system. C++ follows, having
+ gained
+<p>
+</p><center>2</center>
+
+<hr>
+
+<a href="#PAGE2">2</a><strong><a name="PAGE3"> Page 3</a></strong> <a 
+href="#PAGE4">4</a>
+<p>
+most of its popularity from its complete backward compatibility to the C
+ language.
+C++ adds object-oriented elements to the C language.
+</p><p>
+Object-oriented programming has the advantage of simplifying the 
+maintenance of
+a compiler over time. The interest in building compilers in the Java 
+language lies in
+its platform independence, its robustness from a software engineering 
+point of view
+and its popularity among defectors from C++. Java is sometimes called "C
+ <i>plus plus
+minus minus</i>" because it lacks many undesirable features of C and C++
+ like pointer
+arithmetic.
+</p><p>
+In the following subsections, we study both tool families and look at 
+their most
+popular Java implementations.
+</p><p>
+</p><h3>1.1.1 Lex/YACC</h3>
+Lex[Les75] and YACC[Joh75] (<i>Yet Another Compiler Compiler</i>) are a 
+pair of tools
+that can be used together to generate a compiler or its front-end. Many 
+variations on
+these tools are in use today. Among the most popular versions are the 
+Open Software
+Foundation's GNU system Flex and Bison tools. These tools use the C 
+language to
+specify the <i>action code</i>. (We use the term <i>actions</i> to refer
+ to the code written by a
+programmer to be executed at specific points of a lexer and/or parser 
+execution).
+<p>
+Lex is normally used to partition a stream of characters into tokens. It
+ takes
+as input a specification that associates regular expressions with 
+actions. From this
+specification, Lex builds a function implementing a deterministic finite
+ automaton
+(DFA) that recognizes regular expressions in linear time. At runtime, 
+when a regular
+expression is matched, its associated action is executed.
+</p><p>
+YACC is a parser generator. Like lex, YACC reads a specification that 
+contains
+both the grammar of the compiled language and actions associated with 
+each alter-
+native of a production of the grammar. It then generates a parser that 
+will execute
+the action code associated with each alternative as soon as discovered. 
+YACC gener-
+ates LALR(1) parsers, and has a few options to deal with ambiguous 
+grammars and
+operator precedence.
+</p><p>
+The combination of Lex/YACC allows a programmer to write a complete one 
+pass
+compiler by simply writing two specifications: one for Lex and one for 
+YACC.
+</p><p>
+A version of Lex has been ported to Java. It is called JLex[Ber97]. It 
+has been
+developed by Elliot Joel Berk, a student of the Department of Computer 
+Science,
+Princeton University. It is quite similar in functionality to Flex.
+</p><p>
+</p><center>3</center>
+
+<hr>
+
+<a href="#PAGE3">3</a><strong><a name="PAGE4"> Page 4</a></strong> <a 
+href="#PAGE5">5</a>
+<br>
+A Java version of YACC is called CUP[Hud97] (<i>Constructor of Useful 
+Parsers</i>). It
+has been developed by Scott E. Hudson, Graphics Visualization and 
+Usability Center,
+Georgia Institute of Technology. It is very similar to YACC, but actions
+ are written
+in the Java language.
+<p>
+We now list the advantages and drawbacks of using the JLex/CUP pair of 
+tools
+to build compilers.
+</p><p>
+<b>Advantages</b>
+</p><ul>
+<li> JLex DFA based lexers are usually faster than hand written lexers.
+<p>
+</p></li><li> JLex supports macros to simplify the specification of 
+complex regular
+expressions.
+<p>
+</p></li><li> JLex supports <i>lexer states</i>, a popular feature found
+ in GNU FLEX.
+<p>
+</p></li><li> CUP generates LALR(1) parsers and can deal with some 
+ambiguous grammars
+using options to resolve LALR conflicts.
+<p>
+</p></li><li> The set of languages that can be recognized by an LALR(1) 
+parser is a superset of
+LL(k) languages. In addition, LALR(1) grammars can be left recursive 
+whereas
+LL(k) grammars can't.
+<p>
+</p></li><li> LALR(1) parsers are usually faster than equivalent PCCTS 
+LL(k) parsers for
+the same language, because PCCTS uses costly syntactic predicates to 
+resolve
+parsing con icts.
+<p>
+</p></li><li> Both JLex and CUP are available in source code form.
+</li></ul>
+<p>
+<b>Drawbacks </b>
+</p><ul>
+<li> JLex supports only 8 bits characters. But, Java has adopted 16 bits
+ Unicode
+characters as its native character set. JLex has a <i>%unicode</i> 
+directive, but it is
+not yet implemented.
+<p>
+</p></li><li> JLex still has known bugs in presence of complex macros.
+<p>
+</p></li><li> JLex macros are treated much like C macros. This means 
+that they are textually
+replaced in regular expressions. This can lead to very hard to find bugs
+ similar
+to those found in C in presence of unparenthesized macros<sup>1</sup>.
+</li></ul>
+<p>
+-----------------------------
+</p><p>
+<sup>1</sup>If a macro M is defined as a|b , then the regular expression
+ aMb will be interpreted as aa|bb <img src="thesis_files/xi.jpg" 
+height="15" width="19"> (aa)|(bb), not
+a(a|b)b as intended.
+</p><p>
+</p><center>4</center>
+
+<hr>
+
+<a href="#PAGE4">4</a><strong><a name="PAGE5"> Page 5</a></strong> <a 
+href="#PAGE6">6</a>
+<br>
+<ul>
+<li> JLex and CUP have not been specially designed to work together. So,
+ it is the
+programmer's job to build the links between the code generated by both 
+tools.
+JLex has <i>%cup</i> directive, but it has no effect.
+<p>
+</p></li><li> CUP options for handling ambiguous grammars can be quite 
+dangerous in the
+hand of a novice, because it is hard to clearly determine the recognized
+ grammar.
+<p>
+</p></li><li> <i>Action code</i> embedded in CUP parsers can be quite 
+diffcult to debug. The
+abstraction required to clearly understand the operation of a 
+table-based LALR
+parser is the source of this diffculty for casual users of CUP.
+<p>
+</p></li><li> With today's low memory prices and faster processors, many
+ programmers prefer
+to work on an <i>Abstract Syntax Tree (AST)</i> representation of parsed
+ programs.
+CUP offers no support for building ASTs. So, the programmer has to write
+ the
+appropriate action code to build nodes for every production alternative 
+of the
+grammar.
+<p>
+</p></li><li> The lack of support for ASTs renders CUP ill suited for 
+multiple pass compilers.
+<p>
+</p></li><li> The fact that actions are embedded in the specification is
+ a big software en-
+gineering problem. It means that resulting specifications are often 
+enormous.
+Since CUP does not allow the specification to be broken into multiple 
+files, the
+specification may result in one huge file. Furthermore, the duplication 
+of action
+code in the specification and in the resulting program is quite bad. It 
+leaves
+to the programmer the responsibility of keeping the specification and 
+resulting
+program consistent. So safely debugging JLex/CUP action code involves 
+the
+following tedious cycle:
+<p>
+Repeat
+</p><p>
+</p><ol type="1">
+<li> Writing or modifying action code in the specification file.
+</li><li> Compiling the specification.
+</li><li> Compiling the resulting code.
+</li><li> Executing the resulting program to find errors.
+</li><li> Locating the errors in the program.
+</li><li> Looking back in the specification for the related erroneous 
+action code.
+</li></ol>
+<p>
+Until success
+</p><p>
+</p></li><li> Taking a shortcut in the previous cycle by fixing errors 
+directly in the generated
+program can result in unsynchronized specification and working code, if 
+the
+programmer does not take the time to update the specification 
+accordingly. This
+</li></ul>
+<p>
+</p><center>5</center>
+
+<hr>
+
+<a href="#PAGE5">5</a><strong><a name="PAGE6"> Page 6</a></strong> <a 
+href="#PAGE7">7</a>
+<p>
+is most likely to happen when a programmer debugs actions in an 
+Integrated
+Development Environment.
+</p><p>
+</p><h3>1.1.2 PCCTS</h3>
+PCCTS[Par97] stands for <i>Purdue Compiler Construction Tool Set</i>. It
+ has been devel-
+oped mainly by Terence Parr. Originally, PCCTS was written in the C++ 
+language
+to generate compilers written in C++. Lately, PCCTS 1.33 has been ported
+ to Java
+and renamed ANTLR2.xx[Ins97].
+<p>
+ANTLR 2.xx is a single tool combining together all three parts of PCCTS.
+ PCCTS
+1.33 consisted of:
+</p><p>
+</p><ol type="1">
+<li> ANTLR (ANother Tool for Language Recognition),
+</li><li> DLG (DFA-based Lexical analyzer Generator) and
+</li><li> SORCERER, a tool for generating tree parsers and tree 
+transformers
+</li></ol>
+<p>
+A very similar tool has been developed in parallel by Sun Microsystems 
+inc., called
+JavaCC. There are no major differences between the two products but for 
+the copy-
+right and source code availability. While ANTLR is in the public domain,
+ JavaCC is
+a commercial product, not available in source code format.
+</p><p>
+PCCTS has been developed in reaction to the complexity of using Lex/YACC
+ to
+resolve compilation problems. Mainly, the table based bottom-up parsing 
+of YACC
+resulted in very hard to debug compilers. Instead, PCCTS builds <i>LL(k)
+recursive-descent</i> parsers. An LL(1) recursive-descent parser is 
+constituted of a set of functions
+called recursively to parse the input. Each function is responsible for a
+ single pro-
+duction. The function gets a token from the lexer and determines the 
+appropriate
+alternative based on it. This very intuitive approach was used to build 
+early LL(1) one
+pass Pascal compilers. Today, some programmers still code LL(1) 
+recursive-descent
+parser by hand, without the help of compiler compilers. Figure 1.1 shows
+ a small
+LL(1) grammar and the recursive functions used to parse it. The problem 
+is that
+LL(1) grammars are very restrictive. Many common programming constructs 
+are not
+easily written as an LL(1) grammar. The most common problems are:
+</p><p>
+</p><ol type="1">
+<li> LL(1) grammars require two alternatives of a production to be 
+distinguishable by
+looking only at the next available token. This means that the following 
+grammar
+is not allowed: A = aA|a.
+</li></ol>
+<p>
+</p><center>6</center>
+
+<hr>
+
+<a href="#PAGE6">6</a><strong><a name="PAGE7"> Page 7</a></strong> <a 
+href="#PAGE8">8</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><td>
+<pre>The grammar:
+<p>
+A = 'a' A {action1} |
+    'b' B {action2};
+B = 'b'   {action3};
+</p><p>
+The recursive functions:
+void A() // A = 'a' A | 'b' B;
+{
+ switch(lexer.peek())
+ {
+  case 'a': // A = 'a' A
+   lexer.get(); // We match the 'a'
+   A(); // We call recursively to handle A
+   // the code in action1 is inserted here
+   ...
+   break;
+  case 'b': // A = 'b' B
+   lexer.get(); // We match the 'b'
+   B(); // We call recursively to handle B
+   // the code in action2 is inserted here
+   ...
+   break;
+  default:
+   // error!
+ }
+}
+</p><p>
+void B() // B = 'b';
+{
+ switch(lexer.peek())
+ {
+  case 'b': // B = 'b'
+   lexer.get(); // We match the 'b'
+   // the code in action3 is inserted here
+   ...
+   break;
+  default:
+   // error!
+ }
+}
+</p></pre>
+</td></tr>
+</tbody></table>
+<p>
+Figure 1.1: A small LL(1) grammar and its parsing functions
+</p></center>
+<p>
+</p><center>7</center>
+
+<hr>
+
+<a href="#PAGE7">7</a><strong><a name="PAGE8"> Page 8</a></strong> <a 
+href="#PAGE9">9</a>
+<p>
+</p><ul>
+2. LL(1) grammars cannot be left recursive. So, this is not allowed: A =
+ Aaja.
+</ul>
+PCCTS offers LL(k) parsing and many powerful features. The most 
+important
+ones are: (1) semantic predicates, (2) syntactic predicates, (3) 
+Extended
+Backus-Naur Form<sup>2</sup> (EBNF) syntax, and (4) AST building and 
+Tree-parsers.
+<p>
+A <i>semantic predicate</i> specifies a condition that must be met (at 
+run-time) before
+parsing may proceed. In the following example, we use a semantic 
+predicate to dis-
+tinguish between a variable declaration and an assignment alternative, 
+using PCCTS
+syntax:
+</p><p>
+</p><pre>statement:
+ {isTypeName(LT(1))}? ID ID ";" | // declaration "type varName;"
+ ID "=" expr ";"; // assignment
+</pre>
+<p>
+The parsing logic generated by PCCTS for this example is:
+</p><p>
+</p><pre>if(LA(1)==ID &amp;&amp; isTypeName(LT(1)))
+{
+ match alternative one
+}
+else if (LA(1)==ID)
+{
+ match alternative two
+}
+else error
+</pre>
+<p>
+This example showed us how one can in uence the parsing process with 
+semantic
+information using sematic predicates.
+</p><p>
+<i>Syntactic predicates</i> are used in cases where finite LL(k) for 
+k&gt;1 is insuffcient
+to disambiguate two alternatives of a production. A syntactic predicate 
+executes
+the parsing function calls of the predicate, but it does not execute any
+ action code.
+If the predicate succeeds, then the alternative is chosen and the 
+parsing calls of
+the alternative are executed along with action code. If the predicate 
+fails, the next
+matching alternative (or predicate) is executed.
+</p><p>
+One of the most popular features of PCCTS is its directive to build 
+abstract syntax
+trees (AST) automatically. The resulting AST has a single Java node type
+ shared by
+</p><p>
+-----------------------------
+</p><p>
+<sup>2</sup>EBNF is BNF augmented with the regular expression operators:
+ (), *, ? and +.
+</p><p>
+</p><center>8</center>
+
+<hr>
+
+<a href="#PAGE8">8</a><strong><a name="PAGE9"> Page 9</a></strong> <a 
+href="#PAGE10">10</a>
+<p>
+all the nodes. One gets specific information about the parsing type of 
+the nodes by
+calling methods on the node. Additionally, PCCTS allows for building 
+tree-parsers. A
+tree-parser is a parser that scans the AST for patterns. If it finds a 
+specified pattern,
+it executes the action code associated with the pattern. A tree-parser 
+is very similar
+in its specification and implementation to normal parser. It uses the 
+same LL(k)
+EBNF and predicates as normal parsers and it is built using recursive 
+functions.
+</p><p>
+We will now list the advantages and drawbacks of using the Java versions
+ of PCCTS
+(ANTLR2.xx and JavaCC) when building compilers.
+</p><p>
+<b>Advantages</b>
+</p><ul>
+<li> Both tools have a tight integration of the lexer and the parser.
+<p>
+</p></li><li> JavaCC DFA-based lexers accept 16 bits Unicode characters.
+<p>
+</p></li><li> ANTLR lexers are LL(k)-based (with predicates) and share 
+the same syntax as
+parsers.
+<p>
+</p></li><li> Action code is much easier to debug with ANTLR and JavaCC 
+than with
+LALR(1) table-based parsers, due to the natural behavior of 
+recursive-descent
+parsers.
+<p>
+</p></li><li> Both tools support EBNF.
+<p>
+</p></li><li> Both tools have options to generate ASTs automatically.
+<p>
+</p></li><li> Both tools support recursive-descent tree-parsers.
+<p>
+</p></li><li> The support for ASTs is very convenient for multiple-pass 
+compilers.
+<p>
+</p></li><li> The range of languages that can be parsed by these tools 
+is much bigger than
+LL(1), and is relatively comparable to LALR(1). The use of semantic 
+predicates
+enables the parsing of <i>context-sensitive</i> grammars.
+<p>
+</p></li><li> Both tools are free. Additionally, ANTLR is provided in 
+source code form and
+is in the public domain.
+<p>
+</p></li><li> Both tools are relatively well supported, with dedicated 
+newsgroups on the
+Internet.
+</li></ul>
+<p>
+</p><center>9</center>
+
+<hr>
+
+<a href="#PAGE9">9</a><strong><a name="PAGE10"> Page 10</a></strong> <a 
+href="#PAGE11">11</a>
+<p>
+<b>Drawbacks</b>
+</p><ul>
+<li> ANTLR lexers do not support 16 bits Unicode character input.
+<p>
+</p></li><li> The exibility of predicates comes with a very high cost in
+ performance if used
+poorly by a programmer.
+<p>
+</p></li><li> While semantic predicates allow the parsing <i>context-sensitive</i>
+ grammars, they
+also are a software engineering problem. Semantic verifications must 
+happen
+along with parsing in order to enable semantic predicates. Furthermore, 
+the
+predicates are somehow anintegral part of the resulting grammar. This 
+obscures
+the grammar.
+<p>
+</p></li><li> Syntactic predicates are very expensive in computation 
+time.
+<p>
+</p></li><li> A majority of predicate uses would not be needed by an 
+LALR(1) parser to
+recognize the same grammar.
+<p>
+</p></li><li> LL(k) grammars cannot be left recursive. This handicap can
+ be fixed by widely
+know grammar transformations and the use of EBNF syntax. A = Aa|a =&gt; A
+ =
+(a)+.
+<p>
+</p></li><li> ANTLR/JavaCC specifications suffer from the same important
+ software
+engineering problems as JLex/CUP. They tend to become huge, and 
+debugging
+action code involves the same tedious cycle.
+<p>
+</p></li><li> As with JLex/CUP, the responsibility ofkeeping the 
+specification and the
+generated code synchronized is left to the programmer. So taking a 
+shortcut in the
+debugging cycle by fixing errors in the program directly can result in
+unsynchronized specification and working code. This is most likely to 
+happen when
+debugging semantic predicates in an Integrated Development Environment.
+<p>
+</p></li><li> The integrity and the correctness of the AST is left in 
+the hands of the
+programmer. There will be no warning if a transformation on the AST 
+results in
+a degenerate tree. Such bugs are extremely diffcult to track, because 
+they may
+result in a null pointer exception, or some other error condition in 
+unrelated code
+thousands of instructions after the transformation occurred. This is 
+comparable
+to C and C++ array out of bound problems.
+</li></ul>
+<p>
+</p><center>10</center>
+
+<hr>
+
+<a href="#PAGE10">10</a><strong><a name="PAGE11"> Page 11</a></strong> <a
+ href="#PAGE12">12</a>
+<p>
+</p><h2>1.2 Thesis Contribution</h2>
+This thesis reports on <i>SableCC</i>, a new compiler framework for 
+building compilers in
+the Java programming language. <i>SableCC</i> uses design patterns and 
+takes advantage
+of the Java type system to deliver highly modular, abstract syntax tree 
+(AST) based,
+object-oriented compilers.
+<p>
+Our approach differs from other approaches in that <i>SableCC</i> 
+specification files
+don't contain any action code. Instead, <i>SableCC</i> generates an 
+object-oriented
+framework in which actions can be added by simply defining new classes 
+containing the
+action code. This leads to a tool that supports a shorter development 
+cycle.
+</p><p>
+<i>SableCC</i> generated ASTs are strictly-typed. This means that the 
+AST is self
+preserving, preventing any corruption from occurring in it. This 
+contrasts with ANTLR
+(and JavaCC) generated ASTs where the integrity of the AST is left in 
+the hands of
+the programmer.
+</p><p>
+In summary, the main contributions of this thesis are:
+</p><p>
+</p><ul>
+<li> The design of a new approach to build easy to maintain, AST based,
+object-oriented compilers in the Java language.
+<p>
+</p></li><li> The use of object-oriented techniques to clearly separate 
+machine-generated code
+and human-written code. This simplifies the maintenance of a compiler 
+and leads
+to a shorter development cycle.
+<p>
+</p></li><li> The introduction of an extended visitor design pattern 
+that supports evolving
+structures. This simplifies the addition of custom node types in the 
+AST, without
+modifying existing classes.
+<p>
+</p></li><li> The implementation of <i>SableCC</i>, an object-oriented 
+compiler framework.
+<i>SableCC</i> consist of:
+<p>
+</p><ol type="1">
+<li> A deterministic finite automaton (DFA) based lexer generator.
+<p>
+</p></li><li> An LALR(1) parser and AST builder generator.
+<p>
+</p></li><li> An object-oriented AST framework generator.
+</li></ol>
+<p>
+</p></li><li> The implementation of the front-end of a compiler for the 
+Java programming
+language using <i>SableCC</i>.
+<p>
+</p></li><li> The implementation of a SIMPLE C compiler front-end and a 
+state-of-the-art
+points-to analysis for SIMPLE C programs, as a proof of concept on the
+simplicity of using <i>SableCC</i>.
+</li></ul>
+<p>
+</p><center>11</center>
+
+<hr>
+
+<a href="#PAGE11">11</a><strong><a name="PAGE12"> Page 12</a></strong> <a
+ href="#PAGE13">13</a>
+<p>
+</p><ul>
+<li> The public release of the <i>SableCC</i> software along with 
+examples on the Internet.
+<i>SableCC</i> is available, free of charges, from the web site
+<a href="http://www.sable.mcgill.ca/SableCC/">http://www.sable.mcgill.ca/SableCC/</a>.
+ A discussion mailing-list is also provided<sup>3</sup>.
+</li></ul>
+<p>
+</p><h2>1.3 Thesis Organization</h2>
+Chapter 2 provides the required background to read this thesis. Chapter 3
+ presents an
+overview of the <i>SableCC</i> compiler compiler along with a complete 
+example. Chapter 4
+describes in details the lexing portion of <i>SableCC</i>. Chapter 5 
+describes the grammat-
+ical specifications of <i>SableCC</i> and discusses their relation with 
+the generated AST.
+Chapter 6 details <i>SableCC</i> generated frameworks and discusses the 
+techniques to
+make most effcient use of the framework. Chapter 7 details a few case 
+studies, and
+chapter 8 presents our conclusions and points out directions for future 
+work.
+<p>
+-----------------------------
+</p><p>
+<sup>3</sup>See Appendix 8.2 for details.
+</p><p>
+</p><center>12</center>
+
+<hr>
+
+<a href="#PAGE12">12</a><strong><a name="PAGE13"> Page 13</a></strong> <a
+ href="#PAGE14">14</a>
+<p>
+</p><h1>Chapter 2</h1>
+<h1>Background</h1>
+<p>
+This chapter presents some basic compiler notions that will be required 
+in the
+following chapters. These notions are normally acquired in undergraduate
+ compiler courses,
+so we will be brief. This chapter also presents an introduction to the 
+Java type system
+which provides the background required to understand the robustness of 
+the typed
+ASTs created by <i>SableCC</i>.
+</p><p>
+</p><h2>2.1 Regular Expressions and Deterministic Finite Automata (DFA) </h2>
+<p>
+<i>Regular Expressions and Deterministic Finite Automata</i> (DFA) are 
+used to specify
+and implement lexers. Before going further, we state a few definitions.
+</p><p>
+<b>Definition 1</b> : <i>A <b>string</b> s over an alphabet <img 
+src="thesis_files/sigma.jpg" height="11" width="14"> is a finite 
+sequence of symbols drawn
+from that alphabet. The <b>length</b> of a string s is the number of 
+symbols in s. The
+<b>empty string</b>, denoted <img src="thesis_files/empty.jpg" 
+height="11" width="10">, is a special string of length zero.</i>
+</p><p>
+<b>Definition 2</b> : <i>A <b>language</b> L over alphabet <img 
+src="thesis_files/sigma.jpg" height="11" width="14"> is a set of strings
+ over this alphabet.<sup>1</sup></i>
+</p><p>
+In less formal terms, a string is a sequence of characters and a 
+language is just a set
+of strings. Table 2.1 defines the <i>union</i>, <i>concatenation</i> and
+ <i>Kleene closure</i> operations
+on languages. These operations will be useful in the definition of 
+regular expressions
+that follows.
+</p><p>
+-----------------------------
+</p><p>
+<sup>1</sup>The empty set and the set { <img 
+src="thesis_files/empty.jpg" height="11" width="10"> } that contains 
+only the empty string are languages under this definition.
+</p><p>
+</p><center>13</center>
+
+<hr>
+
+<a href="#PAGE13">13</a><strong><a name="PAGE14"> Page 14</a></strong> <a
+ href="#PAGE15">15</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><th>Operation</th><th>Definition</th></tr>
+<tr><td>union (L <img src="thesis_files/union.jpg" height="11" 
+width="13"> M)</td><td>L <img src="thesis_files/union.jpg" height="11" 
+width="13"> M = {s | s is in L or s is in M}</td></tr>
+<tr><td>concatenation (LM)</td><td>LM = {st | s is in L and t is in M}</td></tr>
+<tr><td>Kleene closure (L*)</td><td><img src="thesis_files/kleenec.jpg" 
+height="53" width="268"></td></tr>
+</tbody></table>
+<p>
+Table 2.1: Operations on languages
+</p></center>
+<p>
+<b>Definition 3</b> : <i>Here are the rules that define a <b>regular 
+expression</b> over alphabet <img src="thesis_files/sigma.jpg" 
+height="11" width="14">: </i>
+</p><p>
+</p><ul>
+<i>1. <img src="thesis_files/empty.jpg" height="11" width="10"> is a 
+regular expression that denotes the language {<img 
+src="thesis_files/empty.jpg" height="11" width="10">}, the set 
+containing the
+empty string.
+</i><p>
+<i>2. If c is a symbol in <img src="thesis_files/sigma.jpg" height="11" 
+width="14">, then c is a regular expression that denotes the language
+{c}, the set containing the string c (a string of length one).
+</i></p><p>
+<i>3. If r and s are regular expressions denoting the languages L(r) and
+ L(s) respectively, then:
+</i></p><p>
+</p><ul>
+<i>(a) (r) is a regular expression denoting the language L(r).
+</i><p>
+<i>(b) (r)|(s) is a regular expression denoting the language L(r) <img 
+src="thesis_files/union.jpg" height="11" width="13"> L(s).
+</i></p><p>
+<i>(c) (r)(s) is a regular expression denoting the language L(r)L(s).
+</i></p><p>
+<i>(d) (r)* is a regular expression denoting the language (L(r))* .
+</i></p></ul>
+<i></i>
+</ul>
+<p>
+In practice, a few additional rules are added to simplify regular 
+expression notation.
+First, precedence is given to operators. The * operator gets the highest
+ precedence,
+then concatenation then union. This avoids unnecessary parentheses. 
+Second, two
+additional operators are added: <sup>+</sup> and ?, where r<sup>+</sup> =
+ rr* and r? = r|<img src="thesis_files/empty.jpg" height="11" width="10">.
+ These new
+operators get the same precedence as the * operator.
+</p><p>
+Here are some examples of regular expressions and the language they 
+denote.
+</p><p>
+<b>Example 1</b> : <i>a* = {<img src="thesis_files/empty.jpg" 
+height="11" width="10">, a, aa, aaa, ...}</i>
+</p><p>
+<b>Example 2</b> : <i>a<sup>+</sup> <img src="thesis_files/xi.jpg" 
+height="15" width="19"> aa* = {a, aa, aaa, ...}</i>
+</p><p>
+<b>Example 3</b> : <i>a?b <img src="thesis_files/xi.jpg" height="15" 
+width="19"> ab|b = {ab, b}</i>
+</p><p>
+<b>Example 4</b> : <i>(a|)(a|) = {aa, ab, ba, bb}</i>
+</p><p>
+</p><center>14</center>
+
+<hr>
+
+<a href="#PAGE14">14</a><strong><a name="PAGE15"> Page 15</a></strong> <a
+ href="#PAGE16">16</a>
+<p>
+<b>Example 5</b> : <i>a|a*b <img src="thesis_files/xi.jpg" height="15" 
+width="19"> a|(a*b) = {a, b, ab, aab, aaab, aaaab, ...}</i>
+</p><p>
+Let's look, now, at deterministic finite automata. First we state a 
+definition.
+</p><p>
+<b>Definition 4</b> : <i>A <b>deterministic finite automaton</b> is a 
+mathematical model that
+consists of:
+</i></p><p>
+</p><ol type="1">
+<li><i> A set of states S.
+</i></li><li><i> A set of input symbols <img 
+src="thesis_files/sigma.jpg" height="11" width="14">.
+</i></li><li><i> A transition function <b>move</b> that maps 
+state-symbol pairs to a state.
+</i></li><li><i> A state s<sub>0</sub> that is called the <b>initial 
+state</b>.
+</i></li><li><i> A set of states F called <b>final states</b>.
+</i></li></ol>
+<i></i>
+<p>
+A DFA accepts (or recognizes) an input string s = c<sub>1</sub>c<sub>2</sub>...c<sub>n</sub>
+ if and only if s<sub>n</sub> exists<sup>2</sup>
+and is a final state, where s<sub>i+1</sub> = move(s<sub>i</sub>, c<sub>i+1</sub>),
+ starting with state s<sub>0</sub>. Here are some
+DFAs and their recognized languages.
+</p><p>
+<b>Example 6</b> :
+</p><p>
+<i>
+</i></p><ul>
+<i>1. S = {s<sub>0</sub>, f<sub>1</sub>, f<sub>2</sub>}
+</i><p>
+<i>2. <img src="thesis_files/sigma.jpg" height="11" width="14"> = {a,b}
+</i></p><p>
+</p><table>
+<tbody><tr><td><i>3. move(s,c) = </i></td><td><img 
+src="thesis_files/ex6.jpg" 113="" height="" width="302"></td></tr>
+</tbody></table>
+<p>
+<i>4. initial state = s<sub>0</sub>
+</i></p><p>
+<i>5. final states = {f<sub>1</sub>,f<sub>2</sub>}
+</i></p></ul>
+<p>
+<i>This DFA recognizes the language {a,b,aa,bb,aaa,bbb,aaaa,bbbb,...}. 
+It is worth
+noting that it is the same language as the language recognized by the 
+regular expression
+a<sup>+</sup>|b<sup>+</sup> . Figures 2.1 and 2.2 show two other 
+representations for this DFA.
+</i>
+</p><p>
+-----------------------------
+</p><p>
+<sup>2</sup>Note that move does not have to map every state-symbol pair 
+to a state. For example, the empty transition
+function is a valid transition function.
+</p><p>
+</p><center>15</center>
+
+<hr>
+
+<a href="#PAGE15">15</a><strong><a name="PAGE16"> Page 16</a></strong> <a
+ href="#PAGE17">17</a>
+<p>
+</p><center>
+<img src="thesis_files/f2.jpg" height="334" width="511">
+<p>
+Figure 2.1: Graphical DFA accepting a<sup>+</sup>|<sup>+</sup>.
+</p><p>
+</p><table border="1">
+<tbody><tr><td>
+start = {s<sub>0</sub>}
+<br>
+final = {f<sub>1</sub>,f<sub>2</sub>}
+<br>
+a:(s<sub>0</sub> -&gt; f<sub>1</sub>),(f<sub>1</sub> -&gt; f<sub>1</sub>)
+<br>
+b:(s<sub>0</sub> -&gt; f<sub>2</sub>),(f<sub>2</sub> -&gt; f<sub>2</sub>)
+</td></tr>
+</tbody></table>
+<p>
+Figure 2.2: Another notation for DFA accepting a<sup>+</sup>|<sup>+</sup>.
+</p></center>
+<p>
+Regular expressions and DFAs are proven to be equivalent[HU79], in the 
+sense
+that for every regular expression there exists a deterministic finite 
+automaton that
+recognizes the same language, and for every deterministic finite 
+automaton there
+exists a regular expression that recognizes the same language.
+</p><p>
+On the practical side, however, regular expressions are much easier to 
+use by
+humans to specify recognizable forms, while DFAs are easily implemented 
+in tables
+to recognize a language in linear time in the size of the input stream. 
+So, usually,
+a lexer generator reads token definitions in regular expression form and
+ generates a
+lexer based on the equivalent DFAs.
+</p><p>
+</p><center>16</center>
+
+<hr>
+
+<a href="#PAGE16">16</a><strong><a name="PAGE17"> Page 17</a></strong> <a
+ href="#PAGE18">18</a>
+<p>
+</p><h2>2.2 Grammars </h2>
+The syntactic structure of a programming language is usually expressed 
+using a
+context-free grammar (or simply grammar), commonly called Backus-Naur 
+Form<sup>3</sup>
+(BNF). Figure 1.1 contained an example of a very simple grammar. Here is
+ a formal
+definition for context-free grammars.
+<p>
+<b>Definition 5</b> : <i>A context-free grammar or Backus-Naur Form 
+(BNF) is a
+quadruple G = (V<sub>N</sub>,V<sub>T</sub>,P,S) where V<sub>T</sub> is a
+ set of tokens called <b>terminals</b>, V<sub>N</sub> is a
+set of <b>nonterminals</b>, P <img src="thesis_files/runion.jpg" 
+height="21" width="16"> V<sub>N</sub> x(V<sub>N</sub> <img 
+src="thesis_files/union.jpg" height="11" width="13"> V<sub>T</sub>)* is a
+ set of productions where each
+production consists of a nonterminal called <b>left-hand side</b> and a 
+sequence of nonterminals
+and/or terminals called <b>right-hand side</b>, and S <img 
+src="thesis_files/empty.jpg" height="11" width="10"> V<sub>N</sub> is 
+the <b>start symbol</b>. </i>
+</p><p>
+As a notational shortcut, productions with the same left-hand side are 
+normally
+grouped together and a "|" is used to separate right-hand sides.
+</p><p>
+Certain classes of grammar can be parsed effciently. Specifically, LL(1)
+ and LR(1)
+grammars can be parsed in linear time in the size of the AST. It is 
+worth noting that
+ANTLR/JavaCC implementation of LL(k) grammars are not linear in the size
+ of the
+AST. LL parsers are called top-down parsers, and LR parsers are called 
+bottom-up
+parsers.
+</p><p>
+LALR(1) grammars are a subset of LR(1) grammars that can be implemented
+using a more compact representation of parsing tables. Most modern 
+programming
+constructs can be expressed easily using LALR(1) grammars. In diffcult 
+cases, a
+slight relaxation of the grammar rules (by making the grammar accept a 
+larger
+language including some invalid input) resolves LALR(1) conflicts. 
+Invalid constructs
+are eliminate at later stages of the compilation process.
+</p><p>
+<b>Example 7</b> : <i>The following grammar is not LALR(1):
+</i></p><p>
+</p><ul>
+<i>A = Bde|Cdf
+</i><p>
+<i>B = b|c
+</i></p><p>
+<i>C = c
+</i></p></ul>
+<p>
+<i>To see the problem, we look at the input: c <img 
+src="thesis_files/dot.jpg" height="8" width="9"> df (the dot represents 
+the current
+parsing location). The problem is that with one character lookahead, the
+ parser cannot
+determine if the input is: B <img src="thesis_files/dot.jpg" height="8" 
+width="9"> d::: or C <img src="thesis_files/dot.jpg" height="8" 
+width="9"> d:::. This can be easily resolved by eliminating
+production C which is a subset of production B. </i>
+</p><p>
+-----------------------------
+</p><p>
+<sup>3</sup>Sometimes called Backus normal form
+</p><p>
+</p><center>17</center>
+
+<hr>
+
+<a href="#PAGE17">17</a><strong><a name="PAGE18"> Page 18</a></strong> <a
+ href="#PAGE19">19</a>
+<p>
+</p><ul>
+A = Bde|df
+<p>
+B = b|c
+</p></ul>
+<p>
+<i>This will accept some invalid strings like bdf. Such strings can be 
+eliminated after
+the parsing process.</i>
+</p><p>
+LL(1) grammars, on the other hand, are a very small subset of LR(1) 
+grammars.
+It is often diffcult to express some common programming constructs using
+ LL(1)
+grammars. For example, the grammar E = E + n|n that represents 
+left-associative
+expressions is not LL(1).
+</p><p>
+There is an additional notation called Extended BNF (EBNF). This is 
+simply the
+BNF notation extended with regular expression operators {(),*,+,?}. So 
+instead of
+writing P = ab|<img src="thesis_files/empty.jpg" height="11" width="10">,
+ using EBNF we can write P = (ab)?.
+</p><p>
+</p><h2>2.3 The Java Type System</h2>
+In this section, we discuss the most important features of the Java type
+ system for
+this thesis. The type system of Java is relatively complex but simpler 
+and safer than
+C++.
+<p>
+Java, like many other object oriented languages, makes a clear 
+distinction between
+the declared type of a variable and the actual type of the value held 
+into that variable.
+There are two families of types for declaring variables, specifically: 
+basic types and
+reference types.
+</p><p>
+Basic types are predefined and cannot be redefined. They include <i>int,
+ long, char,
+boolean, float, etc</i>. Variables and fields declared of a basic type 
+can only contain values
+of this exact type.
+</p><p>
+Reference types can be user defined. They fall into two categories, <i>classes</i>
+ and
+<i>interfaces</i>. (Arrays are a special kind of classes). All classes 
+share a common ancestor,
+the Object class. Classes and interfaces differ in the following terms:
+</p><p>
+</p><ul>
+<li> Interfaces support multiple inheritance. An interface is said to 
+extend other
+interfaces.
+<p>
+</p></li><li> Interfaces contain only <i>method prototypes</i> and <i>constants
+ (final static fields)</i>.
+<p>
+</p></li><li> Classes support single inheritance only, but can <i>implement</i>
+ multiple interfaces.
+A Class is said to <i>extend</i> another class.
+</li></ul>
+<p>
+</p><center>18</center>
+
+<hr>
+
+<a href="#PAGE18">18</a><strong><a name="PAGE19"> Page 19</a></strong> <a
+ href="#PAGE20">20</a>
+<p>
+</p><ul>
+<li> Classes can define <i>methods</i> and <i>fields</i>.
+</li></ul>
+<p>
+An interface can be viewed as a contract to define some methods. A class
+ that
+implements an interface signals its intention of assuming the terms of 
+this contract.
+The Java compiler and runtime environments insure that such contracts 
+are respected.
+</p><p>
+When a variable is declared of a reference type, it can be assigned, at 
+compile
+time, only values that are either:
+</p><p>
+</p><ul>
+<li> declared as this same reference type,
+<p>
+</p></li><li> declared as a derived reference type.
+</li></ul>
+<p>
+A <i>type cast</i> can be used to bypass these rigid rules, but the 
+compiler will issue an
+error if it can prove that such a cast would always be invalid at 
+runtime.
+</p><p>
+This leads us to the dynamic type checking of Java. At runtime, Java 
+performs
+dynamic type checking to insure that all variables of reference type are
+ assigned values
+whose type is either (1) the declared type of the variable or (2) a 
+derived type. This
+contrasts with the compile time type checking in that it is the <i>actual
+ type</i> of the value,
+not its declared type, that is checked.
+</p><p>
+It is important to see that the dynamic type checking is what makes the 
+Java type
+system very robust. It is not possible, at runtime, to bypass the type 
+system, even
+though it is possible to fool the compiler at compile time using type 
+casts.
+</p><p>
+<b>Example 8</b> : <i>The following method will be compile but, at run 
+time, a ClassCastEx-
+ception will be generated by the Java runtime system:</i>
+</p><p>
+</p><pre>void foo()
+{ Object a = new Integer(5);
+ Vector b = (Vector) a;} // Exception at runtime!
+</pre>
+<p>
+Variables of reference type hold a reference (a pointer) to the actual 
+value, not the
+value itself. Method parameters of reference type are passed a copy of 
+the reference,
+not a copy of the value. A value of class type is called an <i>instance</i>,
+ or commonly
+an <i>object</i>. All instances are explicitly created with the <i>new</i>
+ operator and there are
+no hidden copies. All objects are allocated on the heap by the Java 
+runtime system.
+They are <i>garbage-collected</i> automatically when they are no longer 
+in use. Java offers
+no <i>free</i> operator, preventing any corruption due to the <i>unintended</i>
+ use of freed objects,
+as can happen with C++.
+</p><p>
+</p><center>19</center>
+
+<hr>
+
+<a href="#PAGE19">19</a><strong><a name="PAGE20"> Page 20</a></strong> <a
+ href="#PAGE21">21</a>
+<p>
+Java has four different scopes for the visibility of definitions. <i>public</i>,
+ <i>protected</i>,
+<i>package</i> (or default) and <i>private</i>. Public definitions are 
+visible to all classes. Protected
+definitions are visible to derived classes and to classes of the same 
+package. When
+no scope is specified, it is assumed that a definition has package 
+scope, that is, it is
+visible to all classes of the same package. Private definitions are 
+visible only to the
+class itself. Informally, a <i>package</i> is a collection of classes 
+defined in the same directory.
+They alleviate the need for the notion of <i>friends</i>, as found in 
+other object-oriented
+languages.
+</p><p>
+Version 1.1 of Java has introduced the notion of inner classes and 
+anonymous
+classes. An inner class is a class defined in the scope of an enclosing 
+class. An
+anonymous class, much like anonymous functions in ML, can be defined in 
+expressions.
+<i>SableCC</i> uses both inner classes and anonymous classes.
+</p><p>
+A complete description of the Java type system can be found in the <i>Java
+ Language
+Specification</i>[GJS96].
+</p><p>
+</p><center>20</center>
+
+<hr>
+
+<a href="#PAGE20">20</a><strong><a name="PAGE21"> Page 21</a></strong> <a
+ href="#PAGE22">22</a>
+<p>
+</p><h1>Chapter 3</h1>
+<h1>SableCC</h1>
+In this chapter, we introduce the <i>SableCC</i> compiler compiler. 
+After a brief
+introduction, we list the steps required to build a compiler using <i>SableCC</i>.
+ Then, we discuss
+the <i>SableCC</i> specification file and give an overview of the files 
+that are generated.
+We explain the impact of <i>SableCC</i> on the development cycle, and 
+finally, weshow a
+complete example of a very simple compiler generated with <i>SableCC</i>.
+<p>
+This chapter serves mainly as an introduction to subsequent chapters. 
+Its purpose
+is to give a general idea of how <i>SableCC</i> is used.
+</p><p>
+</p><h2>3.1 Introduction to <i>SableCC</i></h2>
+<i>SableCC</i> represents the result of our research to develop a Java 
+compiler compiler
+that meets new compiler implementation trends. More specifically:
+<p>
+</p><ul>
+<li> Modern compilers usually implement many passes over the compiled 
+program.
+One pass compilers (like early PASCAL compilers) are seldom used 
+anymore.
+<p>
+</p></li><li> Many compilers work on AST (<i>Abstract Syntax Tree</i>) 
+representation of programs.
+<p>
+</p></li><li> As a compiler evolves over time, new analyses and 
+optimizations are added to
+the compiler.
+<p>
+</p></li><li> A compiler, like any other software, must be maintainable.
+</li></ul>
+<p>
+To address these issues we have developed a new approach for compiler 
+compiler
+tools. In our approach, the compiler compiler place in the development 
+cycle has
+</p><p>
+</p><center>21</center>
+
+<hr>
+
+<a href="#PAGE21">21</a>
+<strong><a name="PAGE22"> Page 22</a></strong> <a href="#PAGE23">23</a>
+<p>
+been reduced to merely build an initial object-oriented framework that 
+is based solely
+on the lexical and grammatical definition of the compiled language. This
+ has the
+advantage of limiting framework modifications to the case where the 
+grammar of the
+compiled language is changed.
+</p><p>
+On the other hand, the richness of the generated environment has been 
+increased.
+So, in the generated framework:
+</p><p>
+</p><ul>
+<li> The parser automatically builds the AST of the compiled program.
+<p>
+</p></li><li> Each AST node is strictly typed, ensuring no corruption 
+occurs in the tree.
+<p>
+</p></li><li> Each analysis is written in its own class. Writing a new 
+analysis requires only
+extending some tree walker class and providing methods to do the work at
+appropriate nodes.
+<p>
+</p></li><li> Storage of analysis information is kept in the analysis 
+class itself, outside the
+definition of node types. This ensures no modification to a nodetype is 
+needed
+when a new analysis is added to or removed from the compiler.
+</li></ul>
+<p>
+The framework makes extensive use of object-oriented design patterns to 
+achieve
+modularity of code. The resulting compiler becomes a very maintainable 
+compiler.
+In some cases we have opted for good object-oriented design over fast 
+code. It is
+our belief that over time, new processors get faster and memory gets 
+cheaper, but
+the same old code base is often used to generate new compilers. So good 
+software
+engineering is important in thelong term.
+</p><p>
+We have developed <i>SableCC</i> in the Java programming language. It 
+runs on any
+platform supporting the Java Development Kit 1.1 or newer.
+</p><p>
+</p><h2>3.2 General Steps to Build a Compiler Using SableCC</h2>
+Producing a compiler using <i>SableCC</i> requires the following steps 
+(as shown in Figure
+3.1):
+<p>
+</p><ol type="1">
+<li> Creating a <i>SableCC</i> specification file containing the lexical
+ definitions and the
+grammar of the language to be compiled.
+<p>
+</p></li><li> Launching <i>SableCC</i> on the specification file to 
+generate a framework.
+<p>
+</p></li><li> Creating one or more <i>working classes</i>, possibly 
+inheriting from classes generated
+by <i>SableCC</i>.
+</li></ol>
+<p>
+</p><center>22</center>
+
+<hr>
+
+<a href="#PAGE22">22</a><strong><a name="PAGE23"> Page 23</a></strong> <a
+ href="#PAGE24">24</a>
+<p>
+</p><center>
+<img src="thesis_files/f3_003.jpg" height="348" width="389">
+<p>
+Figure 3.1: Steps to create a compiler using SableCC
+</p></center>
+<p>
+</p><ol start="4" type="1">
+<li> Creating a main compiler class that activates lexer, parser and 
+working classes.
+<p>
+</p></li><li> Compiling the compiler with a Java compiler.
+</li></ol>
+<p>
+By working classes we mean classes that contain the core compiler 
+functionality.
+These classes can be analyses, transformations on the AST, or simply 
+code generation
+classes.
+</p><p>
+We must note that <i>SableCC</i>, as other compiler compiler tools, can 
+also be used to
+build interpreters. In such a case, a working class can be the 
+interpreter itself.
+</p><p>
+</p><h2>3.3 SableCC Specification Files</h2>
+A <i>SableCC</i> specification file is a text file that contains the 
+lexical definitions and the
+grammar productions of the language to be recognized by the generated 
+compiler
+framework. It also specifies a destination root Java package for 
+generated files.
+<p>
+Unlike other compiler compilers, there is no place to put action code 
+associated
+with a token or a production. This design has the advantage of adding 
+stability to
+the framework. Modifications to the framework are limited to when the 
+grammar of
+the compiled language is changed. Adding, changing or even removing 
+action code
+(in working classes) does not affect the generated framework in any way.
+</p><p>
+</p><center>23</center>
+
+<hr>
+
+<a href="#PAGE23">23</a><strong><a name="PAGE24"> Page 24</a></strong> <a
+ href="#PAGE25">25</a>
+<p>
+Lexical definitions use <i>regular expressions</i> and the grammar is 
+written in <i>Backus-Naur Form</i> (BNF).
+</p><p>
+</p><h2>3.4 SableCC Generated Files</h2>
+On output, <i>SableCC</i> generates files into four sub-packages of the 
+specified root pack-
+age. The packages are named: lexer, parser, node and analysis. Each file
+ contains
+either a class or an interface definition.
+<p>
+</p><ul>
+<li> The lexer package contains the Lexer and LexerException classes. 
+These
+classes are, the generated lexer and the exception thrown in case of a 
+lexing
+error, respectively.
+<p>
+</p></li><li> The parser package contains the Parser and ParserException
+ classes. As
+expected, these classes are the parser and the exception thrown in case 
+of a
+parsing errors.
+<p>
+</p></li><li> The node package contains all the classes defining the 
+typed AST.
+<p>
+</p></li><li> The analysis package contains one interface and three 
+classes. These classes
+are used mainly to define AST walkers.
+</li></ul>
+<p>
+</p><h2>3.5 Compiler Development Cycle</h2>
+The choices we have made in the design of the <i>SableCC</i> compiler 
+framework have a
+direct effect on the development cycle of a compiler.
+<p>
+As illustrated by the left diagram of Figure 3.2, with traditional <i>compiler
+ compilers</i>,
+the cycle involves the following steps. First, the programmer writes or 
+fixes the
+grammar and action code in the specification file. Then the source code 
+for the
+compiler is generated. The source code is then compiled to an executable
+ program.
+The program is then tested and debugged. The problem in this cycle is 
+that the
+debugging process is done using the source files generated by the 
+compiler compiler.
+So, if a bug is found in this source code, the programmer has to find 
+the corresponding
+code in the specification file and fix it there.
+</p><p>
+As shown by the right diagram of Figure 3.2, with <i>SableCC</i>, this 
+debugging cycle
+is shortened. Since actions are written directly as Java classes, the 
+source code being
+debugged was written by the programmer. This enables interactive 
+debugging in an
+Integrated Development Environment.
+</p><p>
+</p><center>24</center>
+
+<hr>
+
+<a href="#PAGE24">24</a><strong><a name="PAGE25"> Page 25</a></strong> <a
+ href="#PAGE26">26</a>
+<p>
+</p><center>
+<img src="thesis_files/f3_002.jpg" height="465" width="526">
+<p>
+Figure 3.2: Traditional versus SableCC actions debugging cycle
+</p></center>
+<p>
+</p><h2>3.6 Example</h2>
+In this section, we will demonstrate all the steps to create a very 
+simple syntax
+translator that translates arithmetic expressions into postfix form.
+<p>
+<b>Creating the Specification File and using SableCC</b>
+</p><p>
+First, as illustrated in Figure 3.3, we create a new text file that we 
+name
+postfix.grammar. In it we put a Package declaration specifying postfix 
+as the
+destination root package for <i>SableCC</i> generated files.
+</p><p>
+Under the Tokens section, we add lexical definitions for numbers, 
+arithmetic op-
+erators, parentheses and blanks.
+</p><p>
+In the Ignored Token section, we put blanks, to specify that blanks are 
+ignored
+by the parser.
+</p><p>
+Finally, we list the productions of the grammar under the Productions 
+section.
+We precede each alternative of a production with a name between curly 
+braces.
+</p><p>
+</p><center>25</center>
+
+<hr>
+
+<a href="#PAGE25">25</a><strong><a name="PAGE26"> Page 26</a></strong> <a
+ href="#PAGE27">27</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><td>
+<pre>Package postfix;
+<p>
+Tokens
+ number = ['0' .. '9']+;
+ plus = '+';
+ minus = '-';
+ mult = '*';
+ div = '/';
+ mod = '%';
+ l_par = '(';
+ r_par = ')';
+ blank = (' ' | 13 | 10)+;
+</p><p>
+Ignored Tokens
+ blank;
+</p></pre>
+</td><td>
+<pre>Productions
+ expr =
+  {factor} factor |
+  {plus} expr plus factor |
+  {minus} expr minus factor;
+<p>
+ factor =
+  {term} term |
+  {mult} factor mult term |
+  {div} factor div term |
+  {mod} factor mod term;
+</p><p>
+ term =
+  {number} number |
+  {expr} l_par expr r_par;
+</p></pre>
+</td></tr>
+</tbody></table>
+<p>
+Figure 3.3: postfix.grammar
+</p></center>
+<p>
+This name serves to identify a specific alternative of a production. We 
+save the
+file postfix.grammar in the root directory of our project. At the shell 
+prompt, in
+this directory, we issue the following command:
+</p><p>
+java SableCC postfix.grammar
+</p><p>
+Figure 3.4 shows the execution trace of <i>SableCC</i>. Once <i>SableCC</i>
+ is finished, we
+can look in the postfix subdirectory. As expected, we see four 
+subdirectories named
+lexer, parser, node and analysis. Further exploration in these 
+subdirectories will
+reveal all the Java classes generated by <i>SableCC</i>.
+</p><p>
+<b>Creating the Translation Class</b>
+</p><p>
+To translate a normal infix notation into a postfix notation, we simply 
+need to do
+a depth first traversal of the tree, print numbers as we encounter them 
+and print
+operators after having visited the subtree of the production containing 
+the operator.
+</p><p>
+The final code for the Translation class is shown in Figure 3.5. We will
+ explain
+in forthcoming chapters all the details of how this class works. For the
+ time being,
+we will simply give the general idea.
+</p><p>
+We define the class Translation as extending class DepthFirstAdapter. 
+This
+automatically provides a depth-first traversal of the AST. To print 
+numbers as we en-
+counter them, we simply define the method caseTNumber, the type name of 
+"number"
+nodes being TNumber.
+</p><p>
+</p><center>26</center>
+
+<hr>
+
+<a href="#PAGE26">26</a><strong><a name="PAGE27"> Page 27</a></strong> <a
+ href="#PAGE28">28</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><td>
+<pre>C:\Java\Projects\Postfix&gt;java SableCC postfix.grammar
+Verifying identifiers.
+Generating token classes.
+Generating production classes.
+Generating alternative classes.
+Generating analysis classes.
+Generating utility classes.
+Generating the lexer.
+-Constructing NFA.
+.......................
+-Constructing DFA.
+............
+-resolving ACCEPT states.
+Generating the parser.
+..................
+..................
+..................
+..
+..................
+C:\Java\Projects\Postfix&gt;
+</pre>
+</td></tr>
+</tbody></table>
+<p>
+Figure 3.4: SableCC execution on Windows 95
+</p></center>
+<p>
+The name of every alternative in Figure 3.3 is prefixed with an A and 
+concatenated
+to the name of its production to produce a type name for the 
+alternative. For example:
+</p><p>
+expr = ... | {plus} expr plus factor | ...; =&gt; APlusExpr
+</p><p>
+To print operators after the traversal of a subtree, we define the 
+methods
+outAPlusExpr, outAMinusExpr, outAMultFactor, outADivFactor and
+outAModFactor. These methods get executed after the subtree rooted at 
+each node
+of their respective type<sup>1</sup> has been visited, in the depth 
+first traversal of the tree.
+</p><p>
+Creating the Compiler Class
+As shown in Figure 3.6, we define the Compiler class as containing the 
+main method.
+This will be the starting point of our program. In main, we create an 
+instance of the
+lexer, reading from the standard input. We pass the lexer to the 
+constructor of the
+parser. Then we parse the input. This gives us in return a reference to 
+the root of
+the AST. We store it in variable tree. To apply the transformation, we 
+simply pass
+a new instance of the Translation class to the apply method of tree.
+</p><p>
+-----------------------------
+</p><p>
+<sup>1</sup>The type being the name of the method without the out. So, 
+outAPlusExpr gets executed after the subtree of a
+node of type APlusExpr has been visited.
+</p><p>
+</p><center>27</center>
+
+<hr>
+
+<a href="#PAGE27">27</a><strong><a name="PAGE28"> Page 28</a></strong> <a
+ href="#PAGE29">29</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><td>
+<pre>package postfix;
+import postfix.analysis.*;
+import postfix.node.*;
+<p>
+class Translation extends DepthFirstAdapter
+{
+ public void caseTNumber(TNumber node)
+ {// When we see a number, we print it.
+  System.out.print(node);
+ }
+</p><p>
+ public void outAPlusExpr(APlusExpr node)
+ {// out of alternative {plus} in Expr, we print the plus.
+  System.out.print(node.getPlus());
+ }
+</p><p>
+ public void outAMinusExpr(AMinusExpr node)
+ {// out of alternative {minus} in Expr, we print the minus.
+  System.out.print(node.getMinus());
+ }
+</p><p>
+ public void outAMultFactor(AMultFactor node)
+ {// out of alternative {mult} in Factor, we print the mult.
+  System.out.print(node.getMult());
+ }
+</p><p>
+ public void outADivFactor(ADivFactor node)
+ {// out of alternative {div} in Factor, we print the div.
+  System.out.print(node.getDiv());
+ }
+</p><p>
+ public void outAModFactor(AModFactor node)
+ {// out of alternative {mod} in Factor, we print the mod.
+  System.out.print(node.getMod());
+ }
+}
+</p></pre>
+</td></tr>
+</tbody></table>
+<p>
+Figure 3.5: postfix\Translation.java
+</p></center>
+<p>
+<b>Compiling and Running the Postfix Translator</b>
+</p><p>
+To compile the whole program, we simply type:
+</p><p>
+javac postfixnCompiler.java
+</p><p>
+and to run the postfix translator, we type:
+</p><p>
+java postfix.Compiler
+</p><p>
+</p><center>28</center>
+
+<hr>
+
+<a href="#PAGE28">28</a><strong><a name="PAGE29"> Page 29</a></strong> <a
+ href="#PAGE30">30</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><td>
+<pre>package postfix;
+import postfix.parser.*;
+import postfix.lexer.*;
+import postfix.node.*;
+import java.io.*;
+<p>
+public class Compiler
+{
+ public static void main(String[] arguments)
+ {
+  try
+  {
+   System.out.println("Type an arithmetic expression:");
+</p><p>
+   // Create a Parser instance.
+   Parser p =
+    new Parser(
+    new Lexer(
+    new PushbackReader(
+    new InputStreamReader(System.in), 1024)));
+</p><p>
+   // Parse the input.
+   Start tree = p.parse();
+</p><p>
+   // Apply the translation.
+   tree.apply(new Translation());
+  }
+  catch(Exception e)
+  {
+   System.out.println(e.getMessage());
+  }
+ }
+}
+</p></pre>
+</td></tr>
+</tbody></table>
+<p>
+Figure 3.6: postfix\Compiler.java
+</p></center>
+<p>
+Then, we type some arithmetic expression. When we are finished, we type 
+the <i>End
+Of File</i> character. On Windows 95, this means we type <i>Ctrl-Z</i>. 
+As shown in Figure
+3.7, we see the postfix translation of our expression. It worked!
+</p><p>
+In Figure 3.8 we show the typed AST created at execution time for the 
+expression
+(45 + 36/2)*3 + 5*2 used in Figure 3.7.
+</p><p>
+</p><center>29</center>
+
+<hr>
+
+<a href="#PAGE29">29</a>
+<strong><a name="PAGE30"> Page 30</a></strong><a href="#PAGE31">31</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><td>
+<pre>C:\Java\Projects\Postfix&gt;javac postfix\Compiler.java
+C:\Java\Projects\Postfix&gt;java postfix.Compiler
+Type an arithmetic expression:
+(45 + 36 / 2) * 3 + 5 * 2
+45 36 2 / + 3 * 5 2 * +
+C:\Java\Projects\Postfix&gt;
+</pre>
+</td></tr>
+</tbody></table>
+<p>
+Figure 3.7: Compiling and executing the Syntax Translation program
+</p><p>
+<img src="thesis_files/f3.jpg" height="483" width="605">
+</p><p>
+Figure 3.8: Typed AST of expression (45 + 36/2)*3 + 5*2
+</p></center>
+<p>
+</p><center>30</center>
+
+<hr>
+
+<a href="#PAGE30">30</a><strong><a name="PAGE31"> Page 31</a></strong> <a
+ href="#PAGE32">32</a>
+<p>
+</p><h1>Chapter 4</h1>
+<h1>Lexer</h1>
+In this chapter, we will discuss the lexer generator part of <i>SableCC</i>.
+ There are four
+sections in the specification file that in uence the lexer generator of <i>SableCC</i>,
+ the
+Package, Helpers, States and Tokens sections. On output, <i>SableCC</i> 
+generates a lexer
+class whose behavior can be customized through inheritance, without 
+modifying the
+generated code. We will begin by exploring the details of the 
+specification file, then
+we will discuss the lexer class and the extent of its customization.
+<p>
+We will present simplified parts of the syntax of the lexer. The 
+complete and
+accurate syntax of <i>SableCC</i> can be found in Appendix B.
+</p><p>
+</p><pre>grammar = package_declaration? helper_declarations?
+          states_declarations? token_declarations?
+          ign_tokens? productions?;
+</pre>
+<p>
+</p><h2>4.1 Package Declaration</h2>
+<pre>package_declaration = 'Package' pkg_name?;
+pkg_name = pkg_id pkg_name_tail* ';';
+pkg_name_tail = '.' pkg_id;
+pkg_id = letter(letter|digit)*;
+</pre>
+<p>
+The package declaration is optional. If it is used, it specifies the 
+root package for
+all classes generated by <i>SableCC</i>. If it is not specified, the 
+default (empty) package is
+used instead.
+</p><p>
+<b>Example 9</b> : <i>Package ca.mcgill.sable.example;</i>
+</p><p>
+</p><center>31</center>
+
+<hr>
+
+<a href="#PAGE31">31</a><strong><a name="PAGE32"> Page 32</a></strong> <a
+ href="#PAGE33">33</a>
+<p>
+</p><h2>4.2 Characters and Character Sets</h2>
+<pre>character = char | dec_char | hex_char;
+set = '[' basic bin_op basic ']' |
+      '[' character '..' character ']';
+basic = character | set;
+bin_op = '+' | '-';
+char = ''' not_cr_lf ''';
+dec_char = digit+;
+hex_char = '0' ('x' | 'X') hex_digit+;
+</pre>
+<p>
+<i>SableCC</i> generated lexers can read 16 bit Unicode character 
+streams. To simplify
+the expression of these characters, <i>SableCC</i> accepts three 
+different ways of specifying
+characters.
+</p><p>
+</p><ul>
+1. <b>Quoted character</b>: An ASCII character between two single quotes
+ represents
+itself. Example: 'a'.
+<p>
+2. <b>Decimal number</b>: A decimal number represents the Unicode 
+character with
+this same index. Example: 13 (carriage return).
+</p><p>
+3. <b>Hexadecimal number</b>: A hexadecimal number is prefixed with <b>0X</b>
+ or <b>0x</b>. It
+represents the Unicode character with the same index. Hexadecimal 'a' to
+ 'f'
+digits can be lowercase or uppercase. Example: 0xffff.
+</p></ul>
+<p>
+It is often useful to specify a set of characters, instead of a single 
+character. For
+this purpose, <i>SableCC</i> allows the definition of character sets and
+ defines the union
+and difference operations on sets.
+</p><p>
+A character set consists of any of the following:
+</p><p>
+</p><ul>
+<li> A single character.
+<p>
+</p></li><li> A range of character (based the Unicode ordering). A range
+ is specified as
+follows: [<i>begin .. end</i>], where <i>begin</i> and <i>end</i> are 
+characters. It includes all Unicode
+characters with an index greater or equal to <i>begin</i> and less or 
+equal to <i>end</i>.
+<p>
+</p></li><li> A union of character sets. A union is specified as: [<i>set1
+ + set2</i>]. It includes all
+characters in <i>set1</i> and <i>set2</i>.
+<p>
+</p></li><li> A difference of character sets. A difference is specified 
+as: [<i>set1 - set2</i>]. It includes
+all characters in <i>set1</i> that are not in <i>set2</i>.
+</li></ul>
+<p>
+</p><center>32</center>
+
+<hr>
+
+<a href="#PAGE32">32</a> <strong><a name="PAGE33"> Page 33</a></strong> <a
+ href="#PAGE34">34</a>
+<p>
+Characters and character sets can be used in regular expressions, in the
+ <i>Helpers</i>
+and <i>Tokens</i> sections of the specification file.
+</p><p>
+<b>Example 10</b> : <i>[['a'..'z'] + ['A'..'Z']]: Alphabetical 
+characters.</i>
+<b>Example 11</b> : <i>[['0'..'9'] + [['a'..'f '] + ['A'..'F']]]: 
+Hexadecimal digits.</i>
+</p><p>
+</p><h2>4.3 Regular Expressions, Helpers and Tokens</h2>
+<pre>reg_exp = concat reg_exp_tail*;
+reg_exp_tail = '|' concat;
+concat = un_exp*;
+un_exp = basic un_op?;
+basic = character | set | string | id |
+        '(' reg_exp ')';
+un_op = '*' | '?' | '+';
+<p>
+helper_def = id '=' reg_exp ';';
+token_def = id '=' reg_exp look_ahead? ';';
+look_ahead = '/' reg_exp;
+</p></pre>
+<p>
+The syntax of regular expressions in <i>SableCC</i> is very similar to 
+the formal
+definition of regular expressions. As we said earlier, a regular 
+expression can use character
+sets in addition to characters. Additionally, strings can also be used, 
+and are specified
+with single quotes as in: 'text'. <i>SableCC</i> regular expressions 
+support union <i>regexp1</i> |
+<i>regexp2</i>, concatenation <i>regexp1 regexp2</i> and Kleene closure <i>regexp*</i>,
+ as well as
+parentheses (), and the ? and + operators, as defined in chapter 2. 
+There is no symbol for
+the empty string <img src="thesis_files/empty.jpg" height="11" 
+width="10">. The ? operator or an empty regular expression can be used 
+to
+express this string.
+</p><p>
+<b>Example 12</b> : <img src="thesis_files/ex12.jpg" height="49" 
+width="556">
+</p><p>
+<i>This regular expression accepts the following string: //</i> some 
+comment
+</p><p>
+Unlike other compiler compilers, <i>SableCC</i> has no support for 
+macros. Instead,
+<i>SableCC</i> allows the use of <i>helpers</i>. A helper is a character
+ set or a regular expression
+denoted by an identifier. Helpers are defined in the <i>Helpers</i> 
+section of the specification
+file by writing:
+</p><p>
+</p><center>33</center>
+
+<hr>
+
+<a href="#PAGE33">33</a><strong><a name="PAGE34"> Page 34</a></strong> <a
+ href="#PAGE35">35</a>
+<p>
+<i>helper name = character set or regular expression;</i>
+</p><p>
+When <i>SableCC</i> sees a helper identifier in a regular expression, it
+ replaces it se-
+mantically (not textually) with its declared character set or regular 
+expression. This
+avoids the pitfalls of macros.
+</p><p>
+<b>Example 13</b> : <i>The following definitions give the expected 
+result (unlike macros):
+</i></p><pre><i>Helpers
+    h = 'a' | 'b';
+Tokens
+    t = 'a' h 'b';
+</i></pre>
+<p>
+<i>t denotes the language {"aab","abb"}. A similar macro definition of h
+ with
+textual replacement ('a' h 'b' =&gt; 'a' 'a' | 'b' 'b') would have 
+resulted in the language
+{"aa","bb"} because of the precedence of concatenation over union.</i>
+</p><p>
+Tokens are defined in the <i>Tokens</i> section of the specification 
+file with a syntax
+similar to helpers. For a given input, the longest matching token will 
+be returned by
+the lexer. In the case of two matches of the same length, the token 
+listed first in the
+specification file will be returned.
+</p><p>
+For convenience, a token definition can contain an optional <i>lookahead</i>
+ regular
+expression. A lookahead regular expression is specified by appending a 
+'/' at the end
+of a token definition followed by the lookahead regular expression. The 
+generated
+lexer will recognize the token only if it is followed by a string 
+matching the lookahead
+regular expression.
+</p><p>
+<b>Example 14</b> : <i>do = "DO" / (letter | digit)* '=' (letter | 
+digit)* ','; recognizes the
+DO keyword of Fortran.</i>
+</p><p>
+A token is given a name using an identifier. Here's the syntax for 
+identifiers in
+<i>SableCC</i>:
+</p><p>
+</p><pre>id = name;
+name = name_part ('_' name_part)*;
+name_part = letter (letter | number)*;
+letter = ['a' .. 'z'];
+number = ['0' .. '9'];
+</pre>
+<p>
+</p><center>34</center>
+
+<hr>
+
+<a href="#PAGE34">34</a><strong><a name="PAGE35"> Page 35</a></strong> <a
+ href="#PAGE36">36</a>
+<p>
+For each token, <i>SableCC</i> generates a class in the package <i>root</i>.node
+ with the name
+of the token as the class name. To be accurate, the exact name given to 
+the class
+is computed from the name of the token by prefixing it with a capital 
+'T', replacing
+the first letter with its uppercase, replacing each letter prefixed by 
+an underscore
+with its uppercase, and removing all underscores. For example, for a 
+token named
+'some token', <i>SableCC</i> would generate a class '<i>root</i>.node.TSomeToken'.
+ All token
+classes inherit from (or <i>extend</i>) the class '<i>root</i>.node.Token'.
+</p><p>
+</p><h2>4.4 States</h2>
+<pre>state_declarations = 'States' id_list? ';';
+id_list = id id_list_tail*;
+id_list_tail = ',' id;
+token_def = state_list? id '=' reg_exp ';';
+state_list = '{' id transition? state_list_tail* '}';
+state_list_tail = ',' id transition?;
+transition = '-&gt;' id;
+</pre>
+<p>
+<i>SableCC</i> supports the very popular <i>lexer states</i> feature of 
+GNU FLEX. Lexer
+states define a DFA on top of token definitions. Each state is 
+associated with a set
+of tokens. When the lexer is in a state, only the tokens associated with
+ this state
+are recognized. States can be used for many purposes. For example, they 
+can help
+detecting a <i>beginning of line</i> state, and recognize some tokens 
+only if they appear at
+the beginning of a line.
+</p><p>
+In <i>SableCC</i>, state transitions are triggered by token recognition.
+ Every time a
+token is recognized, the lexer applies the transition specified for the 
+current state and
+the recognized token.
+</p><p>
+This leads us to the specification of states. First, all states must be 
+declared in
+the <i>States</i> section of the specification file. The first state is 
+used as the initial state
+of the DFA.
+</p><p>
+Each token definition can be optionally prefixed by a list of states 
+(possibly with
+transitions). By default, if no state list is specified, the token is 
+associated with all
+states (and is therefore always recognized). In this case, no state 
+transition occurs.
+If there is a state list, the token is recognized only when the lexer is
+ in one of the
+listed states. If the token is recognized and there is a transition 
+'-&gt;' associated with
+the current state of the lexer in the state list of the token, this 
+transition is applied.
+</p><p>
+</p><center>35</center>
+
+<hr>
+
+<a href="#PAGE35">35</a><strong><a name="PAGE36"> Page 36</a></strong> <a
+ href="#PAGE37">37</a>
+<p>
+<b>Example 15</b> : <i>The following lexer will toggle between</i> 
+beginning of line (bol) <i>state
+and</i> inline state<i>, every time an</i> end of line<i> is reached.
+</i></p><p>
+</p><pre><i>States
+    bol, inline;
+Tokens
+    {bol-&gt;inline, inline} char = [[0 .. 0xffff] -[10 + 13]];
+    {bol, inline-&gt;bol} eol = 10 | 13 | 10 13;
+</i></pre>
+<p>
+<i>On input "abc", the lexer begins in state bol and returns "char a". 
+This triggers
+the transition</i> bol-&gt;inline<i>. Then the lexer returns "char b". 
+The lexer stays in state
+</i>inline<i>. Next, the lexer returns "char c" and stays in state</i> 
+inline<i>. Finally, it returns
+"EOF" (and stays in state</i> inline<i>).</i>
+</p><p>
+For each state, <i>SableCC</i> generates a constant of type <i>root</i>.lexer.Lexer.State.
+The
+ name of the constant is the name of the state where all letters are 
+replaced with
+their uppercase. For example, the two constants <i>root</i>.lexer.Lexer.State.BOL
+ and
+<i>root</i>.lexer.Lexer.State.INLINE would be defined in the previous 
+example. The
+id() method on each constant can be called to obtain a unique integer 
+value for the
+constant. This can be useful in switch statements.
+</p><p>
+</p><h2>4.5 The Lexer Class</h2>
+From the specification, <i>SableCC</i> generates a DFA based lexer in 
+the class
+root.lexer.Lexer. This class contains public and protected members.
+<p>
+The public members of the lexer class are:
+</p><p>
+</p><ul>
+<li> public Lexer(PushbackReader in) //constructor
+<p>
+</p></li><li> public Token peek() throws LexerException, IOException
+<p>
+</p></li><li> public Token next() throws LexerException, IOException
+</li></ul>
+<p>
+The constructor requires a java.io.PushbackReader. The lexer pushes back
+lookahead characters into this reader, after it recognizes a token. (A 
+reader is a
+Unicode character stream, in Java 1.1). The next and peek methods return
+ the next
+</p><p>
+</p><center>36</center>
+
+<hr>
+
+<a href="#PAGE36">36</a><strong><a name="PAGE37"> Page 37</a></strong> <a
+ href="#PAGE38">38</a>
+<p>
+available token on the stream, but the next method advances to the next 
+token, while
+consecutive calls to peek return the same token.
+</p><p>
+It is important to note that a token is recognized only once. After the 
+first call to
+peek, a reference to the token is kept in a private variable. Subsequent
+ calls to peek
+return this reference. A call to next returns this reference but clears 
+the variable.
+</p><p>
+The protected members are used in derived classes to customize the lexer
+ behavior.
+They are:
+</p><p>
+</p><ul>
+<li> protected Token token;
+<p>
+</p></li><li> protected State state;
+<p>
+</p></li><li> protected void filter();
+</li></ul>
+<p>
+The key to customization is the filter method. This method is called 
+every time
+a token is recognized through a call to next or peek, but not 
+necessarily on all such
+calls, as we have said earlier. To customize the lexer, the programmer 
+creates a new
+class that inherits from the Lexer class, and overrides the filter 
+method. Before
+a call the filter class, the lexer puts a reference to the newly 
+recognized token in
+the token variable. On return from the call to filter, the lexer checks 
+the token
+variable, and does one of two things:
+</p><p>
+</p><ul>
+1. If the token variable is set to null, the lexer restarts scanning the
+ <i>input reader</i>
+for a new token, in the state state.
+<p>
+2. If the token variable contains a <i>non-null</i> reference, the lexer
+ returns this reference
+as the next token. The next time the token scans the input for a new 
+token, it
+does it in the state state.
+</p></ul>
+<p>
+In the filter methods, it is possible to change the token and/or state 
+variables<sup>1</sup>.
+It is therefore possible for derived lexer class to use some additional 
+information to
+affect the state of the lexer, accumulate tokens or return a different 
+token. The filter
+method can even be used to push back characters into the input reader.
+</p><p>
+</p><h2>4.6 Example Lexer</h2>
+In this section, we develop a customized lexer that recognizes 
+identifiers, blanks and
+nested comments. Nested comments cannot be implemented without 
+customization.
+<p>
+-----------------------------
+</p><p>
+<sup>1</sup>In a future version of <i>SableCC</i>, accessor methods 
+(get/set) will be used to read/modify the token and state
+variables.
+</p><p>
+</p><center>37</center>
+
+<hr>
+
+<a href="#PAGE37">37</a><strong><a name="PAGE38"> Page 38</a></strong> <a
+ href="#PAGE39">39</a>
+<p>
+But with customization, they are fairly easy to implement. Here's the <i>SableCC</i>
+specification:
+</p><p>
+</p><pre>Helpers
+  all = [0 .. 0xffff];
+  letter = [['a' .. 'z'] + ['A' .. 'Z']];
+<p>
+States
+  normal,
+  comment;
+</p><p>
+Tokens
+{normal} blank = (' ' | 10 | 13 | 9)*;
+{normal} identifier = (letter | '_')*;
+</p><p>
+{normal-&gt;comment, comment}
+          comment = '/*';
+</p><p>
+{comment} comment_end = '*/';
+{comment} comment_body = [all -['*' + '/']]*;
+{comment} star = '*';
+{comment} slash = '/';
+</p></pre>
+<p>
+This specifies a lexer that enters the comment state when it recognizes a
+ comment
+token, but never leaves this state. Two things to note: (1) The state 
+and token
+namespaces are independent. This allowed us to have both a comment state
+ and
+token. (2) The comment token is not what we are looking for. It returns 
+"/*" instead
+of the full nested comment.
+</p><p>
+To fix this problem, we derive a new class from the Lexer class. In this
+ class we
+keep the count of "/*" and "*/" tokens, and we accumulate the text. When
+ the count
+reaches zero, we return a comment token with the full text, and we 
+change the state
+to normal. Here's the Java code:
+</p><p>
+</p><center>38</center>
+
+<hr>
+
+<a href="#PAGE38">38</a><strong><a name="PAGE39"> Page 39</a></strong> <a
+ href="#PAGE40">40</a>
+<p>
+</p><pre>import lexer.Lexer;
+import lexer.Lexer.State;
+import node.*;
+public class MyLexer extends Lexer
+{ private int count;
+  private TComment comment;
+  private StringBuffer text;
+  // We define a constructor
+  public MyLexer(java.io.PushbackReader in)
+  { super(in);
+  }
+  // We define a filter that recognizes nested comments.
+  protected void filter()
+  { // if we are in the comment state
+    if(state.equals(State.COMMENT))
+    { // if we are just entering this state
+      if(comment == null)
+      { // The token is supposed to be a comment.
+        // We keep a reference to it and set the count to one
+        comment = (TComment) token;
+        text = new StringBuffer(comment.getText());
+        count = 1;
+        token = null; // continue to scan the input.
+      }
+      else
+      { // we were already in the comment state
+        text.append(token.getText()); // accumulate the text.
+        if(token instanceof TComment)
+          count++;
+        else if(token instanceof TCommentEnd)
+          count--;
+        if(count != 0)
+          token = null; // continue to scan the input.
+        else
+        { comment.setText(text.toString());
+          token = comment; //return a comment with the full text.
+          state = State.NORMAL; //go back to normal.
+          comment = null; // We release this reference.
+        }
+      }
+    }
+  }
+}
+</pre>
+<p>
+</p><center>39</center>
+
+<hr>
+
+<a href="#PAGE39">39</a><strong><a name="PAGE40"> Page 40</a></strong> <a
+ href="#PAGE41">41</a>
+<p>
+</p><h2>4.7 Summary</h2>
+We have explained the specification of a lexer in <i>SableCC</i> 
+language<sup>2</sup>. We have
+discussed how a generated lexer can be customized easily through 
+inheritance. And
+finally, wehave shown an example of how to build a customized lexer.
+<p>
+Customized lexers can be quite powerful, but they have a very simple and
+ clean
+implementation. The <i>SableCC</i> generated code is never modified to 
+add functionality
+to the lexer. Additionally, there is no need to duplicate code between 
+the customized
+lexer and the base lexer in order to perform this customization.
+</p><p>
+-----------------------------
+</p><p>
+<sup>2</sup>We have intentionally omitted to discuss the algorithm used 
+to generate the lexer tables. <i>SableCC</i> implements
+the algorithm found in [ASU88].
+</p><p>
+</p><center>40</center>
+
+<hr>
+
+<a href="#PAGE40">40</a><strong><a name="PAGE41"> Page 41</a></strong> <a
+ href="#PAGE42">42</a>
+<p>
+</p><h1>Chapter 5</h1>
+<h1>Parser</h1>
+In this chapter, we will study the parser generator part of <i>SableCC</i>.
+ There are four
+sections in the specification file that in uence the parser generator: <i>Package,
+ Tokens,
+Ignored Tokens</i> and <i>Productions</i>. On output, <i>SableCC</i> 
+generates a parser class that
+automatically builds a typed <i>abstract syntax tree</i> (AST) while 
+parsing the input.
+The default AST constructed by <i>SableCC</i> matches the <i>concrete 
+syntax tree</i> (CST).
+The parser class can be customized through inheritance to modify the AST
+ as it is
+constructed.
+<p>
+We will begin by exploring the specification of the parser. Then, we 
+will discuss
+the parser class and how it can be customized.
+</p><p>
+</p><pre>grammar = package_declaration? helper_declarations?
+          states_declarations? token_declarations?
+          ign_tokens? productions?;
+</pre>
+<p>
+</p><h2>5.1 Package and Tokens</h2>
+We have seen the details of the package and tokens sections in chapter 
+4.
+<i>SableCC</i> uses the package declaration to determine the root 
+package of
+generated classes. The parser generator uses token declarations (and 
+production
+declarations) to resolve the type of terminals (and nonterminals) on the
+ right-hand side of
+productions<sup>1</sup>.
+<p>
+-----------------------------
+</p><p>
+<sup>1</sup>See Chapter 2.
+</p><p>
+</p><center>41</center>
+
+<hr>
+
+<a href="#PAGE41">41</a>
+<strong><a name="PAGE42"> Page 42</a></strong><a href="#PAGE43">43</a>
+<p>
+</p><h2>5.2 Ignored Tokens</h2>
+<pre>ign_tokens = 'Ignored' 'Tokens' id_list? ';';
+id_list = id id_list_tail*;
+id_list_tail = ',' id;
+</pre>
+<p>
+Many programming languages use blanks to separate tokens. Often, they 
+also
+allow the programmer to add comments to augment the readability of the 
+code. These
+blanks and comments do not usually appear in the grammar of these 
+programming
+languages. In fact, it would be very complicated to add them to the 
+grammar without
+rendering it overly complicated. So, normally, these tokens are 
+recognized by the lexer,
+but they are not used by the parser.
+</p><p>
+In its specification file, <i>SableCC</i> allows the programmer to 
+specify the list of tokens
+to be ignored by the parser. The generated parser will receive these 
+tokens, but it will
+discard them. Some compiler compilers hide these tokens at the lexer 
+level, instead.
+It would be possible to write a customized <i>SableCC</i> lexer to 
+discard the tokens at the
+lexer stage.
+</p><p>
+<i>SableCC</i> will issue an error message if a programmer tries to use 
+an ignored token
+in the definition of a production.
+</p><p>
+<b>Example 16</b> : <i>Here is a specification that forces the parser to
+ ignore blanks and
+comments.</i>
+</p><p>
+</p><pre>Ignored Tokens
+     blanks, comments;
+</pre>
+<p>
+</p><center>42</center>
+
+<hr>
+
+<a href="#PAGE42">42</a><strong><a name="PAGE43"> Page 43</a></strong> <a
+ href="#PAGE44">44</a>
+<p>
+</p><h2>5.3 Productions</h2>
+<pre>prod = id '=' alts ';';
+alts = alt alts_tail*;
+alts_tail = '|' alt;
+alt = alt_name? elem* |
+  '(' alt_name? elem* ')';
+alt_name = '{' id '}';
+elem = elem_name? specifier? id un_op?;
+elem_name = '[' id ']' ':';
+specifier = token_specifier '.' |
+            production_specifier '.';
+token_specifier = 'T';
+production_specifier = 'P';
+</pre>
+<p>
+<i>SableCC</i> supports an EBNF<sup>2</sup> like syntax for productions.
+ Unlike YACC and PC-
+CTS, there is no place for <i>action code</i> in the specification<sup>3</sup>.
+ But, in order to offer the
+best support for typed abstract syntax trees, <i>SableCC</i> extends the
+ syntax to allow
+for the specification of names in the grammar.
+</p><p>
+Before explaining all the details of the specification, we will study 
+the structure of
+the typed AST and its relation to the grammar. For the sake of 
+simplicity, we will
+begin with the BNF<sup>4</sup> notation.
+</p><p>
+Let's begin with a small grammar:
+</p><p>
+</p><pre>Token /* token definitions */
+  l_par = '('; r_par = ')';
+  plus = '+'; number = ['0'..'9'];
+Productions /* grammar */
+  exp = number |
+        add;
+  add = l_par exp plus exp r_par;
+</pre>
+<p>
+This grammar specifies a small arithmetic language. In this example exp 
+is a
+<i>production</i> that has two <i>alternatives</i> (number and add), and
+ add is a <i>production</i> that
+has a single <i>alternative</i> (l_par...r_par). An <i>alternative</i> 
+has <i>zero</i> or more <i>elements</i>. For
+</p><p>
+-----------------------------
+</p><p>
+<sup>2</sup>See chapter 2.
+<br>
+<sup>3</sup>We call actions the code to be executed every time a 
+production is recognized.
+<br>
+<sup>4</sup>See chapter 2.
+</p><p>
+</p><center>43</center>
+
+<hr>
+
+<a href="#PAGE43">43</a><strong><a name="PAGE44"> Page 44</a></strong> <a
+ href="#PAGE45">45</a>
+<p>
+example, the last alternative had five <i>elements</i>. Each <i>element</i>
+ is either a <i>production
+name</i> (nonterminal) or a <i>token name</i> (terminal).
+</p><p>
+The second element (exp) of the single alternative of production add, 
+stands for
+all possible alternatives of production exp. Note that it cannot stand 
+for anything
+else. This behavior can be mimicked through inheritance in Java. <i>SableCC</i>
+ could
+generate an abstract class PExp denoting production exp, and we define 
+two classes
+AExp1 extends PExp and AExp2 extends PExp, denoting respectively the 
+first and
+second alternatives of production exp. This would give usatype system 
+that enforces
+a variable of type PExp to hold only values of type AExp1 or AExp2.
+</p><p>
+For our example grammar, <i>SableCC</i> would generate the following 
+classes defining
+an abstract syntax tree for the grammar:
+</p><p>
+</p><pre>abstract class PExp {}
+class AExp1 extends PExp { TNumber elem1; }
+class AExp2 extends PExp { PAdd elem1; }
+abstract class PAdd {}
+class AAdd1 extends PAdd
+{ TLPar elem1; PExp elem2; TPlus elem3;
+  PExp elem4; TRPar elem5; }
+</pre>
+<p>
+PExp and PAdd are abstract classes (meaning that no instance of these 
+types can be
+created, only instances of derived types), to prevent the construction 
+of meaningless
+ASTs.
+</p><p>
+We have implemented this inheritance and naming scheme in an early 
+version
+of <i>SableCC</i>. But, after some usage and feedback, it was felt that 
+looking for the
+fourth (or was is the fifth?) element of the third alternative of 
+production p was quite
+cumbersome and led to code that was diffcult to maintain. It is easy to 
+inadvertently
+type PExp2 instead of PExp1 in a variable declaration, but it can be 
+quite diffcult to
+find such an error.
+</p><p>
+To resolve this problem, we decided to add names to alternatives and to 
+elements
+in the current version of <i>SableCC</i>. In the following subsection, 
+we will describe the
+naming rules of <i>SableCC</i>.
+</p><p>
+</p><center>44</center>
+
+<hr>
+
+<a href="#PAGE44">44</a><strong><a name="PAGE45"> Page 45</a></strong> <a
+ href="#PAGE46">46</a>
+<p>
+</p><h4>SableCC Naming Rules</h4>
+Every production class is automatically named by using the production 
+name,
+prefixing it with an uppercase 'P', replacing the first letter with an 
+uppercase, replacing
+each letter prefixed by an underscore with an uppercase, and removing 
+all
+underscores. In our example grammar, as we have seen, this results in 
+classes : PExp and
+PAdd.
+<p>
+If a production has a single <i>unnamed alternative</i>, the alternative
+ class is named
+like its production class, but the uppercase 'P' prefix is replaced by 
+an uppercase 'A'.
+In our example, the single alternative of production add would be named:
+ AAdd.
+</p><p>
+When there is more than one alternative, <i>SableCC</i> requires a name 
+for each alter-
+native. <i>SableCC</i> accepts one exception to this rule. It allows one
+ alternative to be
+left without a name. This is for backward compatibility of evolving 
+grammars. (If
+a production had only one alternative and a new alternative is added, 
+then giving a
+name to the original alternative would change its type name).
+</p><p>
+A name is given to an <i>alternative</i> in the grammar by prefixing the
+ alternative
+with an identifier between curly brackets. The class that corresponds to
+ the <i>named
+alternative</i> is named by applying to the alternative name the usual 
+uppercase
+transformations, prefixing it by an uppercase 'A', and postfixing it 
+with the transformed
+production name.
+</p><p>
+Unlike alternatives, <i>elements</i> have an obvious candidate for name 
+which is the
+identifier of the element itself. This will work, as long as an element 
+does not appear
+twice in the same alternative. In that case the current version <i>SableCC</i>
+ requires a
+name for at least one of the two elements. (For backward compatibility, 
+one occurrence
+of the repeated element can remain unnamed). <i>SableCC</i> will issue 
+an error if not
+enough names are provided. <i>Element names</i> are specified by 
+prefixing the element
+with an identifier between square brackets followed by a colon.
+</p><p>
+<i>SableCC</i> does not give direct access to element variables. 
+Instead, it provides
+<i>accessor</i> methods. <i>Accessors</i> are get<i>xxx</i> and set<i>xxx</i>
+ methods, where the <i>xxx</i> is the
+name of the element (with the usual uppercase transformation). <i>SableCC</i>
+ uses these
+accessors to further prevent the construction of an invalid AST. For 
+example, it
+enforces the "tree" property of the AST (e.g., a node cannot have more 
+than one
+parent), and also provides a free <i>parent()</i> method to all AST 
+nodes. The programmer
+does not (and cannot!) set this reference. It is done automatically 
+every time a
+set<i>xxx</i> method is called.
+</p><p>
+</p><center>45</center>
+
+<hr>
+
+<a href="#PAGE45">45</a><strong><a name="PAGE46"> Page 46</a></strong> <a
+ href="#PAGE47">47</a>
+<p>
+Here is our example grammar modified to abide by <i>SableCC</i> naming 
+rules:
+</p><pre>Productions /* grammar */
+  exp = {constant} number |
+        {add} add;
+  add = l_par [left]:exp plus [right]:exp r_par;
+</pre>
+<p>
+And, here is a model of the classes that would be generated by <i>SableCC</i>
+ for this
+grammar:
+</p><p>
+</p><pre>abstract class Node {}
+abstract class PExp extends Node{}
+class AConstantExp extends PExp
+{ TNumber getNumber(){...}
+  void setNumber(TNumber number){...};
+}
+class AAddExp extends PExp
+{ PAdd getAdd(){...}
+  void setAdd(PAdd add){...}
+}
+etc.
+</pre>
+<p>
+</p><h4>EBNF Syntax</h4>
+Let's get back to our EBNF notation. <i>SableCC</i> does not completely 
+support EBNF.
+This is by design. The reason for this is that there is no obvious type 
+safe abstract
+syntax tree for productions like:
+<p>
+p = (a a| b)* | (c d)+;
+How many alternatives does this production have? Two? If so, what are (a
+ a)
+and (b)? What names should they have?...
+</p><p>
+On the other hand, <i>SableCC</i> supports the following three operators
+ on elements:
+*, + and ?. They carry the same semantics as in regular expressions.
+</p><p>
+Later, we will explain the implementation of these operators in the 
+parser. But
+now, we will look at their representation in the AST. The ? operator 
+denotes an
+optional element. Elements in a <i>SableCC</i> AST can contain null 
+references. (Enforcing
+</p><p>
+</p><center>46</center>
+
+<hr>
+
+<a href="#PAGE46">46</a><strong><a name="PAGE47"> Page 47</a></strong> <a
+ href="#PAGE48">48</a>
+<p>
+<i>non-null</i> references would be too restrictive. It would 
+unnecessarily complicate the
+implementation of tree transformations). So, the ? operator has no 
+effect on the
+definition of AST node types.
+</p><p>
+From an AST point of view, the + and * operators are identical. They are
+ both
+implemented as collections, or more precisely, typed linked lists. A 
+typed linked list
+is a linked list that will generate a ClassCastException exception if an
+ attempt is
+made to insert a value of an invalid type.
+</p><p>
+<i>SableCC</i> implements the specification of linked lists containers 
+of the upcoming
+Java 1.2 Collection <i>application programming interface</i> (API). So, 
+as soon as the next
+version of Java will be released, <i>SableCC</i> ASTs will be able to 
+take advantage of this
+new API.
+</p><p>
+<b>Example 17</b> : prod = [tokens]:token*; <i>will generate the 
+following class:</i>
+</p><pre>class AProd{
+  LinkedList getTokens();
+  void setTokens(LinkedList tokens); }
+</pre>
+<p>
+What is not shown in this example, is that the <i>linked list</i> 
+private field of AProd is
+initialized with a typed linked list that applies a dynamic cast to type
+ TToken on all
+nodes inserted into the list. It is beyond the scope of this thesis to 
+explain the details
+of collection classes.
+</p><p>
+</p><h4>Ignored Alternatives</h4>
+In order to support the easy creation of customized abstract syntax 
+trees, <i>SableCC</i>
+allows the programmer to add new productions and alternatives to a 
+grammar, while
+keeping these alternatives hidden from the parsing process. An <i>ignored
+ alternative</i> is
+simply enclosed in parentheses.
+<p>
+</p><center>47</center>
+
+<hr>
+
+<a href="#PAGE47">47</a><strong><a name="PAGE48"> Page 48</a></strong> <a
+ href="#PAGE49">49</a>
+<p>
+<b>Example 18</b> : <i>This is a grammar with an ignored alternative:</i>
+</p><pre>id_list =
+     {temp} id id_list_tail* |
+     (id+); // ignored
+<p>
+id_list tail =
+     comma id;
+</p></pre>
+<p>
+<i>The parser will construct an AST for the grammar without the ignored 
+alternative.
+But, this grammar enables the programmer to apply tree transformations 
+and get an
+AST for the following grammar:</i>
+</p><p>
+</p><pre>     id list = id+;
+</pre>
+<i>This new AST is not only smaller, it is also easier to use.</i>
+<p>
+</p><h2>5.4 Implementation Details</h2>
+In this section we describe the implementation of EBNF operators in the 
+parser.
+Instead of redesigning LALR(1) parser construction algorithms to accept 
+the new
+operators (*, + and ?), we havedecided to create a parse time LALR(1) 
+BNF gram-
+mar derived from the EBNF specification. This is done by applying the 
+following
+transformations to the grammar iteratively, until no operators remain.
+<p>
+</p><ul>
+1. For each element with a (?) operator, we remove the operator and we 
+create a
+new alternative without the element.
+<p>
+2. For each element with a (+) operator, we change the type x of the 
+element tot,
+a new production name. And we add the following production to the 
+grammar:
+t = t x|x;
+</p><p>
+3. For each element with a (*) operator, we change the element e? to 
+(e+)?. This
+is an internal temporary representation. It is illegal in 
+specifications.
+</p></ul>
+<p>
+</p><center>48</center>
+
+<hr>
+
+<a href="#PAGE48">48</a><strong><a name="PAGE49"> Page 49</a></strong> <a
+ href="#PAGE50">50</a>
+<p>
+<b>Example 19</b> : <i>We show a SableCC EBNF and its BNF parsing 
+grammar:</i>
+</p><pre>a = b*;
+<i>becomes:</i>
+a = temp | ;
+temp = temp b | b;
+</pre>
+<p>
+We have learned, by experience, that the obvious implementation for (?),
+ by creat-
+ing a new production (temp = x | ;) causes more LALR(1) con icts than 
+our current
+implementation.
+</p><p>
+Once parsed, all temporary productions are automatically converted to 
+linked lists
+and inserted in the AST. So, this process is completely invisible to the
+ programmer.
+</p><p>
+</p><h2>5.5 The Parser Class</h2>
+From the specification, <i>SableCC</i> generates an LALR(1) parser in 
+the class
+<i>root</i>.parser.Parser, unless there is an LALR(1) con ict, in which 
+case, a detailed
+error message is given to the programmer. This message contains the 
+nature of
+the con ict (shift/reduce, etc.), the lookahead token and the complete 
+set of LR(1)
+items[ASU88].
+<p>
+The parser class automatically builds the AST while parsing. This is 
+done by
+shifting the tokens received from the lexer on the parse stack. On every
+ reduction,
+the parser creates a new instance for the reduced alternative, it pops 
+the elements off
+the parse stack and attaches them to the new instance, then it pushes 
+the instance
+back onto the parse stack.
+</p><p>
+The parser class exposes two public members:
+</p><p>
+</p><ul>
+1. public Parser(<i>root</i>.lexer.Lexer lexer); //constructor
+<p>
+2. public Start parse()
+<br>
+   throws ParserException, LexerException, IOException
+</p></ul>
+<p>
+The constructor takes a lexer as a parameter. The parse method parses 
+the input
+and returns a reference to the root of the AST that is always of the 
+type Start. The
+Start production is defined as:
+</p><p>
+</p><center>49</center>
+
+<hr>
+
+<a href="#PAGE49">49</a><strong><a name="PAGE50"> Page 50</a></strong> <a
+ href="#PAGE51">51</a>
+<p>
+Start = <i>first production</i> EOF;
+</p><p>
+This is usually all the knowledge required in order to use the Parser 
+class. The
+programmer only has to create a parser instance and call the parse 
+method to get
+the AST of the compiled program.
+</p><p>
+</p><h2>5.6 Customized Parsers</h2>
+In some cases, it is necessary to apply some AST transformation at 
+parsing time.
+While we believe that this is not the best time to implement any action,
+ the reality is
+that sometimes creating a full AST in memory can consume too much 
+memory. This
+is especially true when parsing huge files.
+<p>
+In order to address this problem, the Parser class exposes two protected
+ members:
+</p><p>
+</p><ul>
+1. protected void filter();
+<p>
+2. protected Node node;
+</p></ul>
+<p>
+The filter method works exactly like the filter method in lexers. It is 
+called on
+every reduction, allowing an advanced programmer to change the node 
+pushed onto
+the parse stack. In order to do so, the programmer should assign to node
+ a reference
+to a new alternative of the same production. Ignored alternatives are 
+usually used to
+create classes for this step.
+</p><p>
+We do not recommend this usage, because it is error prone. The compiler 
+does not
+check that the new alternative node derives from the same abstract 
+production class
+as the initial node. (But the Java type system will generate a 
+ClassCastException
+at runtime). The main advantage of this method is to reduce the size of 
+the AST at
+construction time. This is necessary when compiling huge programs 
+written in large
+programming languages.
+</p><p>
+In the future, customized parsers will also serve to do error recovery. 
+The current
+version of <i>SableCC</i> generates parsers that will stop at the first 
+error and throw a
+ParserException with a detailed error message.
+</p><p>
+A complete example of a parser was shown in section 3.6. An example of a
+customized parser is given in Appendix C. It is recommended that the 
+reader understands
+Chapter 6 before looking at this more advanced example.
+</p><p>
+</p><center>50</center>
+
+<hr>
+
+<a href="#PAGE50">50</a>
+<strong><a name="PAGE51"> Page 51</a></strong><a href="#PAGE52">52</a>
+<p>
+</p><h2>5.7 Summary</h2>
+We have explained the specification of a parser in the <i>SableCC</i> 
+language and how the
+generated classes of the typed AST relate to the grammar. Then, we have 
+discussed
+the details of the generated parser class and how to use it can be 
+customized to reduce
+the size of the AST at parse time<sup>5</sup>.
+<p>
+We have seen that, unlike other compiler compilers, <i>SableCC</i> 
+generates a parser
+whose sole purpose is to build a typed AST. The parser does not contain 
+any embed-
+ded action code. In the next chapter, we will explain how the typed AST 
+along with
+a visitor pattern eliminates the need for parser embedded actions.
+</p><p>
+-----------------------------
+</p><p>
+<sup>5</sup>We have intentionally omitted to discuss the algorithm used 
+to generate the parser tables. <i>SableCC</i> implements
+the algorithm found in [ASU88].
+</p><p>
+</p><center>51</center>
+
+<hr>
+
+<a href="#PAGE51">51</a>
+<strong><a name="PAGE52"> Page 52</a></strong><a href="#PAGE53">53</a>
+<p>
+</p><h1>Chapter 6</h1>
+<h1>Framework</h1>
+At the heart of an abstract syntax tree based compiler is the tree 
+walking process.
+In order to build AST-walker classes that can be easily extended to add 
+actions on
+specific nodes of the AST, <i>SableCC</i> uses an adaptation of the <i>visitor</i>[GH95]
+ design
+pattern. In this chapter, we will revisit this design pattern, extend 
+it, and then explain
+how it is used by <i>SableCC</i> to achieve our design goals. Finally, 
+wewill discuss a few
+additional features of <i>SableCC</i> generated frameworks.
+<p>
+</p><h2>6.1 The Visitor Design Pattern Revisited</h2>
+A somewhat formal definition of the visitor design pattern has been 
+given as <i>"a
+solution to the problem of adding operations on the elements of an 
+object structure
+without changing the classes of the elements on which it operates"</i>[GH95].
+ In our
+view, and according to our experience in teaching it to novices in 
+object-oriented
+programming, the name of this design pattern is not very intuitive. So, 
+in reaction
+to this, we have developed new names for the constituents of this design
+ pattern. We
+describe the design pattern as it is often used. We say that it is an 
+object-oriented
+way of implementing a switch on the type of an element.
+<p>
+Here is a small example. We have three classes Circle, Square and 
+Rectangle,
+all derived from class Shape. These classes are used in a program with a
+ graphical
+user interface that shows circles, squares and rectangles to the user. 
+Every time the
+user points an object with the mouse pointer and clicks on the mouse 
+button, the
+method Selected is called with the selected object in parameter.
+</p><p>
+</p><center>52</center>
+
+<hr>
+
+<a href="#PAGE52">52</a><strong><a name="PAGE53"> Page 53</a></strong> <a
+ href="#PAGE54">54</a>
+<p>
+In the method Selected, we would like toprint adiagnostic message saying
+ "a x
+was selected", where x is either circle, square or rectangle, depending 
+on the type of
+the selected object. One way of doing this, in Java, would be to use the
+ instanceof
+operator:
+</p><p>
+</p><pre>void Selected(Shape obj)
+{ if(obj instanceof Circle)
+    System.out.println("a circle was selected");
+  else if(obj instanceof Square)
+    System.out.println("a square was selected");
+  else
+    System.out.println("a rectangle was selected");
+}
+</pre>
+<p>
+The problem with this approach, is that if we had 100 shapes, it could 
+take up to
+99 comparisons to find the shape of an object. Thus finding the shape of
+ an object
+is O(n) (worst case) where n is the number of available shape classes. 
+We would like
+to do this operation in O(1). One way of making this possible would be 
+to define an
+abstract method id in class Shape, and override it in each shape class 
+to return a
+user defined unique ID.
+</p><p>
+</p><table>
+<tbody><tr><td>
+<pre>abstract class Shape
+{ ...
+  abstract int id();
+}
+</pre>
+</td><td>
+<pre>class Square extends Shape
+{ ...
+  static final int ID = 2;
+  int id() { return ID; }
+}
+</pre>
+</td></tr>
+<tr><td>
+<pre>class Circle extends Shape
+{ ...
+  static final int ID = 1;
+  int id() { return ID; }
+}
+</pre>
+</td><td>
+<pre>class Rectangle extends Shape
+{ ...
+  static final int ID = 3;
+  int id() { return ID; }
+}
+</pre>
+</td></tr>
+</tbody></table>
+<p>
+</p><center>53</center>
+
+<hr>
+
+<a href="#PAGE53">53</a><strong><a name="PAGE54"> Page 54</a></strong> <a
+ href="#PAGE55">55</a>
+<p>
+This would enable us to write:
+</p><pre>void Selected(Shape obj)
+{ switch(obj.id())
+  { case Circle.ID:
+      System.out.println("a circle was selected"); break;
+    case Square.ID:
+      System.out.println("a square was selected"); break;
+    case Rectangle.ID:
+      System.out.println("a rectangle was selected"); break;
+  }
+}
+</pre>
+<p>
+This approach has some problems. For example, it leaves the 
+responsibility of
+keeping the IDs unique in the hands of the programmer and it is easy to 
+forget to
+write the break statement. Additionally, the unique ID is redundant 
+information.
+We can already identify the type of an object using the instanceof 
+operator.
+</p><p>
+Fortunately, there exists an object oriented way of doing this switch 
+statement,
+without defining a unique integer ID for each class. This method, uses 
+inheritance
+and interfaces to achieve its goal.
+</p><p>
+The first step in this solution is to define a Switch interface as 
+follows: for each
+class derived from Shape, we add a method called case<i>xxx</i> where <i>xxx</i>
+ is the name of
+the class.
+</p><p>
+</p><pre>interface Switch
+{
+  void caseCircle(Circle obj);
+  void caseSquare(Square obj);
+  void caseRectangle(Rectangle obj);
+}
+</pre>
+<p>
+This interface, will be implemented by every <i>switch statement class</i>
+ used to tailor
+actions based on the type of a shape object.
+</p><p>
+The second step is to modify each shape class to implement an apply 
+method.
+The apply method will call the appropriate method on a switch object 
+passed as a
+parameter.
+</p><p>
+</p><center>54</center>
+
+<hr>
+
+<a href="#PAGE54">54</a><strong><a name="PAGE55"> Page 55</a></strong> <a
+ href="#PAGE56">56</a>
+<p>
+</p><pre>abstract class Shape
+{ ...
+  abstract void apply(Switch sw);
+}
+class Circle extends Shape
+{ ...
+  void apply(Switch sw)
+  { sw.caseCircle(this); }
+}
+etc.
+</pre>
+<p>
+Notice how the Circle.apply method calls the caseCircle method, passing a
+reference to this in parameter. This means that when Circle.apply is 
+called, the
+caseCircle method of sw is called with the circle as the parameter.
+</p><p>
+Finally, we can use an anonymous Java class to implement the 
+object-oriented
+switch on the type of a shape. The following code demonstrates this:
+</p><p>
+</p><pre>void Selected(Shape obj)
+{ obj.apply(new Switch()
+  { void caseCircle(Circle obj)
+    { System.out.println("a circle was selected"); }
+    void caseSquare(Square obj)
+    { System.out.println("a square was selected"); }
+    void caseRectangle(Rectangle obj)
+    { System.out.println("a rectangle was selected"); }
+  });
+}
+</pre>
+<p>
+This code is relatively similar to the previous implementation of the 
+Selected
+method, but this time, we used the apply method on obj, instead of the 
+switch
+keyword.
+</p><p>
+This is normally called the <i>visitor design pattern</i>. In the usual 
+presentation of the
+visitor pattern, apply is called accept, and the caseXxx methods are 
+called visitXxx.
+The anonymous class (or any class implementing Switch) is called a <i>visitor</i>.
+</p><p>
+</p><center>55</center>
+
+<hr>
+
+<a href="#PAGE55">55</a><strong><a name="PAGE56"> Page 56</a></strong> <a
+ href="#PAGE57">57</a>
+<p>
+</p><h2>6.2 Extending the Visitor Design Pattern</h2>
+The visitor pattern, as described in the previous section has some 
+limitations. As
+stated in [GH95], the visitor pattern makes it hard to <i>add new 
+element types to
+the visited structure, and visiting across class hierarchies is 
+impossible</i>. In <i>SableCC</i>
+generated frameworks, we have made some modifications to the visitor 
+design pattern
+to overcome these limitations and render the design usable in the 
+context of evolving
+structures.
+<p>
+To do so, we redefine the Switch interface to be more generic.
+</p><p>
+</p><pre>interface Switch { }
+</pre>
+<p>
+This interface will be the ancestor of all switch interfaces in the 
+framework. Then,
+we define a new Switchable interface:
+</p><p>
+</p><pre>interface Switchable { void apply(Switch sw); }
+</pre>
+<p>
+Every <i>switchable</i> class (like Circle, Square, and Rectangle) 
+should implement
+this interface. Here's our modified code:
+</p><p>
+</p><pre>interface ShapeSwitch extends Switch
+{ void caseCircle(Circle obj);
+  void caseSquare(Square obj);
+  void caseRectangle(Rectangle obj);
+}
+abstract class Shape
+  implements Switchable
+{ ...
+}
+class Circle extends Shape
+{ ...
+  void apply(Switch sw)
+  { ((ShapeSwitch)sw).caseCircle(this); }
+}
+etc.
+</pre>
+<p>
+The introduction of the new Switch and Switchable interfaces allows us 
+to add
+a new Oval shape without modifying any existing class:
+</p><p>
+</p><center>56</center>
+
+<hr>
+
+<a href="#PAGE56">56</a><strong><a name="PAGE57"> Page 57</a></strong> <a
+ href="#PAGE58">58</a>
+<p>
+</p><pre>interface ExtendedShapeSwitch extends Switch
+{
+  void caseOval(Oval obj);
+}
+class Oval extends Shape
+{ ...
+  void apply(Switch sw)
+  { ((ExtendedShapeSwitch)sw).caseOval(this); }
+}
+</pre>
+<p>
+So, in short, to add a new shape (or a collection of new shapes), we 
+define a new
+interface that extends Switch and includes a caseXxx method for each new
+ shape.
+Then we make sure that each new shape class implements the Switchable 
+interface.
+We can now write:
+</p><p>
+</p><pre>interface AllShapesSwitch
+  extends ShapeSwitch, ExtendedShapeSwitch {}
+<p>
+void Selected(Shape obj)
+{
+  obj.apply(new AllShapesSwitch()
+  {
+    void caseCircle(Circle obj)
+    { System.out.println("a circle was selected"); }
+    void caseSquare(Square obj)
+    { System.out.println("a square was selected"); }
+    void caseRectangle(Rectangle obj)
+    { System.out.println("a rectangle was selected"); }
+    void caseOval(Oval obj)
+    { System.out.println("an oval was selected"); }
+  });
+}
+</p></pre>
+<p>
+</p><h2>6.3 SableCC and Visitors</h2>
+In each generated framework, <i>SableCC</i> defines an Analysis 
+interface that extends
+Switch. This interface contains all the caseXxx methods for token 
+classes (TXxx and
+<p>
+</p><center>57</center>
+
+<hr>
+
+<a href="#PAGE57">57</a><strong><a name="PAGE58"> Page 58</a></strong> <a
+ href="#PAGE59">59</a>
+<p>
+Token) and alternative classes (AXxx and Start). Naturally, class Node, 
+the ancestor
+of all AST classes, implements Switchable.
+</p><p>
+In addition, <i>SableCC</i> implements a utility class called 
+AnalysisAdapter that im-
+plements Analysis and provides a default implementation for all methods.
+ Unless a
+method is overridden, it will call the defaultCase method. This makes it
+ possible
+to implement a switch by extending AnalysisAdapter, specifying only 
+relevant cases
+and catching all unspecified cases in a <i>default</i> handler.
+</p><p>
+Here's an example of the implementation of a <i>switch adapter</i> for 
+our (extended)
+shape example:
+</p><p>
+</p><pre>class AllShapesSwitchAdapter implements AllShapesSwitch
+{ void caseCircle(Circle obj)
+  { defaultCase(obj); }
+  void caseSquare(Square obj)
+  { defaultCase(obj); }
+  void caseRectangle(Rectangle obj)
+  { defaultCase(obj); }
+  void caseOval(Oval obj)
+  { defaultCase(obj); }
+  void defaultCase(Shape obj) { }
+}
+</pre>
+<p>
+We could use it to detect circles:
+</p><pre>void Selected(Shape obj)
+{ obj.apply(new AllShapesSwitchAdapter()
+  { void caseCircle(Circle obj)
+    { System.out.println("a circle was selected"); }
+    void defaultCase(Shape obj)
+    { System.out.println("The selected object is not a circle"); }
+  }
+}
+</pre>
+<p>
+</p><h2>6.4 AST Walkers</h2>
+One of the basic functionalities required to work on an AST is visiting 
+its nodes. A
+tree-walker is a class that will visit all the nodes of an AST in a 
+predefined order.
+<p>
+</p><center>58</center>
+
+<hr>
+
+<a href="#PAGE58">58</a>
+<strong><a name="PAGE59"> Page 59</a></strong> <a href="#PAGE60">60</a>
+<br>
+By default, <i>SableCC</i> provides two tree-walker classes. One that 
+visits the nodes in
+a normal depth-first traversal. The second class visits the AST nodes in
+ the reverse
+depth-first traversal.
+<p>
+To implement the tree-walkers, <i>SableCC</i> uses the extended visitor 
+design pattern
+presented in earlier sections.
+</p><p>
+How does <i>SableCC</i> implement tree-walkers? A first approach would 
+be to use a
+switch class with a set of recursive methods, like:
+</p><p>
+</p><pre>class DephFirstAdapter extends AnalysisAdapter
+{
+  void caseStart(Start node)
+  {
+    node.getAXxx().apply(this); // Xxx child of Start
+    node.getEOF().apply(this); // EOF child of Start
+  }
+  void caseXxx(Xxx node)
+  {
+    node.getYyy.apply(this); // Yyy child of Xxx
+    node.getZzz.apply(this); // Zzz child of Xxx
+  }
+  ...
+}
+</pre>
+<p>
+The problem with this approach is that if we want to add some action 
+code when
+visiting a node of type Xxx in a derived class, we must override the 
+caseXxx method
+and add into it the tree walking code. For example:
+</p><p>
+</p><pre>class Action extends DepthFirstAdapter
+{
+  void caseXxx(Xxx node)
+  { ...
+    action code
+    node.getYyy.apply(this); // first child of Xxx
+    node.getZzz.apply(this); // second child of Xxx
+  }
+  ...
+}
+</pre>
+<p>
+</p><center>59</center>
+
+<hr>
+
+<a href="#PAGE59">59</a>
+<strong><a name="PAGE60"> Page 60</a></strong> <a href="#PAGE61">61</a>
+<p>
+Since reuse (without copying and pasting source code) is important, <i>SableCC</i>
+provides overridable methods that are called just before and after 
+visiting a node
+while walking the AST. These methods are called inXxx and outXxx 
+respectively,
+where Xxx are the types of grammar alternatives. So the general design 
+of the
+DepthFirstAdapter class is:
+</p><p>
+</p><pre>class DephFirstAdapter extends AnalysisAdapter
+{
+  void caseStart(Start node)
+  {
+    inStart(node);
+    node.getAXxx().apply(this); // first child of Start
+    node.getEOF().apply(this); // second child of Start
+    outStart(node);
+  }
+  void inStart(Start node) {}
+  void outStart(Start node) {}
+  void caseXxx(Xxx node)
+  {
+    inXxx(node);
+    node.getYyy.apply(this); // first child of Xxx
+    node.getZzz.apply(this); // second child of Xxx
+    outXxx(node);
+  }
+  ...
+}
+</pre>
+<p>
+This class walks the tree in a depth-first traversal, calling the inXxx 
+and outXxx
+methods on entering and leaving nodes. But more interestingly, it is 
+easy to extend
+this class and provide some action code to be executed when entering or 
+leaving some
+type of node by simply overriding the appropriate inXxx or outXxx 
+method. There
+is no need to copy the recursive calls that walk the tree.
+</p><p>
+It is interesting to note that this approach isolates tree walking code 
+and action
+code in their own separate classes. This is a big gain in software 
+reuse, because the
+same tree-walker can be used as the parent of many different action 
+classes.
+</p><p>
+It is also possible to implement new tree-walkers by extending one of 
+the two
+provided tree-walker classes and overriding appropriate methods. This 
+can be quite
+useful for tree-based data ow analyses. For example, an abstract 
+interpretation of
+</p><p>
+</p><center>60</center>
+
+<hr>
+
+<a href="#PAGE60">60</a><strong><a name="PAGE61"> Page 61</a></strong> <a
+ href="#PAGE62">62</a>
+<p>
+a loop might compute fixed points by walking a subtree over and over 
+until some
+condition is met. It would be possible to create an appropriate walker 
+that would call
+an overridable method to test the loop condition.
+</p><p>
+</p><h2>6.5 Additional Features</h2>
+To prevent any corruption in the AST, <i>SableCC</i> implements some 
+additional safe-
+guards. The tree nature of the AST is enforced by <i>SableCC</i>. It is 
+not possible to
+create <i>directed acyclic graphs</i> (DAG). So, if an AST node is 
+attached to a new parent,
+the link between the node and its old parent is automatically deleted. 
+This happens
+also with nodes in collections.
+<p>
+The only limited corruption intentionally left in the AST is the ability
+ to use null
+references. This was necessary to keep some exibility in the AST. 
+Enforcing both
+non-null references and strict trees (no DAG) would unnecessarily 
+complicate tree
+transformations.
+</p><p>
+The Node class, ancestor of all AST classes, implements a parent() 
+method that
+returns the parentof a node ornull if there isn't one. The programmer 
+does not set
+this reference. In fact, he/she can't. The reference is simply provided 
+with no help
+from the programmer. The implementation of this is made possible by the 
+use of
+package scoped methods and because children are always accessed through 
+accessor
+methods and collections (linked lists).
+</p><p>
+All AST node classes are intentionally declared <i>final</i>. This makes
+ it impossible to
+extend a node class to store information directly in the node. Instead, 
+analysis data is
+stored in analysis classes. On the other hand, the AnalysisAdapter class
+ implements
+four methods:
+</p><p>
+</p><pre>Object getIn(Node node);
+Object getOut(Node node);
+void setIn(Node node, Object in);
+void setOut(Node node, Object out);
+</pre>
+<p>
+These methods can be used to save and retrieve information from/to 
+internal hash
+tables. The advantage of this approach is that it makes it possible to 
+free all references
+to analysis data by simply setting references to the analysis class to 
+null. The garbage
+collector will find all the garbage. This also eliminates the need to 
+walk the AST to
+free data.
+</p><p>
+</p><center>61</center>
+
+<hr>
+
+<a href="#PAGE61">61</a><strong><a name="PAGE62"> Page 62</a></strong> <a
+ href="#PAGE63">63</a>
+<p>
+</p><center>
+<table border="1">
+<tbody><tr><th>Method Name</th><th>Description</th></tr>
+<tr><td>apply()</td><td>Implements the extended visitor pattern.</td></tr>
+<tr><td>clone()</td><td>Copies an entire subtree.</td></tr>
+<tr><td><i>smart constructor</i></td><td>Takes children as parameters.</td></tr>
+<tr><td>get/setLine()</td><td>(Tokens only) gets/sets the line number.</td></tr>
+<tr><td>get/setPos()</td><td>(Tokens only) gets/sets the line position.</td></tr>
+<tr><td>get/setText()</td><td>(Tokens only) gets/sets the text of the 
+token.</td></tr>
+<tr><td>parent()</td><td>Returns the parent of the node (or <i>null</i>)</td></tr>
+<tr><td>replaceBy()</td><td>Replaces the subtree by another subtree.</td></tr>
+<tr><td>toString()</td><td>Returns a text representation of the subtree.</td></tr>
+</tbody></table>
+<p>
+Table 6.1: Methods available on all nodes.
+</p></center>
+<p>
+AST nodes implement additional features like the toString() method that 
+prints
+the complete subtree, the clone() method that clones a subtree, smart 
+constructors,
+and the replaceBy() method that simplify AST modifications. Table 6.1 
+shows a
+summary of methods available on all nodes.
+</p><p>
+</p><h2>6.6 Summary</h2>
+In this chapter, we have discussed the visitor design pattern. We then 
+explained our
+extensions to render the pattern usable in evolving structures. We 
+finally explained
+the design of tree-walkers and a few other features of <i>SableCC</i> 
+generated frameworks.
+A complete functional example of a compiler with embedded actions can be
+ found in
+chapter 3.
+<p>
+</p><center>62</center>
+
+<hr>
+
+<a href="#PAGE62">62</a><strong><a name="PAGE63"> Page 63</a></strong> <a
+ href="#PAGE64">64</a>
+<p>
+</p><h1>Chapter 7</h1>
+<h1>Case Studies</h1>
+In this chapter, we will discuss five case studies of the use of <i>SableCC</i>.
+ Two of these
+case studies used an older version of <i>SableCC</i>; version 1.0. Based
+ on the conclusion of
+these first studies, we did important additions to <i>SableCC</i>. The 
+result was <i>SableCC</i>
+version 2.0, which was used in the last studies. <i>SableCC</i> version 
+2.0 is the version
+that is described in this thesis.
+<p>
+</p><h2>7.1 SableCC with SableCC</h2>
+The first case study consisted of the rewriting <i>SableCC</i> using <i>SableCC</i>.
+ The first
+preliminary version of <i>SableCC</i> was written with the help of CUP 
+and JavaLex (now
+called JLex). In this first version, <i>SableCC</i> was already designed
+ internally around a
+typed AST, but we had to code by hand all the AST classes, and insert 
+AST building
+actions in the CUP grammar specification.
+<p>
+In <i>SableCC</i> 1.0, preliminary version, the framework provided a 
+basic DFA based
+lexer (without lexer states), a typed AST based on a pure BNF 
+specification (without
+names for alternatives and elements), an LALR(1) parser that 
+automatically built the
+AST, and a depth-first AST traversal class.
+</p><p>
+In the course of the summer of 1997, we have rewritten <i>SableCC</i> 
+version 1.0 using
+our preliminary version. This automatically provided all the additional 
+features of
+<i>SableCC</i> generated AST nodes, like accessors and automatic parent 
+pointer, improv-
+ing the robustness and usability of the internal AST of <i>SableCC</i>.
+</p><p>
+Rewriting the AST building code of <i>SableCC</i> using <i>SableCC</i> 
+proved to be easy.
+We had only to provide a specification file containing token definitions
+ and grammar
+</p><p>
+</p><center>63</center>
+
+<hr>
+
+<a href="#PAGE63">63</a><strong><a name="PAGE64"> Page 64</a></strong> <a
+ href="#PAGE65">65</a>
+<p>
+productions. We ran <i>SableCC</i> on this specification and we got a 
+new AST and AST
+builder. The use of accessors (get/set methods) in this new AST required
+ a few
+cosmetic changes to core classes of <i>SableCC</i>, but the Java 
+compiler did a fairly good
+job of finding all modification sites.
+</p><p>
+Our use of a typed AST from the beginning proved quite useful. We didn't
+ ex-
+perience any diffculty to find discrepancies in the code. In fact, most 
+errors were
+found at compile time, because they resulted in type errors. So once 
+type errors were
+resolved, we had a stable product.
+</p><p>
+Parent pointers have not proved useful before we did some major changes 
+to
+<i>SableCC</i>, in version 2.0. As the reader might have guessed, we 
+have written the
+second version of <i>SableCC</i> using the first version.
+</p><p>
+The biggest annoyance experienced, while using <i>SableCC</i> version 
+1.0, was the
+constant need to refer to the grammar of <i>SableCC</i> to find the type
+ name of an
+alternative or thename of an element. (Is it node5 or node6?)
+</p><p>
+</p><h2>7.2 Code profiling</h2>
+In the Fall term of 1997, we performed the first field test of <i>SableCC</i>
+ in the form of an
+assignment for students of the advanced compiler course at McGill 
+University. In this
+assignment, students had three options, two of which are relevant to 
+this thesis. The
+first option was to insert profiling statements in the AST of SIMPLE C 
+programs, in
+the context of the McCAT C compiler[Sri92](written in C). The second 
+option was to
+insert profiling statements in the AST of programs written in the Small 
+language, a
+toy language similar to SIMPLE C, but without functions. A Small 
+compiler, written
+in Java using <i>SableCC</i> version 1.0, was provided to the students. 
+The compiler had
+a Small AST to C file translator, so students could execute their 
+programs and test
+their transformations.
+<p>
+At that point in time, we were mainly interested in the usability of <i>SableCC</i>
+generated frameworks. So we collected verbal and written feedback (in 
+e-mail messages)
+from the students. Most students, that picked the <i>SableCC</i> options
+ (7 students in
+total), were new to Java and object-oriented programming in general. 
+This proved
+to be a good challenge, in the presence of a framework strongly based on
+ advanced
+object-oriented programming techniques, like the <i>visitor design 
+pattern</i>, <i>anonymous
+classes</i> and the use of Java packages. On the other hand, the 
+students that picked
+the McCAT option were already familiar with the C programming language.
+</p><p>
+</p><center>64</center>
+
+<hr>
+
+<a href="#PAGE64">64</a><strong><a name="PAGE65"> Page 65</a></strong> <a
+ href="#PAGE66">66</a>
+<p>
+Both group of students were provided with a general overview of the 
+respective
+frameworks, along with documentation (extensive in the case of McCAT, 
+minimal in
+the case of <i>SableCC</i>) and examples.
+</p><p>
+Surprisingly, the students choosing the <i>SableCC</i> option were able 
+to use visitors
+and anonymous classes without understanding all the underlying theory. 
+They used
+them as switch statements on the type of AST nodes and as tree walkers, 
+basing their
+code on provided examples.
+</p><p>
+So, unlike what we expected, the major diffculties were of a more 
+technical nature.
+Getting the Java Development Kit 1.1 appropriately installed, 
+understanding the
+behavior of the Java CLASSPATH variable and getting programs to compile 
+were
+the biggest problems experienced by students.
+</p><p>
+The next problem, in importance, was understanding the structure of an 
+abstract
+syntax tree, for students without a background course on compilers. 
+(This course was
+on optimization techniques and did not cover the lexing and parsing 
+stages of a
+compiler). So, for these students, it was a first experience on 
+programming trees. This
+diffculty was shared by students in the McCAT options without a compiler
+background. This diffculty was relatively easily overcome by explaining 
+to the students
+the relation between the AST and the grammar, and then by going through 
+all the
+details of a tree transformation example.
+</p><p>
+It is interesting to note that students in the <i>SableCC</i> option 
+experienced most
+of their problems early in the coding process. Often, they had compiler 
+errors due
+to type problems in their code: missing type casts or invalid 
+assignments. Many,
+possibly hard to find discrepancies, were avoided this way. In fact, 
+when we corrected
+the assignments, we found that almost all problems were of a high level 
+nature. A
+student would not have inserted the right profiling code.
+</p><p>
+The were very few problems of a technical nature in the solutions. But 
+in one case,
+a small bug proved quite diffcult to find. A student had coded his tree 
+transformations
+in a class derived from a tree walker, but at execution time, some 
+transformations did
+not seem to happen. Finally the bug was found. The student had written: 
+public
+void inStmt4(Stmt3 node) instead of public void inStmt4(Stmt4 node). So 
+he
+was creating a new overload for the inStmt4 method instead of overriding
+ it. This
+error would have been much easier to find, if alternatives had names, 
+like in <i>SableCC</i>
+2.0.
+</p><p>
+McCAT option students, on the other hand, experienced their problems 
+later.
+Normally, most of their code would compile, but at execution time, all 
+kind of problems
+occurred. Most problems were due to dereferencing null pointers or AST 
+corruption.
+</p><p>
+</p><center>65</center>
+
+<hr>
+
+<a href="#PAGE65">65</a><strong><a name="PAGE66"> Page 66</a></strong> <a
+ href="#PAGE67">67</a>
+<p>
+Errors of the first nature were relatively easy to detect, but AST 
+corruption problems
+proved very diffcult to find. McCAT implements an AST verifier, but this
+ tool will
+report that some corruption has happened. It won't report on the 
+location of
+erroneous source code. So, some solutions exhibited problems with a few 
+benchmarks,
+while working correctly on most others.
+</p><p>
+In general, both group of students delivered an equivalent quality in 
+their
+assignment solutions, even though, most <i>SableCC</i> option students 
+had to learn Java in
+addition to solve the assignment. There was one student that already 
+knew Java and
+had taken a base compiler course. He not only delivered a perfect 
+assignment, but he
+did it a few days before the assignment submission deadline.
+</p><p>
+It is in the correction of the assignments that we detected the biggest 
+problem of
+<i>SableCC</i>. Reading source code that assigns values to node4 and 
+node9, and retrieves
+information from an object of type Stmt9 is not easy to understand. It 
+would have
+been easier to read that information was retrieved from an object of 
+type ForStmt.
+</p><p>
+So, in conclusion of this experience, we decided to add names for 
+alternatives and
+elements in the specification grammar of <i>SableCC</i>.
+</p><p>
+</p><h2>7.3 A Java Front End</h2>
+As a part of a testbed for possible compile-time optimizations for Java 
+built by the
+Sable Research Group of McGill University, a front-end for the Java 
+language was
+developed using <i>SableCC</i>.
+<p>
+This proved quite simple, using <i>SableCC</i> 2.0. We simply typed the 
+LALR(1)
+grammar for Java 1.02, found in [GJS96]. The longest part was to give a 
+name to
+every alternative.
+</p><p>
+We tested this front end on many programs, and we found no problems with
+ either
+the lexer or the parser.
+</p><p>
+We did experience some problems with the Java runtime system, though, 
+when
+compiling huge Java source files. These problems are related to the Java
+ memory
+management system. Java programs compile fast until they run out of 
+physical mem-
+ory. When the Java garbage collector looks for free space in virtual 
+memory, the
+process slows down considerably.
+</p><p>
+To minimize this problem as much as possible, we have reduced the number
+ of
+object instantiations in generated lexers and parsers. By doing so, we 
+were able to
+</p><p>
+</p><center>66</center>
+
+<hr>
+
+<a href="#PAGE66">66</a><strong><a name="PAGE67"> Page 67</a></strong> <a
+ href="#PAGE68">68</a>
+<p>
+reduce the compile time of our biggest Java source file (1.3 Megabyte) 
+from 55 minutes
+to 1 minute 29 seconds.
+</p><p>
+We think that future versions of Java, using state-of-the-art 
+techniques, will
+overcome these memory and speed limitations. Meanwhile, we think that an
+ AST based
+approach will be useful, as long as the AST fits into physical memory. 
+Customized
+parsers can also be used to reduce the AST size at parsing time.
+</p><p>
+7.4 Fast Points-to Analysis of SIMPLE C Programs
+As a proof of concept on the simplicity of using <i>SableCC</i>, we have
+ developed a front-
+end compiler for the SIMPLE C language, the intermediate language used 
+in the
+McCAT C compiler[Sri92]. Then we have implemented a state-of-the-art 
+almost linear
+time points-to analysis on the typed AST generated by <i>SableCC</i>. 
+All details on the
+algorithms for this analysis can be found in [Ste96].
+</p><p>
+We have implemented the calculation of the storage model of a program. 
+To do
+so, we have used three passes over the AST.
+</p><p>
+</p><ul>
+1. In the first pass, we modify the AST to simplify the implementation 
+of analyses.
+<p>
+2. In the second pass, we create an initial storage model.
+</p><p>
+3. In the third (and final) pass, we calculate the final storage model.
+</p></ul>
+<p>
+The implementation of each pass has been done in a separate Java class. 
+This
+made the implementation of the analysis quite easy, using <i>SableCC</i>.
+ In the following
+subsections, we give aquick overview of these three passes.
+</p><p>
+</p><h4>AST Modifications</h4>
+The <i>abstract syntax tree</i> constructed by <i>SableCC</i> exactly 
+matches the <i>concrete syntax
+tree</i> of a program. In order to build a SIMPLE C front-end using <i>SableCC</i>,
+ we had to
+solve a few LALR(1) con icts by rewriting some parts of the grammar. In 
+particular,
+we had to eliminate the following alternative: type specifier = ... | 
+{typedef}
+identifier; This has led to the addition of other alternatives at 
+different places in
+the grammar.
+<p>
+In our first pass over the AST, we reintroduce the (ignored) typedef 
+alternative.
+We also remove from the AST all the alternatives that were added to 
+resolve LALR(1)
+</p><p>
+</p><center>67</center>
+
+<hr>
+
+<a href="#PAGE67">67</a><strong><a name="PAGE68"> Page 68</a></strong> <a
+ href="#PAGE69">69</a>
+<p>
+conflicts. This is simple in a <i>SableCC</i> framework, using the 
+replaceBy method and
+the node constructors.
+</p><p>
+Here are the first lines of the class ModifyAST.java:
+</p><p>
+</p><pre>import ca.mcgill.sable.simple.analysis.*;
+import ca.mcgill.sable.simple.node.*;
+import ca.mcgill.sable.util.*;
+// Reintroduce in the AST the "identifier" alternative of
+// "type specifier" and the first "value" element of the
+// "binary_expression" production.
+// This removes the modifications done to the grammar in
+// order to make it LALR(1).
+class ModifyAST extends DepthFirstAdapter
+{
+ public void outAIdentifierParameterDeclaration(
+                AIdentifierParameterDeclaration node)
+ {
+  node.replaceBy(new AParameterDeclaration(
+  new ATypedefTypeSpecifier(node.getIdentifier()),
+  node.getDeclarator()));
+ }
+ public void outAAbstractIdentifierParameterDeclaration(
+                AAbstractIdentifierParameterDeclaration node)
+ {
+  node.replaceBy(new AAbstractParameterDeclaration(
+  new ATypedefTypeSpecifier(node.getIdentifier()),
+  node.getAbstractDeclarator()));
+ }
+ ...
+}
+</pre>
+<p>
+</p><h4>Initial Storage Model</h4>
+In order to implement the storage model, we have defined the following 
+Java classes:
+Type, Lam, Ref, Bottom and Variable. Type is an abstract class and the 
+parent of
+Lam, Ref and Bottom. In addition, we have implemented the utility 
+methods (for
+fast union-find) in class Variable.
+<p>
+</p><center>68</center>
+
+<hr>
+
+<a href="#PAGE68">68</a><strong><a name="PAGE69"> Page 69</a></strong> <a
+ href="#PAGE70">70</a>
+<p>
+For example, here's some pseudo-code written in [Ste96]:
+</p><pre><i>
+settype(e,t)
+  type(e) &lt;- T
+  FOR X <img src="thesis_files/empty.jpg" height="11" width="10"> pending(e) do join(e,x)
+</i></pre>
+<p>
+and here is the Java source code for it:
+</p><pre>import ca.mcgill.sable.util.*;
+class Variable
+{
+  ...
+  void setType(Type t)
+  {
+    Variable e = this.ecr();
+    e.type = t; // type(e) &lt;-t
+    for(Iterator i = e.pending.iterator(); i.hasNext();)
+    {
+      e.join((Variable) i.next()); // join(e,x)
+    }
+  }
+  ...
+}
+</pre>
+<p>
+The next step is the implementation of a Declaration class to collect 
+all variable
+declarations and initialize the storage model. All variables are 
+initialized to ref(¡,¡):
+</p><p>
+</p><pre>// Hashtable for Type Variables
+Hashtable variables = new Hashtable(1);
+...
+// v = Ref(bottom, bottom)
+variables.put(id, new Variable(new Ref()));
+</pre>
+<p>
+</p><h4>Creating the final storage model</h4>
+There are six rules to implement afast points-to analysis. (We ignore a 
+few cases of
+[Ste96] that do not apply to SIMPLE C).
+<p>
+</p><center>69</center>
+
+<hr>
+
+<a href="#PAGE69">69</a><strong><a name="PAGE70"> Page 70</a></strong> <a
+ href="#PAGE71">71</a>
+<p>
+We have encoded these rules in the class PointsToAnalysis. Here's the 
+pseudo-code
+and implementation of rule 1:
+</p><p>
+<img src="thesis_files/rule1.jpg" height="146" width="520">
+</p><pre>// x = y
+private void rule1(Variable x, Variable y)
+{
+  Variable ref1 = ((Ref) x.ecr().type).ref.ecr();
+  Variable lam1 = ((Ref) x.ecr().type).lam.ecr();
+<p>
+  Variable ref2 = ((Ref) y.ecr().type).ref.ecr();
+  Variable lam2 = ((Ref) y.ecr().type).lam.ecr();
+</p><p>
+  if(ref1 != ref2)
+  {
+    ref1.cjoin(ref2);
+  }
+</p><p>
+  if(lam1 != lam2)
+  {
+    lam1.cjoin(lam2);
+  }
+}
+</p></pre>
+<p>
+The next step is to apply these rules appropriately. In SIMPLE C, there 
+are 5
+kinds of left-hand side and 19 kinds of right-hand side in <i>lhs = rhs</i>;
+ We analyze
+these two sides separately. When we have an indirect left-hand side, we 
+perform the
+following assignment <i>*lhs = temp</i>. Since the analysis is ow 
+insensitive, this is valid.
+Then we use temp on the left-hand side: <i>temp = rhs</i>.
+</p><p>
+</p><center>70</center>
+
+<hr>
+
+<a href="#PAGE70">70</a><strong><a name="PAGE71"> Page 71</a></strong> <a
+ href="#PAGE72">72</a>
+<p>
+Here are some exerpts from the PointsToAnalysis class:
+</p><pre>PRhs rhs;
+Variable lhs;
+public void outAModifyExpressionBasicStatement(
+               AModifyExpressionBasicStatement node)
+{
+  // [3] lhs = rhs;
+  // Dissect the 5 lhs cases (and get rhs)
+  node.getModifyExpression().apply(new AnalysisAdapter()
+  {
+    public void caseADirectModifyExpression(
+                    ADirectModifyExpression node)
+    {
+       rhs = node.getRhs();
+       node.getVarname().apply(new AnalysisAdapter()
+       {
+         ...
+         public void caseAComprefVarname(
+                         AComprefVarname node)
+         {
+           node.getCompref().apply(new AnalysisAdapter()
+           {
+             public void caseAIndirectCompref(
+                             AIndirectCompref node)
+             {
+               // (2) (*identifier).identifier... = rhs
+               lhs = new Variable(new Ref());
+               // (*identifier).identifier... = temp
+               rule5(variable(node.getIdentifier()), lhs);
+             }
+       ...}}}}}
+       // Dissect the 19 rhs cases
+       rhs.apply(new AnalysisAdapter()
+       {
+         public void caseABinaryRhs(ABinaryRhs node)
+         {
+           // (1) (value binop value)
+           ABinaryExpression exp = (ABinaryExpression) node.getBinaryExpression();
+           rule1(lhs, (Variable) PointsToAnalysis.this.getOut(exp.getLValue()));
+           rule1(lhs, (Variable) PointsToAnalysis.this.getOut(exp.getRValue()));
+          }
+        ...}}
+</pre>
+<p>
+</p><center>71</center>
+
+<hr>
+
+<a href="#PAGE71">71</a><strong><a name="PAGE72"> Page 72</a></strong> <a
+ href="#PAGE73">73</a>
+<p>
+</p><h4>Conclusion</h4>
+As we have shown, the object-oriented features of <i>SableCC</i> allowed
+ us to implement
+a state-of-the-art analysis on an AST representation of SIMPLE C 
+programs, by
+writing clear and concise Java code. This not only simplified the 
+implementation of
+this complex analysis, but the strict-typing of the AST helped discover 
+at compile
+time small discrepancies that would have been very diffcult to find 
+otherwise.
+<p>
+</p><h2>7.5 A Framework for Storing and Retrieving Analysis Information</h2>
+<p>
+As a project for the advanced compiler course (CS-308-621A), Amar 
+Goudjil has
+developed a framework to save analysis information along with the source
+ code of
+programs and retrieve it at a later time[Gou97].
+</p><p>
+The problem is the following. In most compilers, analyses are developed 
+to collect
+information on compiled programs. This information is volatile; is only 
+stored in
+memory structures. It is therefore quite diffcult for a human to analyze
+ the quality of
+this information, or share it with other compiler groups. So, Amar 
+Goudjil developed
+a framework that enables compiler developers to write this information 
+into comments
+embedded in the source code of the analyzed program.
+</p><p>
+Here is a high level view of the system operation. The developer creates
+ a grammar
+to structure analysis information into comments. Then the compiled 
+program and
+its analysis information are dumped to a file, using comments formatted 
+according to
+this new grammar. <i>SableCC</i> is then used to generate two parsers, 
+one for the original
+language, and one for the analysis information grammar. Finally, both 
+parsers are
+combined to build a typed AST, where analysis information is restored.
+</p><p>
+Amar Goudjil used lexer states to allow the coexistence of multiple 
+grammars
+using different keywords. This coexistence allowed multiple analyses to 
+dump their
+information into a single file.
+</p><p>
+The use of <i>SableCC</i> made this project relatively simple to 
+implement. The test
+framework, shown in Figure 7.1, was built to dump analysis information 
+from the
+McCAT C compiler[Sri92] and retrieve this same information in a SIMPLE C
+ compiler
+built in Java using <i>SableCC</i>.
+</p><p>
+It is easy to see a close relation between this project and the 
+Points-to Analysis
+</p><p>
+</p><center>72</center>
+
+<hr>
+
+<a href="#PAGE72">72</a><strong><a name="PAGE73"> Page 73</a></strong> <a
+ href="#PAGE74">74</a>
+<p>
+</p><center>
+<img src="thesis_files/f7.jpg" height="666" width="692">
+<p>
+Figure 7.1: Framework for storing and retrieving analysis information
+</p></center>
+<p>
+project described in Section 7.4. Both projects share the same SIMPLE C
+grammar. By combining both projects, it is possible to use the McCAT 
+compiler as a
+front-end to simplify C programs and run currently implemented analyses 
+on them.
+After writing this information into a file and retrieving this 
+information into a Java
+SIMPLE C compiler, we can use this information to develop new analyses 
+in the Java
+programming language.
+</p><p>
+</p><center>73</center>
+
+<hr>
+
+<a href="#PAGE73">73</a><strong><a name="PAGE74"> Page 74</a></strong> <a
+ href="#PAGE75">75</a>
+<p>
+</p><h1>Chapter 8</h1>
+<h1>Conclusion and Future Work</h1>
+<p>
+</p><h2>8.1 Summary and Conclusions</h2>
+Writing a small compiler or interpreter, or just writing a parser to 
+read some formatted
+text has become a common task. Compiler compilers are tools used by 
+programmers
+to accomplish these tasks. As the Java language appeared on the Internet
+ and gained
+popularity, existing compiler compilers have been ported to Java.
+<p>
+In this thesis, we have discussed <i>SableCC</i>, a new compiler 
+compiler that we
+developed specifically to take advantage of many modern features of 
+Java. Specifically, we
+explained how the design of <i>SableCC</i> shortens the development 
+cycle of a compiler.
+The we showed how to use <i>SableCC</i> to generate a lexer and how the 
+lexer can be
+customized cleanly through inheritance. Then we explained how <i>SableCC</i>
+ reads a
+grammar description and automatically generates a typed abstract syntax 
+tree for
+the described language.
+</p><p>
+We discussed how we implemented and extended the visitor design pattern 
+in
+<i>SableCC</i> generated frameworks. We also explained our 
+implementation of tree-walkers
+and how action code can be added by simply inheriting from a tree-walker
+ class. We
+explained how a <i>SableCC</i> generated AST uses the Java type system 
+and accessors
+to provide automatic parent pointers and protection against corrupted 
+trees. And
+finally, we discussed five case studies. We explained how early studies 
+have in uenced
+the evolution of <i>SableCC</i> and later studies confirmed the 
+simplicity of using <i>SableCC</i>
+to build compilers.
+</p><p>
+</p><center>74</center>
+
+<hr>
+
+<a href="#PAGE74">74</a><strong><a name="PAGE75"> Page 75</a></strong> <a
+ href="#PAGE76">76</a>
+<p>
+Throughout this thesis, we have detailed a new object-oriented approach 
+to
+compiler construction, using design patterns, interfaces and 
+inheritance. We have
+demonstrated the modularity of resulting compilers. We showed how easily
+ one can add
+new analyses into a <i>SableCC</i> framework without modifying existing 
+code.
+</p><p>
+</p><h2>8.2 Future work</h2>
+We have made <i>SableCC</i> available on the Internet (<a 
+href="http://www.sable.mcgill.ca/">http://www.sable.mcgill.ca/</a>). We
+will continue to enhance <i>SableCC</i> to meet its users needs
+<p>
+There is some room for further development of <i>SableCC</i> in the 
+following directions:
+</p><p>
+</p><ul>
+<li> The choice of parser technology is of low importance in the design 
+of <i>SableCC</i>.
+It would be interesting to provide the choice of many parsing strategies
+ to users
+of <i>SableCC</i>. <i>SableCC</i> could support LL(1), LALR(1) and 
+possibly a (slower)
+general context-free grammar parser.
+<p>
+</p></li><li> Error recovery has not been covered in this thesis. We 
+plan to add error recovery
+features to <i>SableCC</i> lexers and parsers. The handling of error 
+recovery would
+happen through inheritance in customized lexers and parsers.
+</li></ul>
+<p>
+</p><center>75</center>
+
+<hr>
+
+<a href="#PAGE75">75</a><strong><a name="PAGE76"> Page 76</a></strong> <a
+ href="#PAGE77">77</a>
+<p>
+</p><h1>Appendix A</h1>
+<h1>SableCC Online Resources</h1>
+The <i>SableCC</i> software can be obtained online from the <i>Sable 
+Research Group's</i> web
+site <a href="http://www.sable.mcgill.ca/">http://www.sable.mcgill.ca/</a>
+ or more directly, <a href="http://www.sable.mcgill.ca/SableCC/">http://www.sable.mcgill.ca/SableCC/</a>.
+An electronic copy of this document and a short introductory document on
+ <i>SableCC</i>
+can be obtained as well.
+<p>
+To join the <i>SableCC</i> discussion mailing-list, send an e-mail 
+message to
+<a href="mailto:SableCC-list-request@sable.mcgill.ca">SableCC-list-request@sable.mcgill.ca</a>
+ with 'subscribe SableCC-list' in the body.
+</p><p>
+<i>SableCC</i> is distributed in both source and binary formats. <i>SableCC</i>
+ can be re-
+distributed and/or modified under the terms of the <i>GNU General Public
+ License</i> as
+published by the <i>Free Software Foundation</i>; either version 2 of 
+the License, or any
+later version.
+</p><p>
+</p><center>76</center>
+
+<hr>
+
+<a href="#PAGE76">76</a><strong><a name="PAGE77"> Page 77</a></strong> <a
+ href="#PAGE78">78</a>
+<p>
+</p><h1>Appendix B</h1>
+<h1>SableCC 2.0 Grammar</h1>
+<pre>/* This grammar defines the <i>SableCC</i> 2.0 input language. */
+Package ca.mcgill.sable.<i>SableCC</i>; // Root Java package for generated files.
+Helpers
+/* These are character sets and regular expressions used in the definition of tokens. */
+all = [0 .. 0xFFFF];
+lowercase = ['a' .. 'z'];
+uppercase = ['A' .. 'Z'];
+digit = ['0' .. '9'];
+hex_digit = [digit + [['a' .. 'f'] + ['A' .. 'F']]];
+<p>
+tab = 9;
+cr = 13;
+lf = 10;
+eol = cr lf | cr | lf; // This takes care of different platforms
+</p><p>
+not_cr_lf = [all -[cr + lf]];
+not_star = [all -'*'];
+not_star_slash = [not_star -'/'];
+</p><p>
+blank = (' ' | tab | eol)+;
+short_comment = '//' not_cr_lf* eol;
+long_comment = '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
+comment = short_comment | long_comment;
+</p><p>
+letter = lowercase | uppercase | '_' | '$';
+id_part = lowercase (lowercase | digit)*;
+</p></pre>
+<p>
+</p><center>77</center>
+
+<hr>
+
+<a href="#PAGE77">77</a><strong><a name="PAGE78"> Page 78</a></strong> <a
+ href="#PAGE79">79</a>
+<p>
+</p><pre>States
+normal, /* The first state is the initial state. */
+package;
+<p>
+Tokens
+/* These are token definitions. It is allowed to use helper regular *
+* expressions in the body of a token definition. *
+* On a given input, the longest valid definition is chosen, In *
+* case of a match, the definition that appears first is chosen. *
+* Example: on input -&gt; 's' &lt;-"char" will have precedence on *
+* "string", because it appears first. */
+</p><p>
+{package}
+pkg_id = letter (letter | digit)*;
+</p><p>
+{normal-&gt;package}
+package = 'Package';
+</p><p>
+states = 'States';
+helpers = 'Helpers';
+tokens = 'Tokens';
+ignored = 'Ignored';
+productions = 'Productions';
+</p><p>
+token_specifier = 'T';
+production_specifier = 'P';
+</p><p>
+dot = '.';
+d_dot = '..';
+</p><p>
+{normal, package-&gt;normal}
+semicolon = ';';
+</p><p>
+equal = '=';
+l_bkt = '[';
+r_bkt = ']';
+l_par = '(';
+r_par = ')';
+l_brace = '{';
+r_brace = '}';
+plus = '+';
+minus = '-';
+q_mark = '?';
+star = '*';
+bar = '|';
+comma = ',';
+slash = '/';
+</p></pre>
+<p>
+</p><center>78</center>
+
+<hr>
+
+<a href="#PAGE78">78</a><strong><a name="PAGE79"> Page 79</a></strong> <a
+ href="#PAGE80">80</a>
+<p>
+</p><pre>arrow = '-&gt;';
+colon = ':';
+<p>
+id = id_part ('_' id_part)*;
+char = ''' not_cr_lf ''';
+dec_char = digit+;
+hex_char = '0' ('x' | 'X') hex_digit+;
+</p><p>
+string = ''' [not_cr_lf -''']+ ''';
+blank = blank;
+comment = comment;
+</p><p>
+Ignored Tokens
+/* These tokens are simply ignored by the parser. */
+blank,
+comment;
+</p><p>
+Productions
+/* These are the productions of the grammar. The first production is *
+* used by the implicit start production: *
+* start = (first production) EOF; *
+* ?, * and + have the same meaning as in a regular expression. *
+* In case a token and a production share the same name, the use of *
+* P. (for production) or T. (for token) is required. *
+* Each alternative can be explicitely named by preceding it with a *
+* name enclosed in braces. *
+* Each alternative element can be explicitely named by preceding it *
+* with a name enclosed in brackets and followed by a colon. */
+</p><p>
+grammar =
+P.package? P.helpers? P.states? P.tokens? ign_tokens? P.productions?;
+</p><p>
+package =
+T.package pkg_name?;
+</p><p>
+pkg_name =
+pkg_id [pkg_ids]:pkg_name_tail* semicolon;
+</p><p>
+pkg_name_tail =
+dot pkg_id;
+</p><p>
+helpers =
+</p></pre>
+<p>
+</p><center>79</center>
+
+<hr>
+
+<a href="#PAGE79">79</a><strong><a name="PAGE80"> Page 80</a></strong> <a
+ href="#PAGE81">81</a>
+<p>
+</p><pre>T.helpers [helper_defs]:helper_def*;
+helper_def =
+id equal reg_exp semicolon;
+<p>
+states =
+T.states id_list? semicolon;
+</p><p>
+id_list =
+id [ids]:id_list_tail*;
+</p><p>
+id_list_tail =
+comma id;
+</p><p>
+tokens =
+T.tokens [token_defs]:token_def*;
+</p><p>
+token_def =
+state_list? id equal reg_exp look_ahead? semicolon;
+</p><p>
+state_list =
+l_brace id transition? [state_lists]:state_list_tail* r_brace;
+</p><p>
+state_list_tail =
+comma id transition?;
+</p><p>
+transition =
+arrow id;
+</p><p>
+ign_tokens =
+ignored T.tokens id_list? semicolon;
+</p><p>
+look_ahead =
+slash reg_exp;
+</p><p>
+reg_exp =
+concat [concats]:reg_exp_tail*;
+</p><p>
+reg_exp_tail =
+bar concat;
+</p><p>
+concat =
+[un_exps]:un_exp*;
+</p><p>
+un_exp =
+basic un_op?;
+</p><p>
+basic =
+</p></pre>
+<p>
+</p><center>80</center>
+
+<hr>
+
+<a href="#PAGE80">80</a><strong><a name="PAGE81"> Page 81</a></strong> <a
+ href="#PAGE82">82</a>
+<p>
+</p><pre>{char} P.char |
+{set} set |
+{string} string |
+{id} id |
+{reg_exp} l_par reg_exp r_par;
+<p>
+char =
+{char} T.char |
+{dec} dec_char |
+{hex} hex_char;
+</p><p>
+set =
+{operation} l_bkt [left]:basic bin_op [right]:basic r_bkt |
+{interval} l_bkt [left]:P.char d_dot [right]:P.char r_bkt;
+</p><p>
+un_op =
+{star} star |
+{q_mark} q_mark |
+{plus} plus;
+</p><p>
+bin_op =
+{plus} plus |
+{minus} minus;
+</p><p>
+productions =
+T.productions [prods]:prod*;
+</p><p>
+prod =
+id equal alts semicolon;
+</p><p>
+alts =
+alt [alts]:alts_tail*;
+</p><p>
+alts_tail =
+bar alt;
+</p><p>
+alt =
+{parsed} alt_name? [elems]:elem* |
+{ignored} l_par alt_name? [elems]:elem* r_par;
+</p><p>
+alt_name =
+l_brace id r_brace;
+</p><p>
+elem =
+elem_name? specifier? id un_op?;
+</p><p>
+elem_name =
+l_bkt id r_bkt colon;
+</p></pre>
+<p>
+</p><center>81</center>
+
+<hr>
+
+<a href="#PAGE81">81</a><strong><a name="PAGE82"> Page 82</a></strong> <a
+ href="#PAGE83">83</a>
+<p>
+</p><pre>specifier =
+{token} token_specifier dot |
+{production} production_specifier dot;
+</pre>
+<p>
+</p><center>82</center>
+
+<hr>
+
+<a href="#PAGE82">82</a><strong><a name="PAGE83"> Page 83</a></strong> <a
+ href="#PAGE84">84</a>
+<p>
+</p><h1>Appendix C</h1>
+<h1>Simple C Grammar</h1>
+<pre>Package ca.mcgill.sable.simple;
+Helpers
+all = [0 .. 127];
+digit = ['0' .. '9'];
+nondigit = ['_' + [['a' .. 'z'] + ['A' .. 'Z']]];
+digit_sequence = digit+;
+fractional_constant = digit_sequence? '.' digit_sequence | digit_sequence '.';
+sign = '+' | '-';
+exponent_part = ('e' | 'E') sign? digit_sequence;
+floating_suffix = 'f' | 'F' | 'l' | 'L';
+simple_escape_sequence = '\' ''' | '\''' | '\?' | '\\' |
+'\a' | '\b' | '\f' | '\n' | '\r' | '\t' | '\v';
+octal_digit = ['0' .. '7'];
+octal_escape_sequence = '\' octal_digit octal_digit? octal_digit?;
+hexadecimal_digit = [digit + [['a' .. 'f'] + ['A' .. 'F']]];
+hexadecimal_escape_sequence = '\x' hexadecimal_digit+;
+escape_sequence = simple_escape_sequence | octal_escape_sequence |
+hexadecimal_escape_sequence;
+s_char = [all -['"' + ['\' + [10 + 13]]]] | escape_sequence;
+s_char_sequence = s_char+;
+nonzero_digit = ['1' .. '9'];
+decimal_constant = nonzero_digit digit*;
+octal_constant = '0' octal_digit*;
+hexadecimal_constant = '0' ('x' | 'X') hexadecimal_digit+;
+unsigned_suffix = 'u' | 'U';
+long_suffix = 'l' | 'L';
+integer_suffix = unsigned_suffix long_suffix? | long_suffix unsigned_suffix?;
+c_char = [all -[''' + ['\' + [10 + 13]]]] | escape_sequence;
+c_char_sequence = c_char+;
+cr = 13;
+</pre>
+<p>
+</p><center>83</center>
+
+<hr>
+
+<a href="#PAGE83">83</a><strong><a name="PAGE84"> Page 84</a></strong> <a
+ href="#PAGE85">85</a>
+<p>
+</p><pre>lf = 10;
+not_star = [all -'*'];
+not_star_slash = [not_star -'/'];
+tab = 9;
+<p>
+Tokens
+dot = '.';
+comma = ',';
+colon = ':';
+semicolon = ';';
+l_par = '(';
+r_par = ')';
+l_bracket = '[';
+r_bracket = ']';
+l_brace = '{';
+r_brace = '}';
+star = '*';
+div = '/';
+mod = '%';
+ampersand = '&amp;';
+plus = '+';
+minus = '-';
+caret = '^';
+tilde = '~';
+excl_mark = '!';
+quest_mark = '?';
+bar = '|';
+ellipsis = '...';
+equal = '=';
+eq = '==';
+neq = '!=';
+lt = '&lt;';
+lteq = '&lt;=';
+gt = '&gt;';
+gteq = '&gt;=';
+arrow = '-&gt;';
+plus_plus = '++';
+minus_minus = '--';
+shl = '&lt;&lt;';
+shr = '&gt;&gt;';
+ampersand_ampersand = '&amp;&amp;';
+bar_bar = '||';
+star_equal = '*=';
+div_equal = '/=';
+mod_equal = '%=';
+plus_equal = '+=';
+minus_equal = '-=';
+</p></pre>
+<p>
+</p><center>84</center>
+
+<hr>
+
+<a href="#PAGE84">84</a><strong><a name="PAGE85"> Page 85</a></strong> <a
+ href="#PAGE86">86</a>
+<p>
+</p><pre>shl_equal = '&lt;&lt;=';
+shr_equal = '&gt;&gt;=';
+ampersand_equal = '&amp;=';
+caret_equal = '^=';
+bar_equal = '|=';
+<p>
+case = 'case';
+default = 'default';
+if = 'if';
+else = 'else';
+switch = 'switch';
+while = 'while';
+do = 'do';
+for = 'for';
+goto = 'goto';
+continue = 'continue';
+break = 'break';
+return = 'return';
+typedef = 'typedef';
+extern = 'extern';
+static = 'static';
+auto = 'auto';
+register = 'register';
+void = 'void';
+char = 'char';
+int = 'int';
+short = 'short';
+long = 'long';
+float = 'float';
+double = 'double';
+signed = 'signed';
+unsigned = 'unsigned';
+struct = 'struct';
+union = 'union';
+enum = 'enum';
+const = 'const';
+volatile = 'volatile';
+sizeof = 'sizeof';
+</p><p>
+identifier = nondigit (digit | nondigit)*;
+floating_constant = fractional_constant exponent_part? floating_suffix? |
+digit_sequence exponent_part floating_suffix?;
+string_litteral = 'L'? '"' s_char_sequence? '"';
+integer_constant = decimal_constant integer_suffix? | octal_constant integer_suffix? |
+hexadecimal_constant integer_suffix?;
+character_constant = 'L'? ''' c_char_sequence ''';
+blank = (cr | lf | tab | ' ')+;
+comment = '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
+</p></pre>
+<p>
+</p><center>85</center>
+
+<hr>
+
+<a href="#PAGE85">85</a><strong><a name="PAGE86"> Page 86</a></strong> <a
+ href="#PAGE87">87</a>
+<p>
+</p><pre>Ignored Tokens
+blank,
+comment,
+extern,
+static,
+auto,
+register,
+const,
+volatile;
+<p>
+Productions
+translation_unit =
+declaration_or_definition*;
+</p><p>
+declaration_or_definition =
+{struct_declaration} struct_declaration |
+{union_declaration} union_declaration |
+{enum_declaration} enum_declaration |
+{typedef_declaration} typedef_declaration |
+{function_declaration} function_declaration |
+{variable_declaration} variable_declaration |
+{function_definition} function_definition;
+</p><p>
+struct_declaration =
+struct identifier l_brace member_declaration* r_brace semicolon;
+</p><p>
+member_declaration =
+type_specifier declarator semicolon;
+</p><p>
+type_specifier =
+{void} void_specifier |
+{char} char_specifier |
+{signed_char} signed_char_specifier |
+{signed_short} signed_short_specifier |
+{signed_int} signed_int_specifier |
+{signed_long} signed_long_specifier |
+{unsigned_char} unsigned_char_specifier |
+{unsigned_short} unsigned_short_specifier |
+{unsigned_int} unsigned_int_specifier |
+{unsigned_long} unsigned_long_specifier |
+{float} float_specifier |
+{double} double_specifier |
+{long_double} long_double_specifier |
+{struct} struct_specifier |
+{union} union_specifier |
+</p></pre>
+<p>
+</p><center>86</center>
+
+<hr>
+
+<a href="#PAGE86">86</a><strong><a name="PAGE87"> Page 87</a></strong> <a
+ href="#PAGE88">88</a>
+<p>
+</p><pre>{enum} enum_specifier |
+// for modified AST
+({typedef} identifier);
+<p>
+void_specifier =
+void;
+</p><p>
+char_specifier =
+char;
+</p><p>
+signed_char_specifier =
+signed char;
+</p><p>
+signed_short_specifier =
+{short} short |
+{signed_short} signed short |
+{short_int} short int |
+{signed_short_int} signed short int;
+</p><p>
+signed_int_specifier =
+{int} int |
+{signed} signed |
+{signed_int} signed int;
+</p><p>
+signed_long_specifier =
+{long} long |
+{signed_long} signed long |
+{long_int} long int |
+{signed_long_int} signed long int;
+</p><p>
+unsigned_char_specifier =
+unsigned char;
+</p><p>
+unsigned_short_specifier =
+{unsigned_short} unsigned short |
+{unsigned_short_int} unsigned short int;
+</p><p>
+unsigned_int_specifier =
+{unsigned} unsigned |
+{unsigned_int} unsigned int;
+</p><p>
+unsigned_long_specifier =
+{unsigned_long} unsigned long |
+{unsigned_long_int} unsigned long int;
+</p><p>
+float_specifier =
+float;
+</p></pre>
+<p>
+</p><center>87</center>
+
+<hr>
+
+<a href="#PAGE87">87</a><strong><a name="PAGE88"> Page 88</a></strong> <a
+ href="#PAGE89">89</a>
+<p>
+</p><pre>double_specifier =
+double;
+<p>
+long_double_specifier =
+long double;
+</p><p>
+struct_specifier =
+struct identifier;
+</p><p>
+union_specifier =
+union identifier;
+</p><p>
+enum_specifier =
+enum identifier;
+</p><p>
+declarator =
+{pointer} pointer |
+{direct} direct_declarator;
+</p><p>
+pointer =
+{direct} star direct_declarator |
+{pointer} star pointer;
+</p><p>
+direct_declarator =
+{identifier} identifier |
+{array} array_declarator |
+{function} function_pointer_declarator;
+</p><p>
+array_declarator =
+{identifier} identifier l_bracket integer_constant? r_bracket |
+{pointer} l_par pointer r_par l_bracket integer_constant? r_bracket |
+{array} array_declarator l_bracket integer_constant? r_bracket;
+</p><p>
+function_pointer_declarator =
+[plp]:l_par pointer [prp]:r_par [pllp]:l_par parameter_list? [plrp]:r_par;
+</p><p>
+parameter_list =
+parameter_declaration parameter_list_tail*;
+</p><p>
+parameter_declaration =
+type_specifier declarator |
+{abstract} type_specifier abstract_declarator? |
+{identifier} identifier declarator | // will be removed from AST
+{abstract_identifier} identifier abstract_declarator?; // will be removed from AST
+</p><p>
+abstract_declarator =
+{pointer} abstract_pointer |
+</p></pre>
+<p>
+</p><center>88</center>
+
+<hr>
+
+<a href="#PAGE88">88</a><strong><a name="PAGE89"> Page 89</a></strong> <a
+ href="#PAGE90">90</a>
+<p>
+</p><pre>{direct} abstract_direct_declarator;
+abstract_pointer =
+{direct} star abstract_direct_declarator? |
+{pointer} star abstract_pointer;
+<p>
+abstract_direct_declarator =
+{array} abstract_array_declarator |
+{function} abstract_function_pointer_declarator;
+</p><p>
+abstract_array_declarator =
+{integer} l_bracket integer_constant? r_bracket |
+{pointer} l_par abstract_pointer r_par l_bracket integer_constant? r_bracket |
+{array} abstract_array_declarator l_bracket integer_constant? r_bracket;
+</p><p>
+abstract_function_pointer_declarator =
+[plp]:l_par abstract_pointer [prp]:r_par [pllp]:l_par parameter_list? [plrp]:r_par;
+</p><p>
+parameter_list_tail =
+comma parameter_declaration;
+</p><p>
+union_declaration =
+union identifier l_brace member_declaration* r_brace semicolon;
+</p><p>
+enum_declaration =
+enum identifier l_brace enumerator additional_enumerator* r_brace semicolon;
+</p><p>
+additional_enumerator =
+comma enumerator;
+</p><p>
+enumerator =
+{automatic} identifier |
+{specific} identifier equal constant;
+</p><p>
+typedef_declaration =
+typedef type_specifier declarator semicolon |
+{identifier} typedef identifier declarator semicolon; // will be removed from AST
+</p><p>
+function_declaration =
+type_specifier function_declarator semicolon |
+{identifier} identifier function_declarator semicolon; // will be removed from AST
+</p><p>
+function_declarator =
+{pointer} pointer_function |
+{direct} direct_function_declarator;
+</p><p>
+pointer_function =
+{direct} star direct_function_declarator |
+</p></pre>
+<p>
+</p><center>89</center>
+
+<hr>
+
+<a href="#PAGE89">89</a><strong><a name="PAGE90"> Page 90</a></strong> <a
+ href="#PAGE91">91</a>
+<p>
+</p><pre>{pointer} star pointer_function;
+direct_function_declarator =
+{array} array_function_declarator |
+{identifier} identifier l_par parameter_list? r_par |
+{function} [plp]:l_par pointer_function [prp]:r_par [pllp]:l_par
+parameter_list? [plrp]:r_par;
+<p>
+array_function_declarator =
+{pointer} l_par pointer_function r_par l_bracket integer_constant? r_bracket |
+{array} array_function_declarator l_bracket integer_constant? r_bracket;
+</p><p>
+variable_declaration =
+type_specifier declarator additional_declarator* semicolon |
+{identifier} identifier declarator additional_declarator*
+semicolon; // will be removed from AST
+</p><p>
+additional_declarator =
+comma declarator;
+</p><p>
+function_definition =
+type_specifier function_declarator function_body |
+{identifier} identifier function_declarator function_body; // will be removed from AST
+</p><p>
+function_body =
+l_brace variable_declaration* statement* stop_statement? r_brace;
+</p><p>
+compound_statement =
+l_brace statement* stop_statement? r_brace;
+</p><p>
+statement =
+{comp_stmt} compound_statement |
+{basic_stmt} basic_statement semicolon |
+{if} if l_par conditional_expression r_par compound_statement |
+{if_then_else} if l_par conditional_expression r_par [then_comp_stmt]:compound_statement
+else [else_comp_stmt]:compound_statement |
+{if_else} if l_par conditional_expression r_par semicolon else compound_statement |
+{while} while l_par conditional_expression r_par compound_statement |
+{do} do compound_statement while l_par conditional_expression r_par semicolon |
+{for} for l_par [start]:basic_statement? [sc_one]:semicolon conditional_expression?
+[sc_two]:semicolon [iter]:basic_statement? r_par compound_statement |
+{switch} switch l_par value r_par case_statements;
+</p><p>
+basic_statement =
+{call_expression} call_expression |
+{modify_expression} modify_expression |
+{dead1} simple_expression |
+{dead2} l_par star identifier r_par |
+</p></pre>
+<p>
+</p><center>90</center>
+
+<hr>
+
+<a href="#PAGE90">90</a><strong><a name="PAGE91"> Page 91</a></strong> <a
+ href="#PAGE92">92</a>
+<p>
+</p><pre>{dead3} l_par ampersand varname r_par |
+{dead4} unop identifier |
+{dead5} l_par unop identifier r_par |
+{dead6} l_par type_name r_par varname |
+{dead7} l_par type_name r_par constant;
+<p>
+rhs =
+{binary} binary_expression |
+{unary} unary_expression;
+</p><p>
+binary_expression =
+{identifier} l_par identifier binop value r_par | // will be removed from AST
+{constant} l_par constant binop value r_par | // will be removed from AST
+</p><p>
+// For modified AST
+( l_par [l_value]:value binop [r_value]:value r_par );
+</p><p>
+value =
+{identifier} identifier |
+{constant} constant;
+</p><p>
+constant =
+{floating} unop? floating_constant |
+{string} unop? string_litteral |
+{integer} unop? integer_constant |
+{character} unop? character_constant;
+</p><p>
+binop =
+{relop} relop |
+{star} star |
+{div} div |
+{mod} mod |
+{ampersand} ampersand |
+{plus} plus |
+{minus} minus |
+{caret} caret |
+{excl_mark} excl_mark |
+{bar} bar |
+{shl} shl |
+{shr} shr |
+{ampersand_ampersand} ampersand_ampersand |
+{bar_bar} bar_bar;
+</p><p>
+relop =
+{eq} eq |
+{neq} neq |
+{lt} lt |
+{lteq} lteq |
+</p></pre>
+<p>
+</p><center>91</center>
+
+<hr>
+
+<a href="#PAGE91">91</a><strong><a name="PAGE92"> Page 92</a></strong> <a
+ href="#PAGE93">93</a>
+<p>
+</p><pre>{gt} gt |
+{gteq} gteq;
+<p>
+unary_expression =
+{simple} simple_expression |
+{reference} l_par star identifier r_par |
+{address} l_par ampersand varname r_par |
+{call} call_expression |
+{unop} unop identifier |
+{par_unop} l_par unop identifier r_par |
+{cast} l_par type_name r_par varname |
+{cast_const} l_par type_name r_par constant;
+</p><p>
+simple_expression =
+{varname} varname |
+{constant} constant;
+</p><p>
+varname =
+{arrayref} arrayref |
+{compref} compref |
+{identifier} identifier;
+</p><p>
+arrayref =
+identifier reflist+;
+</p><p>
+reflist =
+l_bracket value r_bracket;
+</p><p>
+compref =
+{indirect} l_par star identifier r_par idlist+ |
+{direct} identifier idlist+;
+</p><p>
+idlist =
+dot identifier;
+</p><p>
+call_expression =
+identifier l_par arglist? r_par;
+</p><p>
+arglist =
+value arglist_tail*;
+</p><p>
+arglist_tail =
+comma value;
+</p><p>
+unop =
+{plus} plus |
+{minus} minus |
+{tilde} tilde |
+</p></pre>
+<p>
+</p><center>92</center>
+
+<hr>
+
+<a href="#PAGE92">92</a><strong><a name="PAGE93"> Page 93</a></strong> <a
+ href="#PAGE94">94</a>
+<p>
+</p><pre>{excl_mark} excl_mark;
+type_name =
+type_specifier abstract_declarator? |
+{identifier} identifier abstract_declarator?; // will be removed from AST
+<p>
+modify_expression =
+{direct} varname equal rhs |
+{indirect} l_par star identifier r_par equal rhs;
+</p><p>
+conditional_expression =
+{rel} l_par [left]:value relop [right]:value r_par |
+{value} value;
+</p><p>
+case_statements =
+l_brace case_statement+ default_statement r_brace;
+</p><p>
+case_statement =
+{body} case constant colon l_brace statement* stop_statement r_brace |
+{empty} case constant colon;
+</p><p>
+stop_statement =
+{break} break semicolon dead_code* |
+{continue} continue semicolon dead_code* |
+{return} return semicolon dead_code* |
+{return_value} return value semicolon dead_code* |
+{return_par} return l_par value r_par semicolon dead_code*;
+</p><p>
+dead_code =
+{dead1} statement |
+{dead2} break semicolon |
+{dead3} continue semicolon |
+{dead4} return semicolon |
+{dead5} return value semicolon |
+{dead6} return l_par value r_par semicolon;
+</p><p>
+default_statement =
+{body} default colon l_brace statement* stop_statement r_brace |
+{empty} default colon;
+</p><p>
+93
+103fi
+<br>
+<a href="#PAGE103">103</a>
+<strong><a name="PAGE104"> Page 104</a></strong>
+<a href="#PAGE105">105</a>
+<br>
+Appendix D
+Customized Parser
+In this Appendix, we present a customized parser that simplifies the AST of a small
+arithmetic grammar. Here is the grammar:
+</p><p>
+Tokens
+number = ['0'..'9']+;
+plus = '+'; minus = '-';
+l_par = '('; r_par = ')';
+blank = ' ';
+Ignored Tokens blank;
+Productions
+expr =
+{plus} expr plus number |
+{minus} expr minus number |
+{par} l_par expr r_par |
+{number} number |
+( {op} [left]:expr op [right]:expr ); // for modified AST
+op =
+( {plus} plus ) | // for modified AST
+( {minus} minus ); // for modified AST
+</p><p>
+In other words, our initial grammar is (Productions section only):
+Productions
+expr =
+{plus} expr plus number |
+{minus} expr minus number |
+{par} l_par expr r_par |
+{number} number;
+</p></pre>
+<p>
+</p><center>94</center>
+
+<hr>
+
+<a href="#PAGE94">94</a><strong><a name="PAGE95"> Page 95</a></strong> <a
+ href="#PAGE96">96</a>
+<p>
+</p><pre>Here is a customized parser that simplifies the AST while it is constructed.
+import ...
+public class CustomParser extends Parser
+{... // Constructor
+AstFix fix = new AstFix();
+private class AstFix extends AnalysisAdapter
+{ public void caseAPlusExpr(APlusExpr node)
+{ CustomParser.token = new AOpExpr(
+node.getExpr(),
+new APlusOp(node.getPlus()),
+new ANumberExpr(node.getNumber()));
+}
+public void caseAMinusExpr(AMinusExpr node)
+{ CustomParser.token = new AOpExpr(
+node.getExpr(),
+new AMinusOp(node.getMinus()),
+new ANumberExpr(node.getNumber()));
+}
+public void caseAParExpr(AParExpr node)
+{ CustomParser.token = node.getExpr();
+}
+}
+protected void filter()
+{
+token.apply(fix)
+}
+}
+<p>
+Our final grammar is (Productions section only):
+Productions
+expr =
+{number} number |
+{op} [left]:expr op [right]:expr;
+op =
+{plus} plus |
+{minus} minus;
+</p></pre>
+<p>
+</p><center>95</center>
+
+<hr>
+
+<a href="#PAGE95">95</a><strong><a name="PAGE96"> Page 96</a></strong> <a
+ href="#PAGE97">97</a>
+<p>
+</p><h1>Bibliography</h1>
+<pre>[ANS97] ANSI. HL7 version 2.3 (ballot draft 3), 1997. World-Wide Web page URL:
+http://www.mcis.duke.edu/standards/HL7/pubs/version2.3/.
+<p>
+[ASU88] Alfred V. Aho, Ravi Sethi, and Jeffrey D. Ullman. Compilers | Principles,
+Techniques, and Tools. Addison-Wesley Publishing Company, Reading,
+Massachusetts, corrected edition, 1988.
+</p><p>
+[BBB + 57] J.W. Backus, R. J. Beeber, S. Best, R. Goldberg, L.M. Haibt, H.L. Herrick,
+R.A. Nelson, D. Sayre, P.B. Sheridan, H. Stern, I Ziller, R. A. Hughes,
+and R. Nutt. The FORTRAN automatic coding system. Western Joint
+Computer Conference, 1957.
+</p><p>
+[Ber97] Elliot Berk. JLex: A lexical analyzer generator for Java(TM),
+1997. World-Wide Web page URL: http://www.cs.princeton.edu/appel/modern/java/JLex/.
+</p><p>
+[GH95] E. Gamma and R. Helm. Design Patterns, Elements of Reusable
+Object-Oriented Software. Addison-Wesley, 1995.
+</p><p>
+[GJS96] J. Gosling, B. Joy, and G. Steele. The Java Language Specification.
+Addison-Wesley, 1996.
+</p><p>
+[Gou97] Amar Goudjil. Framework for storing and retrieving analysis information.
+Technical Report CS-308-621A-1997-2.1, McGill University, 1997.
+</p><p>
+[HU79] J. E. Hopcroft and J. D. Ullman. Introduction to Automata Theory, Lan-
+guages, and Computation. Addison-Wesley, 1979.
+</p><p>
+[Hud97] Scott E. Hudson. CUP parser generator for Java, 1997. World-Wide Web
+page URL: http://www.cs.princeton.edu/ appel/modern/java/CUP/.
+</p><p>
+[Ins97] Magelang Institute. ANTLR 2.0, 1997. World-Wide Web page URL:
+http://www.antlr.org/.
+</p></pre>
+<p>
+</p><center>96</center>
+
+<hr>
+
+<a href="#PAGE96">96</a><strong><a name="PAGE97"> Page 97</a></strong>
+<p>
+</p><pre>[Joh75] S. C. Johnson. YACC -yet another compiler compiler. Technical Report
+Computing Science Technical Report 32, AT&amp;T Bell Laboratories, Murray
+Hill, N.J., 1975.
+<p>
+[Knu84] D. E. Knuth. The TeX book. Addison Wesley, 1984.
+[Les75] M. E. Lesk. Lex -a lexical analyzer generator. Technical Report Comput-
+ing Science Technical Report 39, AT&amp;T Bell Laboratories, Murray Hill,
+N.J., 1975.
+</p><p>
+[LF97] T. LinDholm and F.Yellin. The Java Virtual Machine Specification.
+Addison-Wesley, 1997.
+</p><p>
+[Par97] Terence J. Parr. Language Translation Using PCCTS &amp; C++. Automata
+Publishing Company, 1997. ISBN: 0962748854.
+</p><p>
+[Sri92] Bhama Sridharan. An analysis framework for the McCAT compiler. Mas-
+ter's thesis, McGill University, Montréal, Québec, September 1992.
+</p><p>
+[Ste96] Bjarne Steensgaard. Points-to analysis in almost linear time. In In Pro-
+ceedings of the Twentythird Annual ACM SIGPLAN-SIGACT Symposium
+on Principles of Programming Languages, pages 32{41, 1996.
+</p><p>
+[W3C97] W3C. HTML 4.0 specification, 1997. World-Wide Web page URL:
+http://www.w3.org/TR/REC-html40/.
+</p></pre>
+<p>
+
+</p><hr>
+
+EOF
+    <div id="lastupdate">
+      This site has been last updated by the <a 
+href="mailto:webmaster@sablecc.org?subject=SableCC%20web%20site">web 
+master</a>
+      on 2007/6/24.
+    </div>
+  </div> <!-- main -->
+ </body></html>

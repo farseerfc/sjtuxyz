@@ -1,0 +1,96 @@
+/**
+ * SableCC stylesheet.
+ * 
+ * Roger Keays January 2004
+ *
+ * We use a blue/green color scheme.
+ */
+
+/* positioning first */
+
+#topnav {
+ height: 85px; width: 100%; 
+ background-color: white; overflow: hidden; 
+ border-bottom: 1px solid #ccc; /* top outline of main container */
+}
+
+#leftnav {
+ width: 200px; margin: 8px; margin-right: 0px; 
+ position: absolute;
+}
+
+#sablecc-logo { 
+ width: 408px; height: 100px; float: left; z-index: 1;
+}
+
+#parser-generator { 
+ width: 422px; height: 100px; float: right; z-index: 0;
+}
+
+#sf { 
+ font-size: small; border: 1px solid #3ea54a; padding: 2px;
+ background: url(../images/sf-bg.jpg) right repeat-y; width: 180px;
+}
+#sfimg { text-align: center; }
+
+#ninthave {
+ width: 180px;
+ padding-top: 3px;
+ text-align: center;
+ font-size: small;
+}
+
+#main {
+ position: absolute;
+ left: 210px;      /* space for leftnav */
+ right: 5px;
+ border-left: 1px solid #ccc;    /* left outline of main container */
+ border-bottom: 1px solid #ccc;  /* right outline of main container */
+ border-right: 1px solid #ccc;   /* bottom outline of main container */
+ padding: 3px;
+ background-color: #f3f3f3;         /* pale grey, matches the tabs */
+}
+
+#lastupdate {
+ padding-top: 3px;
+ text-align: center;
+ font-size: small;
+}
+
+/* general styles below */
+
+a { text-decoration: none; color: navy; }
+a:visited { 
+ color: #3ea54a;          /* dark green */ 
+}
+a:hover { 
+ text-decoration: underline; 
+ color: #6dabd0;          /* our medium blue */
+}
+
+body { font-family: sans-serif; padding: 0px; margin: 0px; height: 100%; }
+table { border-collapse: collapse; }
+th { background: #dcdcef; color: #5a8daa; }
+td { vertical-align: middle; padding: 2px; }
+pre, code { color: #3ea54a; }
+h1 { 
+ background: url('../images/blue-shade.jpg') left repeat-y ; 
+ font-size: 20px; font-variant: small-caps; color: navy; 
+}
+
+h2 { 
+ background: url('../images/blue-shade.jpg') left repeat-y ; 
+ font-size: 16px; font-variant: small-caps; color: black; 
+}
+
+h3 { 
+ background: url('../images/blue-shade.jpg') left repeat-y ; 
+ font-size: 14px; font-variant: small-caps; color: black; 
+}
+
+li { padding-bottom: 2px; }
+
+/* named classes */
+.smallcenter { font-size: small; text-align: center; }
+.item-1 { background: #e8f4e9; } /* pale green */
+.padded li { padding-top: 2px; }
