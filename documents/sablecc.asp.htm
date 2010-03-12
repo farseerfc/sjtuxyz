@@ -1,0 +1,1282 @@
+<!DOCTYPE HTML PUBLIC "&ndash;//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+
+
+	<title>Compiler Design - SableCC tutorial</title>
+  
+  <meta http-equiv="content-type" content="text/html; 
+charset=ISO-8859-1">
+  <meta name="keywords" content="AI, Artificial Intelligence, Java, 
+Python, C++, C/C++">
+  <meta name="keywords" content="C, Game, Game Design, Game Development,
+ Game, Games">
+  <meta name="keywords" content="Flash, Flash MX, PovRay, Jython, 
+Compiler">
+  <meta name="keywords" content="Compiler Design, SableCC, Flex, Bison, 
+ANTLR, Scheme">
+  <meta name="keywords" content="Radiance, Voxel, Voxels, Volume 
+Rendering, Physics">
+  <meta name="keywords" content="Maths, Mathematics, Particle, Particle 
+System">
+  <meta name="keywords" content="Particles, Particle Systems, Velocity, 
+Animation">
+  <meta name="keywords" content="Acceleration, Momentum, Trajectory, 
+Trajectories">
+  <meta name="keywords" content="Vector, Vectors, Quaternion, 
+Quaternions, Matrix">
+  <meta name="keywords" content="Matrices, Parser, Parsers, Lexer, 
+Lexers, Scanner">
+  <meta name="keywords" content="Scanners, Grammar, Grammars, Regular 
+Expressions">
+  <meta name="keywords" content="Regular Expression, Computer Graphics, 
+OpenGL">
+<style type="text/css">
+<!--
+
+a,table{  font-family: Tahoma; color: #FFFFFF; text-decoration: none; font-size: 11pt}
+a:hover{font-family: Tahoma; color: #FFFFFF; text-decoration: none; background: #003366; font-size: 11pt}
+--></style>
+</head><body alink="#ff0000" bgcolor="#336699" link="#000000" 
+text="#ffffff" vlink="#000000">
+
+<table bgcolor="#336699" border="0" width="100%">
+<tbody><tr>
+		<td width="100%">
+         <center><img src="sablecc.asp_files/logo.gif" height="80" 
+width="250"></center>
+       </td>
+       <td align="right" bgcolor="#336699">
+      <embed src="sablecc.asp_files/banner.swf" quality="high" 
+bgcolor="#003366" name="banner" type="application/x-shockwave-flash" 
+pluginspage="http://www.macromedia.com/go/getflashplayer" align="" 
+height="80" width="500"> 	   </td>
+</tr>
+</tbody></table>
+   <table align="center" bgcolor="#003366" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+     <tbody><tr>
+       <td align="center" bgcolor="#336699">
+       <table>
+     <tbody><tr>
+       <td align="center" bgcolor="#336699">
+         <a href="http://www.brainycreatures.org/default.asp">
+           <u>Home</u>
+         </a>
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699"> 
+         <a href="http://www.brainycreatures.org/ai/intro.asp">
+           <u>AI</u>
+         </a>
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699"> 
+         <a href="http://www.brainycreatures.org/physics/intro.asp">
+           <u>Physics</u>
+         </a>
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699"> 
+         <a href="http://www.brainycreatures.org/maths/intro.asp">
+           <u>Mathematics</u>
+         </a> 
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699"> 
+         <a href="http://www.brainycreatures.org/compiler/intro.asp">
+           <u>Compiler Design</u>
+         </a> 
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699"> 
+         <a href="http://www.brainycreatures.org/games/intro.asp">
+           <u>Games</u>  
+         </a>
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699">
+         <a href="http://www.brainycreatures.org/download/intro.asp">
+           <u>Downloads</u>
+         </a>
+       </td>
+       <td align="center" bgcolor="#336699">|</td>
+       <td align="center" bgcolor="#336699"> 
+         <a href="http://www.brainycreatures.org/about_me.asp">
+           <u>About Me</u>
+         </a>
+       </td>
+     </tr>
+     </tbody></table>
+     </td>
+     </tr>
+   </tbody></table>
+
+   <table align="center" border="0" cellpadding="2" cellspacing="1" 
+width="100%">
+     <tbody><tr>
+       <td align="center" bgcolor="#336699">
+       <table>
+         
+           <tbody><tr>
+             <td align="center">
+                You are visitor number 301456 since February 2003
+             </td>
+           </tr>
+         
+     </tbody></table>
+     </td>
+     </tr>
+   </tbody></table>
+ 	<table border="0" cellpadding="1" cellspacing="1" width="100%">
+ 			   <tbody>
+    <tr>
+			   	   <td valign="top" width="15%">
+			<table align="center" bgcolor="#003366" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+			  <tbody><tr>
+					<td align="center" bgcolor="#003366">
+						<b>Compiler Design</b>
+					</td>
+				</tr>
+				<tr>
+					<td align="left" bgcolor="#336699">
+ 					  <table>
+						<tbody><tr><td><a 
+href="http://www.brainycreatures.org/compiler/intro.asp"><u>Introduction</u></a></td></tr>
+						<tr><td><a 
+href="http://www.brainycreatures.org/compiler/regularexpression.asp"><u>Regular
+ Expressions</u></a></td></tr>
+						<tr><td><a 
+href="http://www.brainycreatures.org/compiler/grammar.asp"><u>Grammars</u></a></td></tr>
+						<tr><td><a 
+href="http://www.brainycreatures.org/compiler/sablecc.asp"><u>SableCC</u></a></td></tr>
+					  </tbody></table>					
+					</td>
+				</tr>
+			</tbody></table>
+           <table>
+             <tbody><tr><td>&nbsp;</td></tr>
+           </tbody></table>
+			<table align="center" bgcolor="#003366" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+			  <tbody><tr>
+					<td align="center" bgcolor="#003366">
+						<b>Free Books</b>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" bgcolor="#336699">
+					<br><br>
+					<div align="center">
+   					  <a href="http://www.planetpdf.com/mainpage.asp?WebPageID=314"><img
+ src="sablecc.asp_files/thinkingjava.jpg" height="140" width="112"></a><br><br><br>
+					  <a href="http://www.planetpdf.com/mainpage.asp?WebPageID=315"><img
+ src="sablecc.asp_files/thinkingc.jpg" height="140" width="112"></a><br><br><br>
+					  <a href="http://www.planetpdf.com/mainpage.asp?WebPageID=326"><img
+ src="sablecc.asp_files/aoassembly.jpg" height="140" width="112"></a><br><br><br>
+					  <a href="http://isengard.overcode.net/%7Eovercode/writing/plg/">
+						<img src="sablecc.asp_files/plinuxgames.jpg" height="140" 
+width="112"></a><br><br><br>
+  			         <a 
+href="http://www.planetpdf.com/mainpage.asp?WebPageID=620">
+						<img src="sablecc.asp_files/ooinc.jpg" height="140" width="112"></a>
+					</div>
+					</td>
+				</tr>
+			</tbody></table>
+		</td>
+		<td valign="top" width="70%">
+			<table align="center" bgcolor="#003366" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+				<tbody><tr>
+					<td align="center" bgcolor="#003366">
+						<b>Writing a compiler with SableCC</b>
+					</td>
+				</tr>
+				<tr>
+					<td align="left" bgcolor="#336699">
+<h1></h1><p>To create a compiler with SableCC we follow the following 
+steps:
+</p><ol>
+<li>We create a SableCC specification file containing the lexical 
+definitions and the grammar for the language being designed.
+</li><li>After creating the SableCC specification file, we generate the 
+framework by launching SableCC on the specification file. .
+</li><li>At this stage, we generate the working classes. This is the 
+only code we have to write in Java<sup>TM</sup>. It is in this step that
+ we write the semantic analyzer, the code generator, and possibly the 
+code optimizer. In the case of an interpreter, we write a single class. 
+These working classes may be subclasses of one of the classes from the 
+analysis subfolder generated by SableCC in the previous step.
+</li><li>It is during this step that we create the driver class of the 
+compiler. It is used to activate the lexer, parser and working classes.
+</li><li>Finally, in this step, we compile the compiler with a Java<sup>TM</sup>
+ compiler.
+</li></ol>
+<p>To illustrate this, we are going to implement a subset of Pascal by 
+following the steps outlined above. We are going to implement a subset 
+instead of the full language, because we want to give the reader an idea
+ of how SableCC works.</p>
+
+<p>We are now going to start the implementation</p>
+
+<h3>SableCC specification file</h3>
+
+<p>Before we start implementing the SableCC specification file for the 
+subset of Pascal, we are going to describe the syntax of SableCC using 
+BNF. I am assuming that you have read the introduction to regular 
+expressions and the context&#8211;free grammars.</p>
+<p>The syntax of SableCC is as follows:</p>
+<p></p><center><table>
+  <tbody><tr>
+    <td>&lt;grammar&gt; &#8594;</td>
+    <td>[&lt;package declaration&gt;] [&lt;helper declarations&gt;]</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td>[&lt;states declarations&gt;] [&lt;token declarations&gt;]</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td>[&lt;ignored tokes&gt;] [&lt;productions&gt;]</td>
+  </tr>
+</tbody></table></center>
+<p>As we can see from the grammar, a SableCC specification file may  by 
+an empty file. Remember the meaning of anything between [ and ] ? This 
+means that anything between [ and ] can only be the empty string or a 
+single occurrence of whatever is between the brackets.</p>
+	<p>From the allowed sections in a SableCC specification file, we will 
+not take into account the &lt;state declarations&gt; because we will not
+ use it. But if the reader is interested to know how it works, he should
+ refer to [1]. We will now describe the syntax of the other productions.
+ The &lt;package declaration&gt; is used to name the destination root, 
+that is, the directory where all the generated files will be placed. We 
+declare the name of the package as follows:</p>
+<p></p><center>Package uk.co.brainycreatures.smallpascal;</center>
+
+<p>In this example, the root directory will be 
+uk\co\brainycreatures\smallpascal. Meaning that all the genarated 
+subfolders will be placed under this directory. A package name may be 
+any sequence of identifiers, starting with a letter followed by zero or 
+more letters or digits, separated by a dot. The &lt;helper 
+declarations&gt; works like constants in Pascal. And, as its name imply,
+ it is used as a helper of something, in this case the &lt;token 
+declarations&gt; section (more about this next). To see how a &lt;helper
+ declarations&gt; is helpful let&#8217;s examine the following regular 
+expression:</p>
+<p></p><center>
+	id = [&#8216;a&#8217; .. &#8216;z&#8217;] ([&#8216;a&#8217; .. &#8216;z&#8217;] | [&#8216;0&#8217; .. &#8216;9&#8217;])*</center>
+
+<p>In this example we could simplify this regular expression by defining
+ digit = [&#8216;0&#8217; .. &#8216;9&#8217;] and letter = [&#8216;a&#8217; .. &#8216;z&#8217;], then our regular 
+expression ID becomes</p>
+<p></p><center>
+	id = letter (letter | digit)*
+</center>
+<p>Letter and digit are our helpers. Here&#8217;s how we declare helpers in 
+SableCC:</p>
+<p></p><center>
+  <table>
+    <tbody><tr>
+      <td>
+	Helpers
+      </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>letter = [&#8216;a&#8217; .. &#8216;z&#8217;];</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>digit   = [&#8216;0&#8217; .. &#8216;9&#8217;];</td>
+    </tr>
+  </tbody></table>
+</center>
+<p>After the &lt;helper declarations&gt; follows the &lt;token 
+declarations&gt;, which is where we define our terminals or tokens. Lets
+ use the example above to show how to declare tokens in SableCC:</p>
+<p></p><center>
+<table>
+  <tbody><tr>
+    <td>Tokens</td><td> </td>
+  </tr>
+  <tr>
+    <td> </td><td>id = letter (letter | digit)*;</td>
+  </tr>
+</tbody></table></center>
+
+<p>This is very similar to regular expressions as described in the 
+Regular Expressions tutorial. A token defined by a string of characters 
+is declared between quotes, e.g. program = &#8216;program&#8217;, and every 
+declaration ends with a semicolon. Following the &lt;token 
+declarations&gt; is the &lt;ignored tokens&gt;, in other words, the 
+section where we declare the tokens to be ignored by the parser. For 
+example, comments, blanks, carriage return, etc.</p><p>
+</p><p>Here&#8217;s an example:</p>
+<p></p><center>
+  <table>
+    <tbody><tr>
+      <td>Helpers</td><td> </td>
+    </tr>
+    <tr>
+      <td> </td><td>any_charater = [0x0 .. 0xfffff];</td>
+    </tr>
+    <tr>
+      <td> </td><td>nl = &#8216;\n&#8217;;</td>
+    </tr>
+    <tr>
+      <td>Tokens</td><td> </td>
+    </tr>
+    <tr>
+      <td> </td><td>comment = &#8216;&#8260;&#8260;&#8217; any_character nl</td>
+    </tr>
+    <tr>
+      <td> </td><td>blank = 10 | 10 13 | 9;</td>
+    </tr>
+    <tr>
+      <td>Ignored Tokens</td><td> </td>
+    </tr>
+    <tr>
+      <td> </td><td>comment,</td>
+    </tr>
+    <tr>
+      <td> </td><td>blank;</td>
+    </tr>
+  </tbody></table>
+</center>
+
+<p>In this case, comment and blank will be ignored by the parser.</p>
+	<p>Finally, in the &lt;productions&gt; section, we declare the 
+productions grammar for the language. The productions are defined in BNF
+ or EBNF (Extended Backus&#8211;Naur Form).</p> <p>Here&#8217;s an example of how to
+ declare productions:</p>
+<p></p><center>
+  <table>
+    <tbody><tr>
+      <td>Tokens</td><td> </td>
+    </tr>
+   <tr>
+      <td> </td><td>identifier = letter (letter | digit)*;</td>
+    </tr>
+    <tr>
+      <td> </td><td>number = digit+;</td>
+    </tr>
+    <tr>
+      <td> </td><td>plus = &#8216;+&#8217;;</td>
+    </tr>
+    <tr>
+      <td>Productions</td><td> </td>
+    </tr>
+    <tr>
+      <td> </td><td>expression = identifier plus identifier minus number
+ ;</td>
+    </tr>
+  </tbody></table>
+</center>
+<p>As we can see it is similar to the context-free grammars presented in
+ the grammars tutorial. The only difference is that in SableCC we don&#8216;t 
+declare a nonterminal surrounded by &lt; and &gt;, and we replace the &#8594; 
+by =. In the productions section, it is sometimes required to precede a 
+token by <b>T</b>. and a production by a <b>P</b>. This happens when we 
+have a token and a production with the same name. For example if we have
+ a production <i>program</i> and a token <i>program</i>, then in the 
+production below we must precede program by T., because will not know if
+ it is the token program or the production program.</p>
+<p></p><center>
+<table>
+    <tbody><tr>
+      <td>Tokens</td><td> </td>
+    </tr>
+    <tr>
+      <td> </td><td>program = &#8216;program&#8217;;</td>
+    </tr>
+    <tr>
+      <td> </td><td>semicolon = &#8216;;&#8217; ;</td>
+    </tr>
+    <tr>
+      <td>Productions</td><td> </td>
+    </tr>
+    <tr>
+      <td> </td><td>program = T.program identifier semicolon ;</td>
+    </tr>
+  </tbody></table>
+</center>	
+<p>Now that we are familiar with the syntax of SableCC, let&#8217;s implement 
+our subset.</p>
+
+<p>The root of our package will be uk.co.brainycreatures.smallpascal. 
+Hence in the package declaration we will have</p>
+
+<p></p><center><b>Package</b> uk.co.brainycreatures.smallpascal;</center>
+
+<p>After defining the package, we are going to declare our helpers, 
+which are shown below:</p>
+<p></p><center>
+<table>
+<tbody><tr>
+<td>	
+<b>Helpers</b><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a = &#8216;a&#8217; | 
+&#8216;A&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b = &#8216;b&#8217; | 
+&#8216;B&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e = &#8216;e&#8217; | 
+&#8216;E&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;g = &#8216;g&#8217; | 
+&#8216;G&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = &#8216;i&#8217; | 
+&#8216;I&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m = &#8216;m&#8217; | 
+&#8216;M&#8217;;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n = &#8216;n&#8217; | 
+&#8216;N&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;o = &#8216;o&#8217; | 
+&#8216;O&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p = &#8216;p&#8217; | 
+&#8216;P&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r = &#8216;r&#8217; | 
+&#8216;R&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t = &#8216;t&#8217; | 
+&#8216;T&#8217;;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v = &#8216;v&#8217; | 
+&#8216;V&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;w = &#8216;w&#8217; | 
+&#8216;W&#8217;;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cr = 13 ; &#8260;&#8260;
+ carriage return<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lf = 10 ; &#8260;&#8260;
+ line feed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tab = 9 ;  
+&#8260;&#8260; tab char<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ascii_char =
+ [32 .. 127] ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;blank = &#8216;&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;digit = [&#8216;0&#8217;
+ .. &#8216;9&#8217;] ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;letter = 
+[[&#8216;a&#8217; .. &#8216;z&#8217;] + [&#8216;A&#8217; .. &#8216;Z&#8217;]] ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_brace = 
+&#8216;{&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_brace = 
+&#8216;}&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l_paren_star
+ = &#8216;(*&#8217; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r_paren_star
+ = &#8216;*)&#8217; ;<br></td></tr>
+</tbody></table></center>
+<p>Note the space between the letters in the definition of the keywords.
+ In this case we need them, because each letter is a helper token. So, 
+in defining our tokens, we have a sequence of helpers separated by a 
+space.</p> 
+	<p>Finally, we will describe the grammar for the language. Here it is:</p>
+<p></p><center><table><tbody><tr><td>
+<b>Productions</b><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_heading<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;global_declaration_part<br>
+ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;begin<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_statement_part<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end
+ dot;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_heading
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{non_empty}
+ program identifier semicolon |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{empty}
+ ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;global_declaration_part
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var_declaration;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var_declaration
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var
+ var_decl+;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var_decl =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;identifier_list
+ colon type;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;identifier_list
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{single}
+ identifier |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{sequence}
+ identifier_list comma identifier;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;integer;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_statement_part
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statement_sequence;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statement_sequence
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{single}
+ statement |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{sequence}
+ statement_sequence semicolon statement ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statement =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{assign}
+ identifier assignop expression |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{writeln}
+ writeln_stmt ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;writeln_stmt
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{simple}writeln
+ |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{arguments}
+ writeln l_paren expression_list r_paren ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expression_list
+ =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{single}
+ expression |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{sequence}
+ expression_list comma expression ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expression =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{term}
+ term |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{plus}
+ expression plus term |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{minus}
+ expression minus term ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;term =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{factor}
+ factor |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{mult}
+ term mult factor |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{div}
+ term div factor;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;factor =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{identifier}
+ identifier |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{integer}
+ integer;</td></tr></tbody></table></center>
+
+<h3>Generating the working classes</h3>
+
+<p>In this section we will implement the semantic analyser and the code 
+generators for the language. We start by implementing the semantic 
+analyser below.</p>
+
+<h4>The semantic analyser</h4>
+
+<p>The semantic analysis phase completes the static analysis (parsing) 
+phase of the source program, by ensuring that the grammatically correct 
+statements passed to it by the parser &#8216;make sense&#8217;. For instance, the 
+syntax of assignment statements in Pascal does not require that the 
+identifiers have been declared, that they are variables, that they are 
+of similar type, and that the operations can be performed on those 
+types. All these restrictions are defined by the static semantics of 
+Pascal, and the semantic analyser performs the corresponding checks. To 
+perform this checking, the semantic analyser completely processes the 
+declarations and creates equivalent information known as property 
+information. This information is stored in a data structure known as 
+symbol table. The symbol table is used so that given any identifier the 
+associated information may be found.</p>
+	<p>For this small subset, the only checking that needs to be performed 
+is that the identifiers are declared before use and that they are 
+declared only once. There is no need for type checking because all the 
+identifiers are of the same type. The semantic analysis is processed by a
+ depth first traversal on the abstract syntax tree, storing information 
+about identifiers in the symbol table after having visited the subtrees 
+of the production containing the variables declaration. These 
+information will then be fetched as we encounter identifiers in 
+productions factor and variable, respectively.</p>
+<p>Now that we have the required information to implement the semantic 
+analyser, we will now describe how to implement it. Returning to the 
+grammar above, we are now going to explain the effect of the names 
+between { and } in the alternatives of each production. The name of each
+ alternative in the productions of the grammar above are prefixed by A 
+and concatenated by the name of the production to produce a type name 
+for the alternative. For example, for the production below</p>
+<p></p><center><table><tbody><tr><td>
+Factor =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{identifier}
+ identifier | {integer} integer_literal | &#8230; ;</td></tr></tbody></table></center>
+
+<p>a type named AIdentifierFactor and a type name AIntegerFactor will be
+ produced.</p> 
+
+<p>Given the information above, we design our semantic analyser by 
+defining the methods for the alternatives including identifiers. That 
+is, alternatives ASingleIdentifierList, ASequenceIdentifierList, 
+AAssignStatement and AIdentifierFactor. Also, we need to process 
+alternative AVarDecl. Note that for  the alternative for var_decl doe 
+not have a name. This is allowed in SableCC if the production is defined
+ by one alternative only, and the resulting type is the name of the 
+production prefixed by A.</p>
+	<p>Here is the implementation of our semantic analyser:</p>
+<p></p><center><table><tbody><tr><td>
+package uk.co.brainycreatures.smallpascal;<br><br>
+	
+import uk.co.brainycreatures.smallpascal.node.*;<br>
+import uk.co.brainycreatures.smallpascal.analysis.*;<br>
+import  java.util.*; &#8260;&#8260; for the Hashtable<br><br>
+
+public class SemanticAnalyzer extends DepthFirstAdapter {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; stores the identifiers being defined<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hashtable symbol_table = new Hashtable(); 
+&#8260;&#8260; create a new table<br><br>
+		
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; check if the identifier is already in 
+the table and report an error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; if it is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void 
+outASingleIdentifierList(AidentifierList node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; 
+identifier to be stored in the symbol table<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIdentifier 
+ident = node.getIdentifier();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; name of 
+the identifier to be stored in the table<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String key =
+ ident.getText().toUpperCase();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; is the 
+identifier in the table?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+(symbol_table.containsKey(key)) { &#8260;&#8260; report an error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;Identifier
+ already defined.&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(0);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;symbol_table.put(key,
+ key);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; same as above<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void 
+outASingleIdentifierList(AidentifierList node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; 
+identifier to be stored in the symbol table<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TIdentifier 
+ident = node.getIdentifier();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; name of 
+the identifier to be stored in the table<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String key =
+ ident.getText().toUpperCase();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; is the 
+identifier in the table?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+(symbol_table.containsKey(key)) { &#8260; report an error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;Error:
+ [&#8220; ident.getLine() + &#8220;,&#8221;  + ident.getPos() + &#8220;] Identifier already 
+defined.&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(0);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;symbol_table.put(key,
+ key);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; checks if the identifier in the 
+assignment statement was previously<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; declared, and report an error if it 
+wasn&#8217;t<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void 
+outAAssignStatement(AAssignStatement node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tidentifier 
+ident = node.getIdentifier();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String key =
+ ident.getText().toUpperCase();<br><br>
+		
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; Is the 
+identifier in the table?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; if not 
+report error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+(!symbol_table.containsKey(key)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;Error:
+ [&#8220; + ident.getLine() + &#8220;,&#8221;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ident.getPos()
+ + &#8220;] Unknown identifier.&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(0);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; same as above<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public void 
+outAIdentifierFactor(AIdentifierFactor node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tidentifier 
+ident = node.getIdentifier();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String key =
+ ident.getText().toUpperCase();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; Is the 
+identifier in the table?<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; if not 
+report error<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+(!symbol_table.containsKey(key)) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;Error:
+ [&#8220; + ident.getLine() + &#8220;,&#8221; + ident.getPos() + &#8220;] Unknown identifier.&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.exit(0);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+</td></tr></tbody></table></center>
+<p>We define the class <b>SemanticAnalyser</b> as extending class <b>DepthFirstAdapter</b>.</p>
+<p>This
+automatically provides a depth&#8211;first traversal of the AST. To check the 
+declarations of identifiers we just need methods <b>outASingleIdentifierList</b>
+ and <b>outASequenceIdentifierList</b>. To check if they were declared 
+before use we just need methods <b>outAAssignStatement</b> and 
+outAIdentifierFactor. For more about how SableCC generates this methods 
+refer to chapters 5 and 6 of [1]. We are now done with the semantic 
+analyser. For our code generation we do the same thing, but we generate 
+code as well as we process the identifiers in the symbol table.</p>
+
+
+<h4>The Class Generator</h4>
+
+	<p>The <b>ClassGenerator</b> is also a subclass of class <b>DepthFirstAdapter</b>.
+ To implement the code generator we need to do a depth first traversal 
+of the tree, just as we did with the semantic analyser. But for the code
+ generator we will use alternatives from other productions as well. For 
+example, we will use the program_heading to define the name of the class
+ to be generated. That is, we will use the name of the identifier that 
+follows the program keyword, if the program heading is present in the 
+program. If the program heading is not present in the program, the name 
+of the class will be <b>a.out</b>, just as the executables generated by a
+ C compiler in a Unix based system. We will now start the description of
+ the design of our code generator. For example, from the production</p>
+<p></p><center><table><tbody><tr><td>
+program_heading =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{non_empty} 
+T.program identifier semicolon |<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{empty} ;<br></td></tr></tbody></table></center>
+ 
+<p>we will define methods <b>outANonEmptyProgramHeading</b> and <b>outAEmptyProgramHeading</b>.
+ To generate a class file using the Jas API we need to create an 
+instance of class <b>ClassEnv</b> first. Then we set the class 
+attributes: its name, its super class, the source from which it is being
+ compiled and its access modifiers. This is all done in the methods 
+outlined above. We also need to create a default constructor. Although 
+we don&#8217;t realise, the Java compiler generates a default constructor for 
+us. This is how it looks in Java assembly:</p>
+<p></p><center><table><tbody><tr><td>
+.method public &lt;init&gt;()V<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aload_0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invokevirtual 
+java&#8260;lang&#8260;Object&#8260;&lt;init&gt;()V<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return<br>
+.end method
+</td></tr></tbody></table></center>
+
+<p>To define this method, we can either do it in production 
+program_heading, or even before production program traverses its 
+subtrees. More precisely, on the definition of its <b>inAProgram</b> 
+method. It is up to the programmer&#8217;s preference. In our case, we are 
+going to define the constructor in method <b>inAProgram</b>. To define a
+ method we need to define an instance of class <b>CodeAttr</b>, then we 
+add the instructions with its <b>addInsn</b> method. We also need to 
+create a new instance of class CodeAttr for object main_code. Here is 
+how we implement it:</p>
+<p></p><center><table><tbody><tr><td>
+public void inAProgram(AProgram node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; create an new instance of CodeAttr<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init = new CodeAttr();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_code = new CodeAttr(); &#8260;&#8260; create a 
+new object for main program body<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; define 
+the method<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init.addInsn(new
+ Insn(opc_aload_0));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init.addInsn(new
+ Insn(opc_invokevirtual,
+new MethodCP(&#8220;java/lang/Object&#8221;,
+&#8220;&lt;init&gt;&#8221;, &#8220;()V&#8221;)));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;init.addInsn(new
+ Insn(opc_return));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>After defining the method, we must add it to the class. This will be 
+done in either method outAEmptyProgramHeading or 
+outANonEmptyProgramHeading. Here is its implementation:</p>
+<p></p><center><table><tbody><tr><td>
+public void outANonEmptyProgramHeading(ANonEmptyProgramHeading node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; name of the class to be generated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class_name = 
+node.getIdentifier().getText();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; set class
+ attributes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.setClass((new
+ ClassCP(class_name));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.setSuper(new
+ ClassCP(&#8220;java/lang/Object&#8221;));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; source 
+from which it is compiled<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.setSource(new
+ SourceAttr(source_file_name));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; make 
+class public<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.setClassAccess((short)
+ ACC_PUBLIC);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; add the 
+constructor method to the class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.addMethod((short)
+ ACC_PUBLIC, , &#8220;&lt;init&gt;&#8221;, &#8220;()V&#8221;, init, null);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>The code is self explanatory, so we won&#8217;t go into more details.</p>
+<p>The code for method outAEmptyProgramHeading is similar to the code 
+above, except for the name of the class. It sets class_name to &#8220;a.out&#8221;. 
+Proceeding with the grammar, we are now going to define the code that 
+processes identifiers; that is, the code that defines the identifiers. 
+Pascal variables will be defined as Java fields. To define fields in the
+ Jas API, we use method <b>addField</b> of class ClassEnv. The name of 
+the generated variables will be in lowercase. We don&#8217;t need a symbol 
+table in order to fetch the signature of a field. Rather, we use the 
+name of the class to which it belongs. Here is the implementation:</p>
+<p></p><center><table><tbody><tr><td>
+public void outASingleIdentifierList(AsingleIdentifierList node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; get the name of the name of the 
+variable in lower case<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String var_name = 
+node.getIdentifier().getText().toLowerCase();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&#8260;&#8260; add the field to the class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.addField(new
+ Var((short) (ACC_STATIC | ACC_PUBLIC)), new AsciiCP(var_name), new 
+AsciiCP(&#8220;I&#8221;), new ConstAttr(new IntegerCP(0)))));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>The code above is equivalent to the following Java declaration:</p>
+<p></p><center>public static int &lt;var_name&gt; = 0;</center>
+	
+<p>where &lt;var_name&gt; is the same as the variable being declared.</p>
+<p>The code for method <b>outASequenceIdentifierList</b> is the same as 
+the code for <b>outASingleIdentifierList</b> above. So, there is no need
+ to describe it again.</p> 
+<p>Lets now describe how we implement the statements. Before going any  
+further lets analyse how we translate Pascal statements into Java 
+assembly. Because the Java Virtual Machine is stack based, we need to 
+think in terms of stack operations only. So to translate an assignment 
+statement we push all the factors on the right hand side  to the stack 
+and then we pop the result into the variable on the left hand side. For 
+example, the assignment statement</p>
+<p></p><center>a := b + c</center>
+<p>is translated to the following Java assembly code:</p>
+<p></p><center><table><tbody><tr><td>
+getstatic &lt;class name&gt;&#8260;b I<br>
+getstatic &lt;class name&gt;&#8260;c I<br>
+iadd<br>
+putstatic &lt;class name&gt;&#8260;a I<br>
+</td></tr></tbody></table></center>
+
+<p>where &lt;class name&gt; is the name of the class to which each of 
+the fields a, b and c belong. In Java we use the &#8216;.&#8217;, but in Java 
+assembly we use the &#8216;/&#8217; to access either methods or fields. The I 
+following the name of the variable means that this variable is of type 
+int. The instruction <b>getstatic</b> is used to get the value of static
+ fields of a class, and the instruction <b>putstatic</b> is used to 
+store values into static fields of a class. The other arithmetic 
+instructions that will be used in the code generation of the compiler 
+for this subset are:</p>
+<p></p><center><table><tbody><tr><td>
+isub &#8211; used to subtract integer numbers. This instruction expects to 
+find two numbers on<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the top of the stack, and if they are 
+there it pops them, subtracts them and pushes<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the result onto the top of the stack.<br><br>
+
+imul &#8211; the same as isub, but it multiplies instead<br><br>
+
+idiv &#8211; used to divide integers</td></tr></tbody></table></center>
+
+<p>In order to generate the appropriate code, we need to traverse the 
+subtrees of the corresponding operator, and after visiting them we 
+generate the opcode corresponding to this same operator. We need to push
+ numbers and identifiers as we encounter them in production factor, and 
+then generate the opcode for the arithmetic instruction in the 
+alternatives of productions expression and term. Here are the 
+implementations:</p>
+<p></p><center><table><tbody><tr><td>
+public void caseAIdentifierFactor(AidentifierFactor node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String var_name = 
+node.getIdentifier().getText().toLowerCase();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; getstatic
+ &lt;class_name&gt;&#8260;&lt;var_name&gt; I<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_getstatic, new FieldCP(class_name, var_name, &#8220;I&#8221;)));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for integer factors:</p> 
+<p></p><center><table><tbody><tr><td>
+public void caseAIntegerFactor(AIntegerFactor node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; get the string value<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String num_image = 
+node.getIdentifier().getText();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int value = Integer.parseInt(num_image);<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch(value)
+ {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ &#8211;1 :<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_m1)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ 0: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_0)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ 1 : <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_1)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ 2: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_2)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ 3: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_3)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ 4: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_4)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case
+ 5:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iconst_5)); break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if
+ (value =&gt; &#8211;128 &amp;&amp; value &lt;= 127) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_bipush, value)); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+ if (value &gt;= &#8211;65536 &amp;&amp; value &lt;= 65535) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_sipush, value));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else
+ {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_ldc, value));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for addition operator:</p>
+<p></p><center><table><tbody><tr><td>
+public void outAPlusExpression(APlusExpression node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_iadd));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for subtraction operator:</p>
+<p></p><center><table><tbody><tr><td>
+public void outAMinusExpression(AMinusExpression node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_isub));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for multiplication operator:</p>
+<p></p><center><table><tbody><tr><td>
+public void outAMultTerm(AMultTerm node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_imul));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for division operator:</p>
+<p></p><center><table><tbody><tr><td>
+public void outADivTerm(ADivTerm node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_idiv));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for assignment statement:</p>
+<p></p><center><table><tbody><tr><td>
+public void outAAssignStatement(AassignStatement node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String var_name = 
+node.getIdentifier().getText().toLowerCase();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_putstatic, new FieldCP(class_name, var_name, &#8220;I&#8221;)));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<p>Code for writeln statement:</p>
+<p></p><center><table><tbody><tr><td>
+public void inAWritelnStatement(AwritelnStatement node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_getstatic, new FieldCP(&#8220;java/lang/Object&#8221;, &#8220;out&#8221;, 
+&#8220;Ljava/io/PrintStream;&#8221;)));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br><br><br>
+public void outAWritelnStatement(AwritelnStatement node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_invokevirtual, new MethodCP(&#8220;java/io/PrintStream&#8221;, &#8220;println&#8221;, 
+&#8220;(I)V&#8221;)));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+		
+<p>After generating all the code, we add an extra <b>return</b> 
+instruction, we add the method to the class, and we dump the class. This
+ is done in method outAProgram, that is at the exit of a program. The 
+code is a follows:</p>
+<p></p><center><table><tbody><tr><td>
+public void outAProgram(AProgram node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; add 
+return instruction to the end of the method<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code.addInsn(new
+ Insn(opc_return);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; add main 
+method to main_class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.addMethod((short)(
+ ACC_PUBLIC | ACC_STATIC),
+&#8220;main&#8221;, &#8220;([Ljava/lang/String;)V&#8221;, code, null));<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; generate 
+class file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;main_class.write(new
+ DataOutputStream(new FileOutputStream(class_name + &#8220;.class&#8221;)));<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260; output 
+status<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;Wrote
+ &#8220; + class_name + &#8220;.class&#8221;]&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch (Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+</td></tr></tbody></table></center>
+
+<h3>The Main class</h3>
+
+<p>Now that we have implemented the working classes, it time to 
+implement the Main class. This class simply activates the lexer, parser,
+ semantic analyser and the class generator. This is always the same for 
+every compiler or interpreter implemented using SableCC. The code for 
+the main class is shown below:</p>
+<p></p><center><table><tbody><tr><td>
+package uk.co.brainycreatures.smallpascal;<br><br>
+
+import uk.co.brainycreatures.smallpascal.semantic.SemanticAnalyser;<br>
+import uk.co.brainycreatures.smallpascal.code.ClassGenerator;<br>
+import uk.co.brainycreatures.smallpascal.parser.*;<br>
+import uk.co.brainycreatures.smallpascal.lexer.*;<br>
+import uk.co.brainycreatures.smallpascal.node.*;<br><br>
+
+import java.io.*;<br><br>
+
+public class Main {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public static void main(String[] args) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;long 
+start_time, stop_time; &#8260;&#8260; times compilation<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if 
+(args.length &lt; 1) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;Usage:&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(&#8220;
+   java uk.co.brainycreatures.smallpascal.Main &lt;filename&gt;&#8221;);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start_time
+ = System.currentTimeMillis();<br><br>
+		
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260;
+ create lexer<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lexer
+ lexer = new Lexer (new PushbackReader(new BufferedReader(new 
+FileReader(args[0])), 1024));<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260;
+ parser program<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parser
+ parser = new Parser(lexer);<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start
+ ast = parser.parse();<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260;
+ check program semantics<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast.apply(new
+ SemanticAnalyser());<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8260;&#8260;
+ generate class file<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast.apply(new
+ ClassGenerator());<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;catch 
+(Exception e) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(e);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+</td></tr></tbody></table></center>
+
+<p>Now that we have implemented everything, it is time to compile all 
+the source code. Assuming that the current working directory is in our 
+CLASSPATH, we compile the compiler as follows:</p>
+
+<p>C:\mycompilers\javac uk\co\brainycreatures\Main.java</p>
+
+<p>If no errors were found in the source, we will have all the sources 
+compiled. We then just have to debug the compiler. That is, test it with
+ small pascal programs. The best way to test a compiler is by inputig 
+erroneous data to it. That is, invalid programs.</p>
+
+<p>If you have any queries, please do not hesitate to <a 
+href="mailto:fidel.viegas@brainycreatures.co.uk?Subject=Compiler%20Query"><u>contact
+ me</u></a>.</p>
+
+<p>Best Regards<br>
+Fidel.</p>
+
+<p><b>References:</b></p>
+<ol>
+<li>Etienne Gagnon,"SableCC, An Object&#8211;Oriented Compiler Framework", 
+Master&#8217;s thesis, McGill University, Montreal, Quebec, March 1998.
+</li></ol><br><br><br>
+
+
+  				  </td>
+				</tr>
+			</tbody></table>
+			<table align="center" bgcolor="#336699" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+				<tbody><tr>
+				<td border="0" bgcolor="#336699">
+				<br>
+				</td>
+				</tr>
+			</tbody></table>
+		</td>
+		<td valign="top" width="15%">
+			<table align="center" bgcolor="#003366" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+				<tbody><tr>
+					<td align="center" bgcolor="#003366">
+						<b>Books</b>
+					</td>
+				</tr>
+				<tr>
+					<td align="center" bgcolor="#336699">
+					<br><br>
+					<div align="center">
+					  <a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/1931841233/qid%3D1040692770/202-3687931-0127067">
+						<img src="sablecc.asp_files/gpallin1.jpg" height="140" width="112"></a><br><br><br>
+   					  <a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/0761533303/ref=_/202-3687931-0127067"><img
+ src="sablecc.asp_files/openglgp.jpg" height="140" width="112"></a><br><br><br>
+					  <a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/193184108X/qid=1040693296/sr=2-1/ref=sr_2_3_1/202-3687931-0127067"><img
+ src="sablecc.asp_files/aitechniques.jpg" height="140" width="112"></a><br><br><br>
+					  <a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/1584500778/qid%3D1040693684/202-3687931-0127067"><img
+ src="sablecc.asp_files/aiwisdom.jpg" height="140" width="112"></a><br><br><br>
+					  <a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/0201157675/ref=sr_aps_books_1_1/202-3687931-0127067"><img
+ src="sablecc.asp_files/genetic.jpg" height="140" width="112"></a><br><br><br>
+<a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/1584500573/ref=sr_aps_books_1_1/202-3687931-0127067"><img
+ src="sablecc.asp_files/dynamic_canimation.jpg" height="140" width="112"></a><br><br><br>
+<a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/1931841187/qid=1040880934/sr=1-2/ref=sr_1_0_2/202-3687931-0127067"><img
+ src="sablecc.asp_files/macgprogramming.jpg" height="140" width="112"></a><br><br><br>
+<a 
+href="http://www.amazon.co.uk/exec/obidos/ASIN/0596000065/ref=pd_ecc_rvi_f/202-3687931-0127067"><img
+ src="sablecc.asp_files/physics4gdev.jpg" height="140" width="112"></a>
+
+					</div>
+					</td>
+				</tr>
+			</tbody></table>
+			<table align="center" bgcolor="#336699" border="0" cellpadding="2" 
+cellspacing="1" width="100%">
+				<tbody><tr>
+				<td border="0" bgcolor="#336699">
+				<br>
+				</td>
+				</tr>
+			</tbody></table>
+		</td></tr> 
+</tbody></table>
+<p></p>
+
+<table bgcolor="#336699" border="0" width="100%">
+
+<tbody><tr>
+       <td bgcolor="#336699"><center>©&nbsp;2002, 2003 Fidel Viegas. All
+ rights reserved.</center></td>
+</tr>
+</tbody></table>
+
+</body></html>
