@@ -1,0 +1,73 @@
+Package xyzlex;
+
+Helpers
+	all= [ 0 .. 0xffff ] ;
+	letter = ['a'..'z'] | ['A'..'Z'];
+	digit = ['0' .. '9'];
+	sp = ' ' ;
+    cr = 13 ; // carriage return
+    lf = 10 ; // line feed
+    tab = 9 ; // tab char
+    bl = sp | cr | lf | tab ;
+    new_line = cr | lf ;
+    underscore = '_' ;
+    plus_c = '+' ;
+    minus_c = '-' ;
+    signed_c = plus_c | minus_c ;
+    e_c = 'E' | 'e' ;
+    
+States
+	normal, comment_new_s,comment_old_s;
+    
+Tokens
+{normal}	if_key = 'if';
+{normal}	else_key = 'else';
+{normal}	while_key = 'while';
+{normal}	int_key = 'int';
+{normal}	real_key = 'real';
+{normal}	pre_key = 'pre';
+{normal}	post_key = 'post';
+{normal}	class_key = 'class';
+{normal}	extends_key = 'extends';
+{normal}	public_key = 'public';
+{normal}	static_key = 'static';
+{normal}	void_key = 'void';
+{normal}	main_key = 'main'; 
+{normal}	id = letter (underscore | digit | letter)*;
+{normal}	real_literal = digit* '.' digit+ (e_c signed_c? digit*)?;
+{normal}	integer_literal = digit+;
+{normal}	operator = ('&&' | '||' | '>' | '<' | '+' | '-' | '*' | '/' | '=' ); 
+{normal}	left_brace = '{' ;
+{normal}	right_brace = '}' ;
+{normal}	left_p = '(' ;
+{normal}	right_p = ')' ;
+{normal}	point = '.' ;
+{normal}	semicolon = ';' ;
+{normal}	colon = ':' ;
+{normal}	blanks = bl*;
+
+{normal -> comment_new_s}
+			comment_new_style = '//' ;
+{normal -> comment_old_s, comment_old_s}
+			comment_old_style = '/*' ;
+{comment_old_s -> normal}
+			comment_old_style_end = '*/';
+{comment_new_s -> normal}
+			comment_new_style_end = new_line;
+{comment_new_s}
+			comment_any_n = [all - [cr + lf ]]*; 
+{comment_old_s}
+			comment_any_o = [all - ['*' + '/']]*;
+{comment_old_s} star = '*';
+{comment_old_s} slash_o = '/';
+{comment_new_s} slash_n = '/';
+
+Ignored Tokens
+	blanks,
+	comment_new_style,
+	comment_old_style,
+	comment_old_style_end,
+	comment_new_style_end,
+	comment_any_n,
+	comment_any_o ;
+	
