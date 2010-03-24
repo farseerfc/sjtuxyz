@@ -11,6 +11,7 @@ public class Counter {
 	private Lexer lexer;
 	private Map<Class<? extends Token>, Integer> tokensCount;
 	private Exception exception;
+	private List<Token> tokenStream;
 
 	public Counter(PushbackReader in) {
 		this.in = in;
@@ -23,6 +24,7 @@ public class Counter {
 		in = new PushbackReader(new StringReader(input),Consts.getConst(Consts.InputStreamBufferSize));
 		lexer = new Lexer(this.in);
 		tokensCount = new HashMap<Class<? extends Token>, Integer>();
+		tokenStream=new ArrayList<Token>();
 		count();
 	}
 
@@ -37,6 +39,7 @@ public class Counter {
 				} else {
 					tokensCount.put(token.getClass(), 1);
 				}
+				tokenStream.add(token);
 			}
 		} catch (Exception e) {
 			exception=e;
