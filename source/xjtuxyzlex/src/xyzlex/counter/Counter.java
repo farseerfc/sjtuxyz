@@ -1,6 +1,7 @@
 package xyzlex.counter;
 
 import xyzlex.node.*;
+import xyzlex.utils.Consts;
 import xyzlex.lexer.*;
 import java.io.*;
 import java.util.*;
@@ -19,7 +20,7 @@ public class Counter {
 	}
 
 	public Counter(String input) {
-		in = new PushbackReader(new StringReader(input));
+		in = new PushbackReader(new StringReader(input),Consts.getConst(Consts.InputStreamBufferSize));
 		lexer = new Lexer(this.in);
 		tokensCount = new HashMap<Class<? extends Token>, Integer>();
 		count();

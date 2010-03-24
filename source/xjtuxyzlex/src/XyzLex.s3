@@ -33,15 +33,15 @@ Tokens
 {normal}	static_key = 'static';
 {normal}	void_key = 'void';
 {normal}	main_key = 'main'; 
+{normal}	point = '.' ;
 {normal}	id = letter (underscore | digit | letter)*;
-{normal}	real_literal = digit* '.' digit+ (e_c signed_c? digit*)?;
+{normal}	real_literal = digit* '.' digit* (e_c signed_c? digit+)?;
 {normal}	integer_literal = digit+;
 {normal}	operator = ('&&' | '||' | '>' | '<' | '+' | '-' | '*' | '/' | '=' ); 
 {normal}	left_brace = '{' ;
 {normal}	right_brace = '}' ;
 {normal}	left_p = '(' ;
 {normal}	right_p = ')' ;
-{normal}	point = '.' ;
 {normal}	semicolon = ';' ;
 {normal}	colon = ':' ;
 {normal}	blanks = bl*;
