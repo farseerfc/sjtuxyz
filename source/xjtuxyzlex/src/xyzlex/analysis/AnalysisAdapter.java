@@ -129,6 +129,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseTPoint(TPoint node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTId(TId node)
     {
         defaultCase(node);
@@ -165,11 +170,6 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTRightP(TRightP node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTPoint(TPoint node)
     {
         defaultCase(node);
     }
