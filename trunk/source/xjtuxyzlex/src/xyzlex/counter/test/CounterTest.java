@@ -53,10 +53,53 @@ public class CounterTest extends TestCase {
 		assertTrue(counter.getCount(TRealLiteral.class)==1);
 		assertTrue(counter.getCount(TId.class)==2);
 	}
+	
+	public void testCountReal003(){
+		Counter counter = new Counter("2.131E-12");
+		assertTrue(counter.getCount(TRealLiteral.class)==1);
+	}
 
 	public void testCountPoint000(){
-		Counter counter = new Counter(". e");
+		Counter counter = new Counter(". e22");
 		assertTrue(counter.getCount(TPoint.class)==1);
 		assertTrue(counter.getCount(TId.class)==1);
+	}
+	
+	public void testCountId000(){
+		Counter counter = new Counter("a.e");
+		assertTrue(counter.getCount(TId.class) == 2);
+		assertTrue(counter.getCount(TPoint.class) == 1);
+	}
+	
+	public void testCountId001(){
+		Counter counter = new Counter("ifelse");
+		assertTrue(counter.getCount(TId.class) == 1);
+//		assertTrue(counter.getCount(TPoint.class) == 1);
+	}
+	
+	public void testCountCommentNewStyle000(){
+		Counter counter = new Counter("//dfsdgds int click\n");
+		assertTrue(counter.getCount(TCommentNewStyle.class)==1);
+//		assertTrue(counter.getCount())
+	}
+	
+	public void testCountCommentNewStyle001(){
+		Counter counter = new Counter("//dfsdgds int click\n int");
+		assertTrue(counter.getCount(TCommentNewStyle.class)==1);
+		assertTrue(counter.getCount(TIntKey.class)==1);
+//		assertTrue(counter.getCount())
+	}
+	
+	public void testCountCommentNewStyle002(){
+		Counter counter = new Counter("//dfsdgds int /* */click\n int");
+		assertTrue(counter.getCount(TCommentOldStyle.class) == 0);
+		assertTrue(counter.getCount(TCommentNewStyle.class)==1);
+		assertTrue(counter.getCount(TIntKey.class)==1);
+//		assertTrue(counter.getCount())
+	}
+	
+	public void testCountIfKey(){
+		Counter counter = new Counter("if if");
+		assertTrue(counter.getCount(TIfKey.class) == 2);
 	}
 }
