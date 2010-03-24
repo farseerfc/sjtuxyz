@@ -1,5 +1,10 @@
 package xyzlex.counter.test;
 
+import java.io.InputStreamReader;
+import java.io.PushbackReader;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
+
 import junit.framework.TestCase;
 import xyzlex.counter.*;
 import xyzlex.node.*;
@@ -40,6 +45,18 @@ public class CounterTest extends TestCase {
 		Counter counter = new Counter("2.131e-12i");
 		assertTrue(counter.getCount(TRealLiteral.class)==1);
 		assertTrue(counter.getCount(TId.class)==1);
+		
+	}
+	
+	public void testCountReal002(){
+		Counter counter = new Counter("2.131e i");
+		assertTrue(counter.getCount(TRealLiteral.class)==1);
+		assertTrue(counter.getCount(TId.class)==2);
 	}
 
+	public void testCountPoint000(){
+		Counter counter = new Counter(". e");
+		assertTrue(counter.getCount(TPoint.class)==1);
+		assertTrue(counter.getCount(TId.class)==1);
+	}
 }
