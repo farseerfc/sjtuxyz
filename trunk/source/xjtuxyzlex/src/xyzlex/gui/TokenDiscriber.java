@@ -1,11 +1,13 @@
 package xyzlex.gui;
 
+import javax.swing.text.AttributeSet;
+
 import xyzlex.node.Token;
 
 public class TokenDiscriber {
 	private Class<? extends Token> tokenClass;
 	private String name;
-	private String color;
+	private AttributeSet attribute;
 	
 	public TokenDiscriber(){
 		
@@ -14,10 +16,10 @@ public class TokenDiscriber {
 	public TokenDiscriber(
 			Class<? extends Token> tokenClass,
 			String name,
-			String color){
+			AttributeSet attribute){
 		this.tokenClass=tokenClass;
 		this.name=name;
-		this.color=color;
+		this.attribute=attribute;
 	}
 	
 	
@@ -33,10 +35,10 @@ public class TokenDiscriber {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getColor() {
-		return color;
+	public AttributeSet getColor() {
+		return attribute;
 	}
-	public void setColor(String color) {
-		this.color = color;
+	public void setColor(AttributeSet attribute) {
+		this.attribute = attribute;
 	}
 }

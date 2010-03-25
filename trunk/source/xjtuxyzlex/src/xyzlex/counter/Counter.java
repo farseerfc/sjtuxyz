@@ -59,6 +59,10 @@ public class Counter {
 	public Exception getException(){
 		return exception;
 	}
+	
+	public List<Token> getTokenStream(){
+		return tokenStream;
+	}
 
 	
 	
