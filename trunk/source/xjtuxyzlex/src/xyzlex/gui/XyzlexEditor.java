@@ -19,6 +19,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -99,7 +101,7 @@ public class XyzlexEditor extends JFrame {
 
 		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
 				new JScrollPane(txtResult), new JScrollPane(txtText));
-		sp.setDividerLocation(200);
+		sp.setDividerLocation(220);
 		sp.resetToPreferredSizes();
 		this.add(sp, BorderLayout.CENTER);
 
@@ -262,7 +264,8 @@ public class XyzlexEditor extends JFrame {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
 		XyzlexEditor editor = new XyzlexEditor();
 	}
 
