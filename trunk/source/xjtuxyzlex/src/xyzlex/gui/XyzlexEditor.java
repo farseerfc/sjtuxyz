@@ -25,6 +25,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.Position;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.html.*;
 
@@ -41,6 +42,7 @@ public class XyzlexEditor extends JFrame {
 	private boolean needFormat;
 
 	public XyzlexEditor() {
+
 		changed = false;
 		needFormat = false;
 		filePath = "";
@@ -76,25 +78,19 @@ public class XyzlexEditor extends JFrame {
 			@Override
 			public void changedUpdate(DocumentEvent arg0) {
 				changed = true;
-				text = txtText.getText();
 				needFormat = true;
-				// formatText();
 			}
 
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				changed = true;
-				text = txtText.getText();
 				needFormat = true;
-				// formatText();
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				changed = true;
-				text = txtText.getText();
 				needFormat = true;
-				// formatText();
 			}
 
 		});
@@ -228,15 +224,28 @@ public class XyzlexEditor extends JFrame {
 	}
 
 	private void formatText() {
+		if(!needFormat)return;
+		if(txtText.getText().equals(text))return;
+		text=txtText.getText();
 		TokenRegister tr = new TokenRegister();
 		Counter counter = new Counter(text);
 		try {
-			// format txtText
-			Document doc = txtText.getDocument();
-			doc.remove(0, doc.getLength());
-			for (Token t : counter.getTokenStream()) {
-				doc.insertString(doc.getLength(), t.getText(), tr.get(
-						t.getClass()).getColor());
+			Document doc;
+			if (counter.getException() == null) {
+				int lastPos = txtText.getCaretPosition();
+				// format txtText
+				doc = txtText.getDocument();
+				doc.remove(0, doc.getLength());
+				for (Token t : counter.getTokenStream()) {
+					doc.insertString(doc.getLength(), t.getText(), tr.get(
+							t.getClass()).getColor());
+				}
+				int count = 0;
+				for (int i = 0; i < Math.min(text.length(),lastPos); ++i) {
+					if (text.charAt(i) == '\n')
+						count++;
+				}
+				txtText.setCaretPosition(lastPos + count);
 			}
 
 			// format txtResult
@@ -261,10 +270,14 @@ public class XyzlexEditor extends JFrame {
 			needFormat = false;
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
+		} catch (IllegalArgumentException e2) {
+			e2.printStackTrace();
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	public static void main(String[] args) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException,
+			UnsupportedLookAndFeelException {
 		UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
 		XyzlexEditor editor = new XyzlexEditor();
 	}
