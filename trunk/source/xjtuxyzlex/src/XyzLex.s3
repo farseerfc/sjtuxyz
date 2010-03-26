@@ -32,7 +32,9 @@ Tokens
 {normal}	public_key = 'public';
 {normal}	static_key = 'static';
 {normal}	void_key = 'void';
-{normal}	main_key = 'main'; 
+{normal}	main_key = 'main';
+{normal} 	new_key = 'new';
+{normal}	this_key = 'this';
 {normal}	point = '.' ;
 {normal}	id = letter (underscore | digit | letter)*;
 {normal}	real_literal = digit* '.' digit* (e_c signed_c? digit+)?;
