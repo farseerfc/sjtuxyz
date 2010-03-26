@@ -33,7 +33,7 @@ public class TokenRegister {
 	{
 		SimpleAttributeSet keyword=new SimpleAttributeSet();
 		StyleConstants.setFontFamily(keyword, "Courier New");
-		StyleConstants.setForeground(keyword,Color.red);
+		StyleConstants.setForeground(keyword,new Color(0x8b,0,0));
 		StyleConstants.setBold(keyword, true);
 		
 		SimpleAttributeSet normal=new SimpleAttributeSet();
@@ -46,12 +46,12 @@ public class TokenRegister {
 		
 		SimpleAttributeSet id=new SimpleAttributeSet();
 		StyleConstants.setFontFamily(id, "Courier New");
-		StyleConstants.setForeground(id,Color.black);
+		StyleConstants.setForeground(id,Color.blue);
 		StyleConstants.setItalic(id, true);
 		
 		SimpleAttributeSet literal=new SimpleAttributeSet();
 		StyleConstants.setFontFamily(literal, "Courier New");
-		StyleConstants.setForeground(literal,Color.cyan);
+		StyleConstants.setForeground(literal,Color.black);
 		
 		SimpleAttributeSet error=new SimpleAttributeSet();
 		StyleConstants.setFontFamily(error, "Courier New");
