@@ -1,6 +1,7 @@
 package xyzlex.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -12,6 +13,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -48,13 +50,17 @@ public class XyzlexEditor extends JFrame {
 	private boolean changed;
 	private boolean needFormat;
 	private JPanel panel;
+	private String labelText;
+	private JLabel statusLabel;
 
 	public XyzlexEditor() {
+		getContentPane().setForeground(new Color(139, 0, 0));
 
 		changed = false;
 		needFormat = false;
 		filePath = "";
 		mainFrame = this;
+		labelText = "";
 		setTitle("Xyz lexer Editor");
 		setVisible(true);
 		setBounds(100, 100, 600, 400);
@@ -63,6 +69,7 @@ public class XyzlexEditor extends JFrame {
 		buildMenuBar();
 		buildToolbar();
 		buildTextArea();
+		buildStatusLabel();
 		startFormatTimer();
 	}
 
@@ -103,7 +110,7 @@ public class XyzlexEditor extends JFrame {
 			}
 
 		});
-		
+
 		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
 				new JScrollPane(txtResult), new JScrollPane(txtText));
 		sp.setDividerLocation(220);
@@ -196,10 +203,21 @@ public class XyzlexEditor extends JFrame {
 			}
 		});
 		menu.add(menuItem_3);
+
+		JMenuItem menuItem_4 = new JMenuItem("Exit");
+		menuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (changed) {
+					if (!askChanged())
+						return;
+				}
+				System.exit(0);
+			}
+		});
+		menu.add(menuItem_4);
 	}
 
 	private void buildToolbar() {
-		ImageIcon openIcon = new ImageIcon("xyzlex/ico/burnCD.ico");
 		JToolBar toolbar = new JToolBar();
 		panel = new JPanel();
 		this.add(panel, BorderLayout.CENTER);
@@ -255,6 +273,12 @@ public class XyzlexEditor extends JFrame {
 			}
 
 		});
+	}
+
+	private void buildStatusLabel() {
+		statusLabel = new JLabel();
+		panel.add(statusLabel, BorderLayout.SOUTH);
+		statusLabel.setText(labelText);
 	}
 
 	private void openFile() {
