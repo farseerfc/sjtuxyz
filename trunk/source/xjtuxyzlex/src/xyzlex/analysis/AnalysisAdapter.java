@@ -139,6 +139,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseTBooleanKey(TBooleanKey node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTPoint(TPoint node)
     {
         defaultCase(node);
@@ -170,6 +175,16 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseTRightBrace(TRightBrace node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTLeftBracket(TLeftBracket node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseTRightBracket(TRightBracket node)
     {
         defaultCase(node);
     }

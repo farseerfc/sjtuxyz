@@ -35,6 +35,7 @@ Tokens
 {normal}	main_key = 'main';
 {normal} 	new_key = 'new';
 {normal}	this_key = 'this';
+{normal}	boolean_key = 'boolean';
 {normal}	point = '.' ;
 {normal}	id = letter (underscore | digit | letter)*;
 {normal}	real_literal = digit* '.' digit* (e_c signed_c? digit+)?;
@@ -42,6 +43,8 @@ Tokens
 {normal}	operator = ('&&' | '||' | '>' | '<' | '+' | '-' | '*' | '/' | '=' ); 
 {normal}	left_brace = '{' ;
 {normal}	right_brace = '}' ;
+{normal}	left_bracket = '[';
+{normal}	right_bracket = ']';
 {normal}	left_p = '(' ;
 {normal}	right_p = ')' ;
 {normal}	semicolon = ';' ;
