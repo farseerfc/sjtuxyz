@@ -33,7 +33,7 @@ public class TokenRegister {
 	{
 		SimpleAttributeSet keyword=new SimpleAttributeSet();
 		StyleConstants.setFontFamily(keyword, "Courier New");
-		StyleConstants.setForeground(keyword,Color.blue);
+		StyleConstants.setForeground(keyword,Color.red);
 		StyleConstants.setBold(keyword, true);
 		
 		SimpleAttributeSet normal=new SimpleAttributeSet();
@@ -91,6 +91,8 @@ public class TokenRegister {
 		add(new TokenDiscriber(TStaticKey.class,			"Keyword(static)     ", keyword));
 		add(new TokenDiscriber(TVoidKey.class,				"Keyword(void)       ", keyword));
 		add(new TokenDiscriber(TWhileKey.class,				"Keyword(while)      ", keyword));
+		add(new TokenDiscriber(TNewKey.class,				"Keyword(new)        ", keyword));
+		add(new TokenDiscriber(TThisKey.class,				"Keyword(this)       ", keyword));
 		add(new TokenDiscriber(null,						"Error!              ", error));
 	}
 }

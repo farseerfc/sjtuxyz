@@ -13,6 +13,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -31,6 +32,12 @@ import javax.swing.text.html.*;
 
 import xyzlex.counter.Counter;
 import xyzlex.node.Token;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.event.MenuListener;
+import javax.swing.event.MenuEvent;
+import javax.swing.ImageIcon;
 
 public class XyzlexEditor extends JFrame {
 	private JTextPane txtResult;
@@ -40,6 +47,7 @@ public class XyzlexEditor extends JFrame {
 	private String filePath;
 	private boolean changed;
 	private boolean needFormat;
+	private JPanel panel;
 
 	public XyzlexEditor() {
 
@@ -52,6 +60,7 @@ public class XyzlexEditor extends JFrame {
 		setBounds(100, 100, 600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
+		buildMenuBar();
 		buildToolbar();
 		buildTextArea();
 		startFormatTimer();
@@ -94,13 +103,12 @@ public class XyzlexEditor extends JFrame {
 			}
 
 		});
-
+		
 		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
 				new JScrollPane(txtResult), new JScrollPane(txtText));
 		sp.setDividerLocation(220);
 		sp.resetToPreferredSizes();
-		this.add(sp, BorderLayout.CENTER);
-
+		panel.add(sp, BorderLayout.CENTER);
 	}
 
 	private boolean askChanged() {
@@ -132,9 +140,71 @@ public class XyzlexEditor extends JFrame {
 		}
 	}
 
+	private void buildMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("File");
+		this.add(menuBar, BorderLayout.PAGE_START);
+		menuBar.add(menu);
+
+		JMenuItem menuItem = new JMenuItem("New");
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (changed) {
+					if (!askChanged())
+						return;
+				}
+				text = "";
+				txtResult.setText(text);
+				txtText.setText(text);
+				changed = false;
+				filePath = "";
+				needFormat = true;
+			}
+		});
+		menu.add(menuItem);
+
+		JMenuItem menuItem_1 = new JMenuItem("Open...");
+		menuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (changed) {
+					if (!askChanged())
+						return;
+				}
+
+				JFileChooser chooser = new JFileChooser();
+				int returnVal = chooser.showOpenDialog(mainFrame);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					filePath = chooser.getSelectedFile().getPath();
+					openFile();
+				}
+			}
+		});
+		menu.add(menuItem_1);
+
+		JMenuItem menuItem_2 = new JMenuItem("Save");
+		menuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveOrSaveAs();
+			}
+		});
+		menu.add(menuItem_2);
+
+		JMenuItem menuItem_3 = new JMenuItem("Save as...");
+		menuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveAs();
+			}
+		});
+		menu.add(menuItem_3);
+	}
+
 	private void buildToolbar() {
+		ImageIcon openIcon = new ImageIcon("xyzlex/ico/burnCD.ico");
 		JToolBar toolbar = new JToolBar();
-		this.add(toolbar, BorderLayout.NORTH);
+		panel = new JPanel();
+		this.add(panel, BorderLayout.CENTER);
+		panel.setLayout(new BorderLayout());
+		panel.add(toolbar, BorderLayout.NORTH);
 		toolbar.add(new AbstractAction("New") {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -185,7 +255,6 @@ public class XyzlexEditor extends JFrame {
 			}
 
 		});
-
 	}
 
 	private void openFile() {
@@ -224,9 +293,11 @@ public class XyzlexEditor extends JFrame {
 	}
 
 	private void formatText() {
-		if(!needFormat)return;
-		if(txtText.getText().equals(text))return;
-		text=txtText.getText();
+		if (!needFormat)
+			return;
+		if (txtText.getText().equals(text))
+			return;
+		text = txtText.getText();
 		TokenRegister tr = new TokenRegister();
 		Counter counter = new Counter(text);
 		try {
@@ -241,7 +312,7 @@ public class XyzlexEditor extends JFrame {
 							t.getClass()).getColor());
 				}
 				int count = 0;
-				for (int i = 0; i < Math.min(text.length(),lastPos); ++i) {
+				for (int i = 0; i < Math.min(text.length(), lastPos); ++i) {
 					if (text.charAt(i) == '\n')
 						count++;
 				}
