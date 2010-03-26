@@ -58,6 +58,7 @@ public class TokenRegister {
 		StyleConstants.setForeground(error,Color.red);
 
 		add(new TokenDiscriber(TBlanks.class,				"Blank               ", normal));
+		add(new TokenDiscriber(TBooleanKey.class,			"Keyword(boolean)    ", keyword));
 		add(new TokenDiscriber(TClassKey.class,				"Keyword(class)      ", keyword));
 		add(new TokenDiscriber(TColon.class,				"Colon(:)            ", normal));
 		add(new TokenDiscriber(TCommentAnyN.class,			"Comment(new body)   ", comment));
@@ -73,6 +74,7 @@ public class TokenRegister {
 		add(new TokenDiscriber(TIntegerLiteral.class,		"Literal(integer)    ", literal));
 		add(new TokenDiscriber(TIntKey.class,				"Keyword(int)        ", keyword));
 		add(new TokenDiscriber(TLeftBrace.class,			"LeftBrace({)        ", normal));
+		add(new TokenDiscriber(TLeftBracket.class,			"LeftBracket([)      ", normal));
 		add(new TokenDiscriber(TLeftP.class,				"LeftParentheses(()  ", normal));
 		add(new TokenDiscriber(TMainKey.class,				"Keyword(main)       ", keyword));
 		add(new TokenDiscriber(TOperator.class,				"Operator            ", normal));
@@ -83,6 +85,7 @@ public class TokenRegister {
 		add(new TokenDiscriber(TRealKey.class,				"Keyword(real)       ", keyword));
 		add(new TokenDiscriber(TRealLiteral.class,			"Literal(real)       ", literal));
 		add(new TokenDiscriber(TRightBrace.class,			"RightBrace(})       ", normal));
+		add(new TokenDiscriber(TRightBracket.class,			"RightBracket(])     ", normal));
 		add(new TokenDiscriber(TRightP.class,				"RightParentheses()) ", normal));
 		add(new TokenDiscriber(TSemicolon.class,			"Semicolon(;)        ", normal));
 		add(new TokenDiscriber(TSlashN.class,				"Comment(new slash)  ", comment));
