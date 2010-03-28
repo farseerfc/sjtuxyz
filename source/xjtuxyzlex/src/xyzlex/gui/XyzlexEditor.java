@@ -352,7 +352,7 @@ public class XyzlexEditor extends JFrame {
 			text = doc.getText(0, doc.getLength());
 			TokenRegister tr = new TokenRegister();
 			Counter counter= new Counter(text);
-			if(needFormat || !txtText.getText().equals(text)){
+			if(needFormat || !doc.getText(0, doc.getLength()).equals(text)){
 				// format txtText
 				if (counter.getException() == null) {
 					int lastPos = txtText.getCaretPosition();
@@ -364,6 +364,7 @@ public class XyzlexEditor extends JFrame {
 					}
 					txtText.setCaretPosition(lastPos);
 				}
+				needFormat=false;
 			}
 			//refresh statue bar
 			int lineNum=1;
@@ -401,7 +402,6 @@ public class XyzlexEditor extends JFrame {
 			}
 				
 			
-			needFormat = false;
 			statusLabel.setText(labelText);
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
