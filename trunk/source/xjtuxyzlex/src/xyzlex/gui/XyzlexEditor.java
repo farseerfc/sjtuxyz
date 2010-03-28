@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -62,7 +64,6 @@ public class XyzlexEditor extends JFrame {
 		mainFrame = this;
 		labelText = "";
 		setTitle("Xyz lexer Editor");
-		setVisible(true);
 		setBounds(100, 100, 600, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
@@ -71,14 +72,15 @@ public class XyzlexEditor extends JFrame {
 		buildTextArea();
 		buildStatusLabel();
 		startFormatTimer();
+		setVisible(true);
 	}
 
 	private void startFormatTimer() {
 		new Timer(500, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (needFormat)
-					formatText();
+				//if (needFormat)
+				formatText();
 			}
 		}).start();
 	}
@@ -215,7 +217,35 @@ public class XyzlexEditor extends JFrame {
 			}
 		});
 		menu.add(menuItem_4);
+		
+		JMenu menuHelp=new JMenu("Help");
+		menuBar.add(menuHelp);
+		JMenuItem menuAbout=new JMenuItem("About ...");
+		menuAbout.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showAboutDialog();
+			}
+			
+		});
+		menuHelp.add(menuAbout);
 	}
+	
+
+	private void showAboutDialog() {
+		JOptionPane.showMessageDialog(mainFrame,
+				"XYZ is a compiler\n" +
+				"for compiler course in SE of SJTU\n" +
+				"Made By\n" +
+				"5070379019 Wu Ye\n" +
+				"5070379022 Yang JiaChen\n" +
+				"5070379025 Zhan Hui Zhou ",
+				"About XYZ",
+				JOptionPane.CLOSED_OPTION);
+		
+	}
+
 
 	private void buildToolbar() {
 		JToolBar toolbar = new JToolBar();
@@ -317,35 +347,42 @@ public class XyzlexEditor extends JFrame {
 	}
 
 	private void formatText() {
-		if (!needFormat)
-			return;
-		if (txtText.getText().equals(text))
-			return;
-		text = txtText.getText();
-		TokenRegister tr = new TokenRegister();
-		Counter counter = new Counter(text);
 		try {
-			Document doc;
-			if (counter.getException() == null) {
-				int lastPos = txtText.getCaretPosition();
+			Document doc = txtText.getDocument();
+			text = doc.getText(0, doc.getLength());
+			TokenRegister tr = new TokenRegister();
+			Counter counter= new Counter(text);
+			if(needFormat || !txtText.getText().equals(text)){
 				// format txtText
-				doc = txtText.getDocument();
-				doc.remove(0, doc.getLength());
-				for (Token t : counter.getTokenStream()) {
-					doc.insertString(doc.getLength(), t.getText(), tr.get(
-							t.getClass()).getColor());
+				if (counter.getException() == null) {
+					int lastPos = txtText.getCaretPosition();
+					doc = txtText.getDocument();
+					doc.remove(0, doc.getLength());
+					for (Token t : counter.getTokenStream()) {
+						doc.insertString(doc.getLength(), t.getText(), tr.get(
+								t.getClass()).getColor());
+					}
+					txtText.setCaretPosition(lastPos);
 				}
-				int count = 0;
-				for (int i = 0; i < Math.min(text.length(), lastPos); ++i) {
-					if (text.charAt(i) == '\n')
-						count++;
-				}
-				txtText.setCaretPosition(lastPos + count);
 			}
+			//refresh statue bar
+			int lineNum=1;
+			int rowNum=0;
+			int p=txtText.getCaretPosition()-1;
+			while(p>=0 && text.charAt(p)!='\n'){
+				rowNum++;
+				p--;
+			}
+			while(p>=0){
+				if(text.charAt(p)=='\n')
+					lineNum++;
+				p--;
+			}
+			labelText="Line: "+lineNum+" Row: "+rowNum;
 
 			// format txtResult
+			
 			doc = txtResult.getDocument();
-
 			doc.remove(0, doc.getLength());
 			for (Class<? extends Token> tokenClass : counter.getTokenKinds()) {
 				String line = "";
@@ -360,9 +397,12 @@ public class XyzlexEditor extends JFrame {
 			if (counter.getException() != null) {
 				doc.insertString(doc.getLength(), counter.getException()
 						.getMessage(), tr.get(null).getColor());
-
+				labelText += " Error:" + counter.getException().getMessage();
 			}
+				
+			
 			needFormat = false;
+			statusLabel.setText(labelText);
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
 		} catch (IllegalArgumentException e2) {
@@ -374,7 +414,7 @@ public class XyzlexEditor extends JFrame {
 			InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
 		UIManager.setLookAndFeel("ch.randelshofer.quaqua.QuaquaLookAndFeel");
-		XyzlexEditor editor = new XyzlexEditor();
+		new XyzlexEditor();
 	}
 
 }
