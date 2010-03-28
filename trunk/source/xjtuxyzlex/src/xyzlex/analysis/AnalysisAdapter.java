@@ -209,6 +209,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseTComma(TComma node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTBlanks(TBlanks node)
     {
         defaultCase(node);

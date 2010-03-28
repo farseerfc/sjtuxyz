@@ -61,6 +61,7 @@ public class TokenRegister {
 		add(new TokenDiscriber(TBooleanKey.class,			"Keyword(boolean)    ", keyword));
 		add(new TokenDiscriber(TClassKey.class,				"Keyword(class)      ", keyword));
 		add(new TokenDiscriber(TColon.class,				"Colon(:)            ", normal));
+		add(new TokenDiscriber(TComma.class,				"Comma(,)            ", normal));
 		add(new TokenDiscriber(TCommentAnyN.class,			"Comment(new body)   ", comment));
 		add(new TokenDiscriber(TCommentAnyO.class,			"Comment(old body)   ", comment));
 		add(new TokenDiscriber(TCommentNewStyle.class,		"Comment(new begin)  ", comment));
