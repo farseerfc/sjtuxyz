@@ -49,6 +49,7 @@ Tokens
 {normal}	right_p = ')' ;
 {normal}	semicolon = ';' ;
 {normal}	colon = ':' ;
+{normal}	comma = ',';
 {normal}	blanks = bl*;
 
 {normal -> comment_new_s}

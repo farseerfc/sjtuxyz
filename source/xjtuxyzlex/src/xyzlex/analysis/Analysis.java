@@ -40,6 +40,7 @@ public interface Analysis extends Switch
     void caseTRightP(TRightP node);
     void caseTSemicolon(TSemicolon node);
     void caseTColon(TColon node);
+    void caseTComma(TComma node);
     void caseTBlanks(TBlanks node);
     void caseTCommentNewStyle(TCommentNewStyle node);
     void caseTCommentOldStyle(TCommentOldStyle node);
