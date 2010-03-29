@@ -27,6 +27,7 @@ public interface Analysis extends Switch
     void caseTNewKey(TNewKey node);
     void caseTThisKey(TThisKey node);
     void caseTBooleanKey(TBooleanKey node);
+    void caseTReturnKey(TReturnKey node);
     void caseTPoint(TPoint node);
     void caseTId(TId node);
     void caseTRealLiteral(TRealLiteral node);
