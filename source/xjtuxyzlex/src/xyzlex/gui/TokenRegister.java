@@ -10,21 +10,21 @@ import javax.swing.text.StyleConstants;
 import xyzlex.node.*;
 
 public class TokenRegister {
-	private Map<Class<? extends Token>,TokenDiscriber> map;
+	private Map<Class<? extends Token>,TokenDescriber> map;
 	
 	public TokenRegister(){
-		map=new HashMap<Class<? extends Token>,TokenDiscriber>();
+		map=new HashMap<Class<? extends Token>,TokenDescriber>();
 		addAllTokens();
 	}
 	
-	public void add(TokenDiscriber dis)
+	public void add(TokenDescriber dis)
 	{
 		if(map.containsKey(dis.getTokenClass()))
 			throw new RuntimeException("Token Discriber already exist!");
 		map.put(dis.getTokenClass(), dis);
 	}
 	
-	public TokenDiscriber get(Class<? extends Token> tokenClass)
+	public TokenDescriber get(Class<? extends Token> tokenClass)
 	{
 		return map.get(tokenClass);
 	}
@@ -57,46 +57,46 @@ public class TokenRegister {
 		StyleConstants.setFontFamily(error, "Courier New");
 		StyleConstants.setForeground(error,Color.red);
 
-		add(new TokenDiscriber(TBlanks.class,				"Blank               ", normal));
-		add(new TokenDiscriber(TBooleanKey.class,			"Keyword(boolean)    ", keyword));
-		add(new TokenDiscriber(TClassKey.class,				"Keyword(class)      ", keyword));
-		add(new TokenDiscriber(TColon.class,				"Colon(:)            ", normal));
-		add(new TokenDiscriber(TComma.class,				"Comma(,)            ", normal));
-		add(new TokenDiscriber(TCommentAnyN.class,			"Comment(new body)   ", comment));
-		add(new TokenDiscriber(TCommentAnyO.class,			"Comment(old body)   ", comment));
-		add(new TokenDiscriber(TCommentNewStyle.class,		"Comment(new begin)  ", comment));
-		add(new TokenDiscriber(TCommentOldStyle.class,		"Comment(old begin)  ", comment));
-		add(new TokenDiscriber(TCommentNewStyleEnd.class,	"Comment(new end)    ", comment));
-		add(new TokenDiscriber(TCommentOldStyleEnd.class,	"Comment(old end)    ", comment));
-		add(new TokenDiscriber(TElseKey.class,				"Keyword(else)       ", keyword));
-		add(new TokenDiscriber(TExtendsKey.class,			"Keyword(extends)    ", keyword));
-		add(new TokenDiscriber(TId.class,					"Identifier          ", id));
-		add(new TokenDiscriber(TIfKey.class,				"Keyword(if)         ", keyword));
-		add(new TokenDiscriber(TIntegerLiteral.class,		"Literal(integer)    ", literal));
-		add(new TokenDiscriber(TIntKey.class,				"Keyword(int)        ", keyword));
-		add(new TokenDiscriber(TLeftBrace.class,			"LeftBrace({)        ", normal));
-		add(new TokenDiscriber(TLeftBracket.class,			"LeftBracket([)      ", normal));
-		add(new TokenDiscriber(TLeftP.class,				"LeftParentheses(()  ", normal));
-		add(new TokenDiscriber(TMainKey.class,				"Keyword(main)       ", keyword));
-		add(new TokenDiscriber(TOperator.class,				"Operator            ", normal));
-		add(new TokenDiscriber(TPoint.class,				"Point(.)            ", normal));
-		add(new TokenDiscriber(TPostKey.class,				"Keyword(post)       ", keyword));
-		add(new TokenDiscriber(TPreKey.class,				"Keyword(pre)        ", keyword));
-		add(new TokenDiscriber(TPublicKey.class,			"Keyword(public)     ", keyword));
-		add(new TokenDiscriber(TRealKey.class,				"Keyword(real)       ", keyword));
-		add(new TokenDiscriber(TRealLiteral.class,			"Literal(real)       ", literal));
-		add(new TokenDiscriber(TRightBrace.class,			"RightBrace(})       ", normal));
-		add(new TokenDiscriber(TRightBracket.class,			"RightBracket(])     ", normal));
-		add(new TokenDiscriber(TRightP.class,				"RightParentheses()) ", normal));
-		add(new TokenDiscriber(TSemicolon.class,			"Semicolon(;)        ", normal));
-		add(new TokenDiscriber(TSlashN.class,				"Comment(new slash)  ", comment));
-		add(new TokenDiscriber(TSlashO.class,				"Comment(old slash)  ", comment));
-		add(new TokenDiscriber(TStar.class,					"Comment(old star)   ", comment));
-		add(new TokenDiscriber(TStaticKey.class,			"Keyword(static)     ", keyword));
-		add(new TokenDiscriber(TVoidKey.class,				"Keyword(void)       ", keyword));
-		add(new TokenDiscriber(TWhileKey.class,				"Keyword(while)      ", keyword));
-		add(new TokenDiscriber(TNewKey.class,				"Keyword(new)        ", keyword));
-		add(new TokenDiscriber(TThisKey.class,				"Keyword(this)       ", keyword));
-		add(new TokenDiscriber(null,						"Error!              ", error));
+		add(new TokenDescriber(TBlanks.class,				"Blank               ", normal));
+		add(new TokenDescriber(TBooleanKey.class,			"Keyword(boolean)    ", keyword));
+		add(new TokenDescriber(TClassKey.class,				"Keyword(class)      ", keyword));
+		add(new TokenDescriber(TColon.class,				"Colon(:)            ", normal));
+		add(new TokenDescriber(TComma.class,				"Comma(,)            ", normal));
+		add(new TokenDescriber(TCommentAnyN.class,			"Comment(new body)   ", comment));
+		add(new TokenDescriber(TCommentAnyO.class,			"Comment(old body)   ", comment));
+		add(new TokenDescriber(TCommentNewStyle.class,		"Comment(new begin)  ", comment));
+		add(new TokenDescriber(TCommentOldStyle.class,		"Comment(old begin)  ", comment));
+		add(new TokenDescriber(TCommentNewStyleEnd.class,	"Comment(new end)    ", comment));
+		add(new TokenDescriber(TCommentOldStyleEnd.class,	"Comment(old end)    ", comment));
+		add(new TokenDescriber(TElseKey.class,				"Keyword(else)       ", keyword));
+		add(new TokenDescriber(TExtendsKey.class,			"Keyword(extends)    ", keyword));
+		add(new TokenDescriber(TId.class,					"Identifier          ", id));
+		add(new TokenDescriber(TIfKey.class,				"Keyword(if)         ", keyword));
+		add(new TokenDescriber(TIntegerLiteral.class,		"Literal(integer)    ", literal));
+		add(new TokenDescriber(TIntKey.class,				"Keyword(int)        ", keyword));
+		add(new TokenDescriber(TLeftBrace.class,			"LeftBrace({)        ", normal));
+		add(new TokenDescriber(TLeftBracket.class,			"LeftBracket([)      ", normal));
+		add(new TokenDescriber(TLeftP.class,				"LeftParentheses(()  ", normal));
+		add(new TokenDescriber(TMainKey.class,				"Keyword(main)       ", keyword));
+		add(new TokenDescriber(TOperator.class,				"Operator            ", normal));
+		add(new TokenDescriber(TPoint.class,				"Point(.)            ", normal));
+		add(new TokenDescriber(TPostKey.class,				"Keyword(post)       ", keyword));
+		add(new TokenDescriber(TPreKey.class,				"Keyword(pre)        ", keyword));
+		add(new TokenDescriber(TPublicKey.class,			"Keyword(public)     ", keyword));
+		add(new TokenDescriber(TRealKey.class,				"Keyword(real)       ", keyword));
+		add(new TokenDescriber(TRealLiteral.class,			"Literal(real)       ", literal));
+		add(new TokenDescriber(TRightBrace.class,			"RightBrace(})       ", normal));
+		add(new TokenDescriber(TRightBracket.class,			"RightBracket(])     ", normal));
+		add(new TokenDescriber(TRightP.class,				"RightParentheses()) ", normal));
+		add(new TokenDescriber(TSemicolon.class,			"Semicolon(;)        ", normal));
+		add(new TokenDescriber(TSlashN.class,				"Comment(new slash)  ", comment));
+		add(new TokenDescriber(TSlashO.class,				"Comment(old slash)  ", comment));
+		add(new TokenDescriber(TStar.class,					"Comment(old star)   ", comment));
+		add(new TokenDescriber(TStaticKey.class,			"Keyword(static)     ", keyword));
+		add(new TokenDescriber(TVoidKey.class,				"Keyword(void)       ", keyword));
+		add(new TokenDescriber(TWhileKey.class,				"Keyword(while)      ", keyword));
+		add(new TokenDescriber(TNewKey.class,				"Keyword(new)        ", keyword));
+		add(new TokenDescriber(TThisKey.class,				"Keyword(this)       ", keyword));
+		add(new TokenDescriber(null,						"Error!              ", error));
 	}
 }
