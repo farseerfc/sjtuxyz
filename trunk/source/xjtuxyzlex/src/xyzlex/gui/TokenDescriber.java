@@ -4,16 +4,16 @@ import javax.swing.text.AttributeSet;
 
 import xyzlex.node.Token;
 
-public class TokenDiscriber {
+public class TokenDescriber {
 	private Class<? extends Token> tokenClass;
 	private String name;
 	private AttributeSet attribute;
 	
-	public TokenDiscriber(){
+	public TokenDescriber(){
 		
 	}
 	
-	public TokenDiscriber(
+	public TokenDescriber(
 			Class<? extends Token> tokenClass,
 			String name,
 			AttributeSet attribute){
