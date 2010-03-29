@@ -1,0 +1,18 @@
+class Factorial {		//main class //enclosure comment
+    public static void main() {	/*main function*/
+        System.out.println(new Fac().ComputeFac(10));
+    }
+}
+class Fac {
+public int ComputeFac(int num) {
+    pre: num > 0;
+    post: num_aux>0;
+        int num_aux;		/* comment is */
+        if (num > 1)		/*shortest match*/
+            num_aux = num * (this.ComputeFac(num-1));
+        else
+            num_aux = 1;
+        return num_aux;
+    }
+}
+

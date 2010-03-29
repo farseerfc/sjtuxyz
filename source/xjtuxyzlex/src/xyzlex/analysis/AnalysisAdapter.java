@@ -144,6 +144,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseTReturnKey(TReturnKey node)
+    {
+        defaultCase(node);
+    }
+
     public void caseTPoint(TPoint node)
     {
         defaultCase(node);

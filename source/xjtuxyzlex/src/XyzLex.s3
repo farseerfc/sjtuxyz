@@ -36,6 +36,7 @@ Tokens
 {normal} 	new_key = 'new';
 {normal}	this_key = 'this';
 {normal}	boolean_key = 'boolean';
+{normal}	return_key = 'return';
 {normal}	point = '.' ;
 {normal}	id = letter (underscore | digit | letter)*;
 {normal}	real_literal = digit* '.' digit* (e_c signed_c? digit+)?;

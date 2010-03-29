@@ -85,6 +85,7 @@ public class TokenRegister {
 		add(new TokenDescriber(TPublicKey.class,			"Keyword(public)     ", keyword));
 		add(new TokenDescriber(TRealKey.class,				"Keyword(real)       ", keyword));
 		add(new TokenDescriber(TRealLiteral.class,			"Literal(real)       ", literal));
+		add(new TokenDescriber(TReturnKey.class,			"Keyword(return)     ", keyword));
 		add(new TokenDescriber(TRightBrace.class,			"RightBrace(})       ", normal));
 		add(new TokenDescriber(TRightBracket.class,			"RightBracket(])     ", normal));
 		add(new TokenDescriber(TRightP.class,				"RightParentheses()) ", normal));
