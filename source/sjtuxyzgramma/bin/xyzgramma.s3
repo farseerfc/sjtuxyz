@@ -1,0 +1,245 @@
+Package xyzlex;
+
+Helpers
+	all= [ 0 .. 0xffff ] ;
+	letter = ['a'..'z'] | ['A'..'Z'];
+	digit = ['0' .. '9'];
+	sp = ' ' ;
+    cr = 13 ; // carriage return
+    lf = 10 ; // line feed
+    tab = 9 ; // tab char
+    bl = sp | cr | lf | tab ;
+    nl = cr | lf ;
+    underscore = '_' ;
+    plus_c = '+' ;
+    minus_c = '-' ;
+    signed_c = plus_c | minus_c ;
+    e_c = 'E' | 'e' ;
+    not_cr_lf = [all -[cr+lf]];
+    not_star = [all - '*'];
+    not_star_slash = [not_star-'/'];
+    new_comment = '//' not_cr_lf* nl;
+    old_comment = '/*' not_star* '*'+ (not_star_slash not_star* '*'+)* '/';
+    
+    
+Tokens
+	if = 'if';
+	else = 'else';
+	while = 'while';
+	int = 'int';
+	real = 'real';
+	pre = 'pre';
+	post = 'post';
+	class = 'class';
+	extends = 'extends';
+	public = 'public';
+	static = 'static';
+	void = 'void';
+	main = 'main';
+ 	new = 'new';
+	this = 'this';
+	boolean = 'boolean';
+	return = 'return';
+	length = 'length';
+	true = 'true';
+	false = 'false';
+	print = 'System' bl* '.' bl* 'out' bl* '.' bl* 'println';
+	id = letter (underscore | digit | letter)*;
+	point = '.';
+	real_lt = digit* '.' digit* (e_c signed_c? digit+)?;
+	int_lt = digit+;
+	multiply_opr = '*';
+	divide_opr= '/';
+	plus_opr = '+';
+	minus_opr='-';
+	greater_opr = '>' ;
+	less_opr = '<' ;
+	and_opr = '&&';
+	or_opr = '||';
+	not_opr = '!';
+	assign_opr = '='; 
+	l_b = '{' ;
+	r_b = '}' ;
+	l_sq = '[';
+	r_sq = ']';
+	l_p = '(' ;
+	r_p = ')' ;
+	semi = ';' ;
+	colon = ':' ;
+	comma = ',';
+	blanks = bl*;
+	comment = old_comment | new_comment;
+
+Ignored Tokens
+	blanks,
+	comment;
+		
+Productions
+	program = var_decl* state* {-> New program ([var_decl],[state])} ;
+	
+	var_decl = type id semi {-> New var_decl (type,id)}; //¡ú Type id ;
+	
+	/*      Type ¡ú int []
+     *     ¡ú real []
+     *     ¡ú boolean
+     *     ¡ú int
+     *     ¡ú real
+     *     ¡ú id
+	 */
+	type = {int_array}	int l_sq r_sq	{-> New type.int_array()}
+		 | {real_array}	real l_sq r_sq	{-> New type.real_array()}
+		 | {boolean}	boolean			{-> New type.boolean()}
+		 | {int}		int				{-> New type.int()}
+		 | {real}		real			{-> New type.real()}
+		 | {class}		id				{-> New type.class(id)}
+		 ;				
+	 
+	/* state ¡ú { state* }
+     *      ¡ú if ( Exp ) state else state
+     *      ¡ú while ( Exp ) state
+     *      ¡ú System.out.println ( Exp ) ;
+     *      ¡ú id = Exp ;
+     *      ¡ú id [ Exp ]= Exp ;
+	 */
+	state= {block} 	l_b [list]:state* r_b
+						{-> New state.block([list])}
+		 | {if}		if l_p [cond]:exp r_p [then_clause]:state else [else_clause]:state
+		 				{-> New state.if(cond,then_clause,else_clause)} 
+		 | {while}	while l_p [cond]:exp r_p [clause]:state
+		 				{-> New state.while(cond,clause)} 
+		 | {print}	print l_p exp r_p semi
+		 				{-> New state.print(exp)}
+		 | {assign}	id array_index? assign_opr exp semi
+		 				{-> New state.assign(id,array_index.exp,exp)}	
+		 ; 
+			   
+	array_index {-> exp} = l_sq exp r_sq {-> exp} ;
+	/* Exp ¡ú Exp op Exp
+     *     ¡ú Exp [ Exp ]
+     *     ¡ú Exp . length
+     *     ¡ú Exp . id ( ExpList )
+     *     ¡ú INTEGER LITERAL
+     *     ¡ú true
+     *     ¡ú false
+     *     ¡ú id
+     *     ¡ú this
+     *     ¡ú new int [ Exp ]
+     *     ¡ú new id ()
+     *     ¡ú ! Exp
+     *     ¡ú ( Exp )
+	 */
+	exp  {-> exp} = {or_opr} [first]:exp or_opr [rest]:exp1
+					{-> New exp.or_opr(first.exp,rest.exp)}
+				  | {single} exp1
+				 	{-> exp1.exp} 
+				  ;
+				  
+	exp1 {-> exp} = {and_opr} [first]:exp1 and_opr [rest]:exp2
+					{-> New exp.and_opr(first.exp,rest.exp)}
+				  | {single} exp2
+				 	{-> exp2.exp} 
+				  ;
+				  
+	exp2 {-> exp} = {not_opr} [first]:exp3
+					{-> New exp.not_opr(first.exp)}
+				  | {single} exp3
+				 	{-> exp3.exp} 
+				  ;
+				  
+	exp3 {-> exp} = {greater_opr} [first]:exp3 greater_opr [rest]:exp4
+					{-> New exp.greater_opr(first.exp,rest.exp)}
+				  | {less_opr}    [first]:exp3 less_opr [rest]:exp4
+					{-> New exp.less_opr(first.exp,rest.exp)}
+				  | {single} exp4
+				 	{-> exp4.exp} 
+				  ;
+	
+	exp4 {-> exp} = {plus_opr}  [first]:exp4 plus_opr [rest]:exp5
+					{-> New exp.plus_opr(first.exp,rest.exp)}
+				  | {minus_opr} [first]:exp4 minus_opr [rest]:exp5
+					{-> New exp.minus_opr(first.exp,rest.exp)}
+				  | {single} exp5
+				 	{-> exp5.exp} 
+				  ;
+				   
+	exp5 {-> exp} = {multiply_opr}  [first]:exp5 multiply_opr [rest]:term
+					{-> New exp.multiply_opr(first.exp,rest.exp)}
+				  | {divide_opr} [first]:exp5 divide_opr [rest]:term
+					{-> New exp.divide_opr(first.exp,rest.exp)}
+				  | {single} term
+				 	{-> term.exp} 
+				  ;
+			
+	term {-> exp} = {int_lt} 		int_lt		{-> New exp.int_lt(int_lt)}
+				  | {real_lt} 		real_lt 	{-> New exp.real_lt(real_lt)}
+				  | {true_lt} 		true 		{-> New exp.true_lt()}
+				  | {false_lt} 		false 		{-> New exp.false_lt()}
+				  | {var} 			id 			{-> New exp.var(id)}
+				  | {this}			this		{-> New exp.this()}
+				  | {sub_exp} 		l_p exp r_p {-> exp.exp}
+				  | {array_sub}		[array]:term l_sq [index]:exp r_sq 	
+				  	{-> New exp.array_sub(array.exp,index.exp)}
+				  | {array_length} 	[array]:term point length
+				  	{-> New exp.array_length(array.exp)}
+				  | {mem_func}		[object]:term point [func]:id l_p [args]:exp_list? r_p
+					{-> New exp.mem_func(object.exp,func,[args.exp])}
+				  | {new_int_ar} 	new int l_sq [size]:exp r_sq
+					{-> New exp.new_int_ar(size.exp)}
+				  | {new_real_ar} 	new real l_sq [size]:exp r_sq
+					{-> New exp.new_real_ar(size.exp)}
+				  | {new_object} 	new [type]:id l_p r_p
+				  	{-> New exp.new_object(type)}
+				  ;
+			
+	/*ExpList ¡ú Exp ExpRest*
+     *      ¡ú
+     */
+    exp_list {-> exp*}  = {comma_sep} exp comma exp_list 
+    					  {-> [exp, exp_list.exp]}
+    					| {single} exp {-> [exp.exp]}
+    					;
+    
+Abstract Syntax Tree
+
+	program = var_decl* state*;
+	
+	var_decl = type id ; //¡ú Type id ;
+	
+	type = {int_array}
+		 | {real_array}
+		 | {boolean}
+		 | {int}
+		 | {real}
+		 | {class} id
+		 ;
+		 
+	state = {block} 	[list]:state*
+		  | {if}		[cond]:exp [then]:state [else]:state
+		  | {while}		[cond]:exp [clause]:state
+		  | {print}		exp
+		  | {assign}	id [index]:exp? [value]:exp
+		  ; 
+		 
+	exp = {or_opr} 		[first]:exp [rest]:exp
+		| {and_opr} 	[first]:exp [rest]:exp
+		| {not_opr} 	[first]:exp
+		| {greater_opr} [first]:exp [rest]:exp
+		| {less_opr} 	[first]:exp [rest]:exp
+		| {plus_opr} 	[first]:exp [rest]:exp
+		| {minus_opr} 	[first]:exp [rest]:exp
+		| {multiply_opr} [first]:exp [rest]:exp
+		| {divide_opr} 	[first]:exp [rest]:exp
+		| {int_lt} 		int_lt
+		| {real_lt} 	real_lt
+		| {true_lt}
+		| {false_lt}
+		| {var} 		[var]:id
+		| {this}
+		| {sub_exp} 	exp
+		| {array_sub}		[array]:exp [index]:exp
+		| {array_length} 	[array]:exp
+		| {mem_func}		[object]:exp [func]:id [args]:exp*
+		| {new_int_ar} 	[size]:exp
+		| {new_real_ar} [size]:exp
+		| {new_object} 	[type]:id
+		;
