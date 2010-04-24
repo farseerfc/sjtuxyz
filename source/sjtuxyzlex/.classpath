@@ -5,6 +5,5 @@
 	<classpathentry kind="lib" path="lib/sablecc.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/quaqua.jar"/>
-	<classpathentry kind="lib" path="xjtuxyzlex_fat.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

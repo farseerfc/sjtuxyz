@@ -28,11 +28,11 @@ public interface Analysis extends Switch
     void caseTThisKey(TThisKey node);
     void caseTBooleanKey(TBooleanKey node);
     void caseTReturnKey(TReturnKey node);
-    void caseTPoint(TPoint node);
     void caseTId(TId node);
+    void caseTPoint(TPoint node);
     void caseTRealLiteral(TRealLiteral node);
     void caseTIntegerLiteral(TIntegerLiteral node);
-    void caseTOperator(TOperator node);
+    void caseTBiOpr(TBiOpr node);
     void caseTLeftBrace(TLeftBrace node);
     void caseTRightBrace(TRightBrace node);
     void caseTLeftBracket(TLeftBracket node);
@@ -43,14 +43,6 @@ public interface Analysis extends Switch
     void caseTColon(TColon node);
     void caseTComma(TComma node);
     void caseTBlanks(TBlanks node);
-    void caseTCommentNewStyle(TCommentNewStyle node);
-    void caseTCommentOldStyle(TCommentOldStyle node);
-    void caseTCommentOldStyleEnd(TCommentOldStyleEnd node);
-    void caseTCommentNewStyleEnd(TCommentNewStyleEnd node);
-    void caseTCommentAnyN(TCommentAnyN node);
-    void caseTCommentAnyO(TCommentAnyO node);
-    void caseTStar(TStar node);
-    void caseTSlashO(TSlashO node);
-    void caseTSlashN(TSlashN node);
+    void caseTComment(TComment node);
     void caseEOF(EOF node);
 }

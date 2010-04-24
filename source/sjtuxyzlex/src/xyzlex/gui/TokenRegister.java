@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
+import com.sun.corba.se.impl.naming.cosnaming.TransientBindingIterator;
+
 import xyzlex.node.*;
 
 public class TokenRegister {
@@ -62,12 +64,7 @@ public class TokenRegister {
 		add(new TokenDescriber(TClassKey.class,				"Keyword(class)      ", keyword));
 		add(new TokenDescriber(TColon.class,				"Colon(:)            ", normal));
 		add(new TokenDescriber(TComma.class,				"Comma(,)            ", normal));
-		add(new TokenDescriber(TCommentAnyN.class,			"Comment(new body)   ", comment));
-		add(new TokenDescriber(TCommentAnyO.class,			"Comment(old body)   ", comment));
-		add(new TokenDescriber(TCommentNewStyle.class,		"Comment(new begin)  ", comment));
-		add(new TokenDescriber(TCommentOldStyle.class,		"Comment(old begin)  ", comment));
-		add(new TokenDescriber(TCommentNewStyleEnd.class,	"Comment(new end)    ", comment));
-		add(new TokenDescriber(TCommentOldStyleEnd.class,	"Comment(old end)    ", comment));
+		add(new TokenDescriber(TComment.class,				"Comment(new body)   ", comment));
 		add(new TokenDescriber(TElseKey.class,				"Keyword(else)       ", keyword));
 		add(new TokenDescriber(TExtendsKey.class,			"Keyword(extends)    ", keyword));
 		add(new TokenDescriber(TId.class,					"Identifier          ", id));
@@ -78,7 +75,7 @@ public class TokenRegister {
 		add(new TokenDescriber(TLeftBracket.class,			"LeftBracket([)      ", normal));
 		add(new TokenDescriber(TLeftP.class,				"LeftParentheses(()  ", normal));
 		add(new TokenDescriber(TMainKey.class,				"Keyword(main)       ", keyword));
-		add(new TokenDescriber(TOperator.class,				"Operator            ", normal));
+		add(new TokenDescriber(TBiOpr.class,				"Operator            ", normal));
 		add(new TokenDescriber(TPoint.class,				"Point(.)            ", normal));
 		add(new TokenDescriber(TPostKey.class,				"Keyword(post)       ", keyword));
 		add(new TokenDescriber(TPreKey.class,				"Keyword(pre)        ", keyword));
@@ -90,9 +87,6 @@ public class TokenRegister {
 		add(new TokenDescriber(TRightBracket.class,			"RightBracket(])     ", normal));
 		add(new TokenDescriber(TRightP.class,				"RightParentheses()) ", normal));
 		add(new TokenDescriber(TSemicolon.class,			"Semicolon(;)        ", normal));
-		add(new TokenDescriber(TSlashN.class,				"Comment(new slash)  ", comment));
-		add(new TokenDescriber(TSlashO.class,				"Comment(old slash)  ", comment));
-		add(new TokenDescriber(TStar.class,					"Comment(old star)   ", comment));
 		add(new TokenDescriber(TStaticKey.class,			"Keyword(static)     ", keyword));
 		add(new TokenDescriber(TVoidKey.class,				"Keyword(void)       ", keyword));
 		add(new TokenDescriber(TWhileKey.class,				"Keyword(while)      ", keyword));

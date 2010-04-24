@@ -149,12 +149,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTPoint(TPoint node)
+    public void caseTId(TId node)
     {
         defaultCase(node);
     }
 
-    public void caseTId(TId node)
+    public void caseTPoint(TPoint node)
     {
         defaultCase(node);
     }
@@ -169,7 +169,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTOperator(TOperator node)
+    public void caseTBiOpr(TBiOpr node)
     {
         defaultCase(node);
     }
@@ -224,47 +224,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTCommentNewStyle(TCommentNewStyle node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentOldStyle(TCommentOldStyle node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentOldStyleEnd(TCommentOldStyleEnd node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentNewStyleEnd(TCommentNewStyleEnd node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentAnyN(TCommentAnyN node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTCommentAnyO(TCommentAnyO node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTStar(TStar node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTSlashO(TSlashO node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseTSlashN(TSlashN node)
+    public void caseTComment(TComment node)
     {
         defaultCase(node);
     }
