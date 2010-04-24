@@ -1,9 +1,6 @@
 package xyzlex.counter.test;
 
-import java.io.InputStreamReader;
-import java.io.PushbackReader;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
+
 
 import junit.framework.TestCase;
 import xyzlex.counter.*;
@@ -30,7 +27,7 @@ public class CounterTest extends TestCase {
 	
 	public void testCountCommentOldStyle000(){
 		Counter counter = new Counter(" /* comment /* aa */ int");
-		assertTrue(counter.getCount(TCommentOldStyle.class)==1);
+		assertTrue(counter.getCount(TComment.class)==1);
 		assertTrue(counter.getCount(TIntKey.class)==1);
 	}
 	
@@ -61,6 +58,7 @@ public class CounterTest extends TestCase {
 
 	public void testCountPoint000(){
 		Counter counter = new Counter(". e22");
+		int a=counter.getCount(TPoint.class),b=counter.getCount(TId.class);
 		assertTrue(counter.getCount(TPoint.class)==1);
 		assertTrue(counter.getCount(TId.class)==1);
 	}
@@ -79,21 +77,20 @@ public class CounterTest extends TestCase {
 	
 	public void testCountCommentNewStyle000(){
 		Counter counter = new Counter("//dfsdgds int click\n");
-		assertTrue(counter.getCount(TCommentNewStyle.class)==1);
+		assertTrue(counter.getCount(TComment.class)==1);
 //		assertTrue(counter.getCount())
 	}
 	
 	public void testCountCommentNewStyle001(){
 		Counter counter = new Counter("//dfsdgds int click\n int");
-		assertTrue(counter.getCount(TCommentNewStyle.class)==1);
+		assertTrue(counter.getCount(TComment.class)==1);
 		assertTrue(counter.getCount(TIntKey.class)==1);
 //		assertTrue(counter.getCount())
 	}
 	
 	public void testCountCommentNewStyle002(){
 		Counter counter = new Counter("//dfsdgds int /* */click\n int");
-		assertTrue(counter.getCount(TCommentOldStyle.class) == 0);
-		assertTrue(counter.getCount(TCommentNewStyle.class)==1);
+		assertTrue(counter.getCount(TComment.class)==1);
 		assertTrue(counter.getCount(TIntKey.class)==1);
 //		assertTrue(counter.getCount())
 	}
