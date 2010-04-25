@@ -133,16 +133,15 @@ public class Interpt extends DepthFirstAdapter {
 	public void outAMultiplyOprExp(AMultiplyOprExp node) {
 		Value l = (Value) getOut(node.getFirst());
 		Value r = (Value) getOut(node.getRest());
+		Value result = new Value();
 		try {
 			if (WhatType.getInstance().is(l.getType(), TypeNodes.aRealType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							* ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							* ((double) ((Integer) r.getValue())));
@@ -152,20 +151,19 @@ public class Interpt extends DepthFirstAdapter {
 			} else if (WhatType.getInstance().is(l.getType(),
 					TypeNodes.aIntType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((double) ((Integer) l.getValue()))
 							* ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
-					result.setType(TypeNodes.aRealType);
+					result.setType(TypeNodes.aIntType);
 					result.setValue(((Integer) l.getValue())
 							* (((Integer) r.getValue())));
 				} else
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getMultiplyOpr()));
@@ -176,16 +174,15 @@ public class Interpt extends DepthFirstAdapter {
 	public void outADivideOprExp(ADivideOprExp node) {
 		Value l = (Value) getOut(node.getFirst());
 		Value r = (Value) getOut(node.getRest());
+		Value result = new Value();
 		try {
 			if (WhatType.getInstance().is(l.getType(), TypeNodes.aRealType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							/ ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							/ ((double) ((Integer) r.getValue())));
@@ -195,20 +192,20 @@ public class Interpt extends DepthFirstAdapter {
 			} else if (WhatType.getInstance().is(l.getType(),
 					TypeNodes.aIntType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((double) ((Integer) l.getValue()))
 							/ ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
-					result.setType(TypeNodes.aRealType);
+					result.setType(TypeNodes.aIntType);
 					result.setValue(((Integer) l.getValue())
 							/ (((Integer) r.getValue())));
 				} else
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
+			
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getDivideOpr()));
@@ -219,16 +216,15 @@ public class Interpt extends DepthFirstAdapter {
 	public void outAPlusOprExp(APlusOprExp node) {
 		Value l = (Value) getOut(node.getFirst());
 		Value r = (Value) getOut(node.getRest());
+		Value result = new Value();
 		try {
 			if (WhatType.getInstance().is(l.getType(), TypeNodes.aRealType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							+ ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							+ ((double) ((Integer) r.getValue())));
@@ -238,20 +234,20 @@ public class Interpt extends DepthFirstAdapter {
 			} else if (WhatType.getInstance().is(l.getType(),
 					TypeNodes.aIntType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((double) ((Integer) l.getValue()))
 							+ ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
-					result.setType(TypeNodes.aRealType);
+					result.setType(TypeNodes.aIntType);
 					result.setValue(((Integer) l.getValue())
 							+ (((Integer) r.getValue())));
 				} else
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
+			
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getPlusOpr()));
@@ -262,16 +258,15 @@ public class Interpt extends DepthFirstAdapter {
 	public void outAMinusOprExp(AMinusOprExp node) {
 		Value l = (Value) getOut(node.getFirst());
 		Value r = (Value) getOut(node.getRest());
+		Value result = new Value();
 		try {
 			if (WhatType.getInstance().is(l.getType(), TypeNodes.aRealType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							- ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((Double) l.getValue())
 							- ((double) ((Integer) r.getValue())));
@@ -281,20 +276,20 @@ public class Interpt extends DepthFirstAdapter {
 			} else if (WhatType.getInstance().is(l.getType(),
 					TypeNodes.aIntType)) {
 				if (WhatType.getInstance().is(r.getType(), TypeNodes.aRealType)) {
-					Value result = new Value();
 					result.setType(TypeNodes.aRealType);
 					result.setValue(((double) ((Integer) l.getValue()))
 							- ((Double) r.getValue()));
 				} else if (WhatType.getInstance().is(r.getType(),
 						TypeNodes.aIntType)) {
-					Value result = new Value();
-					result.setType(TypeNodes.aRealType);
+					result.setType(TypeNodes.aIntType);
 					result.setValue(((Integer) l.getValue())
 							- (((Integer) r.getValue())));
 				} else
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
+			
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getMinusOpr()));
@@ -311,6 +306,7 @@ public class Interpt extends DepthFirstAdapter {
 			result
 					.setValue(Convert2Real.getInstance().convert(l) > Convert2Real
 							.getInstance().convert(r));
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getGreaterOpr()));
@@ -327,6 +323,7 @@ public class Interpt extends DepthFirstAdapter {
 			result
 					.setValue(Convert2Real.getInstance().convert(l) < Convert2Real
 							.getInstance().convert(r));
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getLessOpr()));
@@ -340,6 +337,7 @@ public class Interpt extends DepthFirstAdapter {
 		result.setType(TypeNodes.aIntArrayType);
 		try {
 			result.setValue(new int[Convert2Int.getInstance().convert(exp)]);
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getNew()));
@@ -353,6 +351,7 @@ public class Interpt extends DepthFirstAdapter {
 		result.setType(TypeNodes.aIntArrayType);
 		try {
 			result.setValue(new double[Convert2Int.getInstance().convert(exp)]);
+			setOut(node,result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getNew()));
@@ -383,7 +382,9 @@ public class Interpt extends DepthFirstAdapter {
 		} else {
 			errors.add(new SemanticError("Value is not array", node.getArray(),
 					node.getLSq()));
+			return;
 		}
+		setOut(node,result);
 	}
 
 	@Override
@@ -401,7 +402,9 @@ public class Interpt extends DepthFirstAdapter {
 		} else {
 			errors.add(new SemanticError("Value is not array", node.getArray(),
 					node.getLength()));
+			return;
 		}
+		setOut(node,result);
 	}
 
 	@Override
