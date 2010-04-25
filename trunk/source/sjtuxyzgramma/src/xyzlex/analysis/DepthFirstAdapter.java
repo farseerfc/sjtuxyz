@@ -1110,11 +1110,32 @@ public class DepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
-        if(node.getPoint() != null)
-        {
-            node.getPoint().apply(this);
-        }
         outAMemFuncExp(node);
+    }
+
+    public void inAFieldExp(AFieldExp node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAFieldExp(AFieldExp node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAFieldExp(AFieldExp node)
+    {
+        inAFieldExp(node);
+        if(node.getObject() != null)
+        {
+            node.getObject().apply(this);
+        }
+        if(node.getField() != null)
+        {
+            node.getField().apply(this);
+        }
+        outAFieldExp(node);
     }
 
     public void inANewIntArExp(ANewIntArExp node)

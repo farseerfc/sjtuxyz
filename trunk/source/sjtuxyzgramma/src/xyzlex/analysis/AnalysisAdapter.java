@@ -274,6 +274,11 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
+    public void caseAFieldExp(AFieldExp node)
+    {
+        defaultCase(node);
+    }
+
     public void caseANewIntArExp(ANewIntArExp node)
     {
         defaultCase(node);

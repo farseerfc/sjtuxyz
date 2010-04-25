@@ -53,6 +53,7 @@ public interface Analysis extends Switch
     void caseAArraySubExp(AArraySubExp node);
     void caseAArrayLengthExp(AArrayLengthExp node);
     void caseAMemFuncExp(AMemFuncExp node);
+    void caseAFieldExp(AFieldExp node);
     void caseANewIntArExp(ANewIntArExp node);
     void caseANewRealArExp(ANewRealArExp node);
     void caseANewObjectExp(ANewObjectExp node);
