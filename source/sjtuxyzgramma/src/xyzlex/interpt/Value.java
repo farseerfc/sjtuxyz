@@ -7,8 +7,8 @@ import xyzlex.node.*;
 
 
 public class Value{
-	PType type;
-	Object value;
+	private PType type;
+	private Object value;
 	
 	public PType getType() {
 		return type;

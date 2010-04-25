@@ -13,40 +13,52 @@ import xyzlex.node.ARealType;
 import xyzlex.node.Switchable;
 
 class PTypeDefaultValue extends AnalysisAdapter {
+	public static PTypeDefaultValue instance = null;
+
+	public static PTypeDefaultValue getInstance() {
+		if (instance == null) {
+			instance = new PTypeDefaultValue();
+		}
+		return instance;
+	}
+
+	private PTypeDefaultValue() {
+	}
+
 	Object returnValue;
-	
-	Object defaultValue(Switchable s){
+
+	Object defaultValue(Switchable s) {
 		s.apply(this);
 		return returnValue;
 	}
-	
+
 	@Override
 	public void caseAIntType(AIntType node) {
-		returnValue=0;
+		returnValue = 0;
 	}
-	
+
 	@Override
 	public void caseAIntArrayType(AIntArrayType node) {
-		returnValue=new int[0];
+		returnValue = new int[0];
 	}
-	
+
 	@Override
 	public void caseARealType(ARealType node) {
-		returnValue=0.0;
+		returnValue = 0.0;
 	}
-	
+
 	@Override
 	public void caseARealArrayType(ARealArrayType node) {
-		returnValue=new double[0];
+		returnValue = new double[0];
 	}
-	
+
 	@Override
 	public void caseABooleanType(ABooleanType node) {
-		returnValue=false;
+		returnValue = false;
 	}
-	
+
 	@Override
 	public void caseAClassType(AClassType node) {
-		returnValue=null;
+		returnValue = null;
 	}
 }
