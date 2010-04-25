@@ -82,13 +82,20 @@ public class InterptTest extends TestCase {
 	}
 	
 	public void testReal003() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("real a;real b;a=1.1;b=1.1;System.out.println(a-b);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "0.0");
+	}
+	
+	public void testReal004() throws ParserException, LexerException, IOException{
 		Interpt interpt=new Interpt("real a;real b;a=1.1;b=2;System.out.println(a*b);");
 		List<String> output=interpt.getOutputs();
 		assertEquals(output.size(), 1);
 		assertEquals(output.get(0), "2.2");
 	}
 	
-	public void testReal004() throws ParserException, LexerException, IOException{
+	public void testReal005() throws ParserException, LexerException, IOException{
 		Interpt interpt=new Interpt("real a;int b;int c;int d;a=1.1;b=2;c=3;d=4;" +
 				"System.out.println(a*b+a*c+c-a+d/b);");
 		List<String> output=interpt.getOutputs();
@@ -96,14 +103,14 @@ public class InterptTest extends TestCase {
 		assertEquals(output.get(0), "9.4");
 	}
 	
-	public void testReal005() throws ParserException, LexerException, IOException{
+	public void testReal006() throws ParserException, LexerException, IOException{
 		Interpt interpt=new Interpt("real a;real b;a=1.1;b=1.1;System.out.println(a/b);");
 		List<String> output=interpt.getOutputs();
 		assertEquals(output.size(), 1);
 		assertEquals(output.get(0), "1.0");
 	}
 	
-	public void testReal006() throws ParserException, LexerException, IOException{
+	public void testReal007() throws ParserException, LexerException, IOException{
 		Interpt interpt=new Interpt("real a;real b;int c;int d;a=1.1;b=1.0;c=2;d=3;" +
 				"System.out.println(a/b+a/c+d/b-c/b+a+c+d+b-a+c-b+a-b);");
 		List<String> output=interpt.getOutputs();
@@ -155,5 +162,61 @@ public class InterptTest extends TestCase {
 		List<String> output=interpt.getOutputs();
 		assertEquals(output.size(), 1);
 		assertEquals(output.get(0), "1.1");
+	}
+	
+	public void testArrLength001() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("int [] a;int b;a=new int[10];b=a.length;System.out.println(b);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "10");
+	}
+	
+	public void testArrLength002() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("real [] a;a=new real[10];System.out.println(a.length);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "10");
+	}
+	
+	public void testAndOpr001() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("boolean a;boolean b;int c;a=true;b=true;if(a&&b){c=1;}else{c=2;}System.out.println(c);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "1");
+	}
+	
+	public void testAndOpr002() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("boolean a;boolean b;int c;a=true;b=false;if(a&&b){c=1;}else{c=2;}System.out.println(c);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "2");
+	}
+	
+	public void testOrOpr001() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("boolean a;boolean b;int c;a=true;b=false;if(a||b){c=1;}else{c=2;}System.out.println(c);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "1");
+	}
+	
+	public void testOrOpr002() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("boolean a;boolean b;int c;a=false;b=false;if(a||b){c=1;}else{c=2;}System.out.println(c);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "2");
+	}
+	
+	public void testWhile001() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("int a;a=0;while(a<5){a=a+1;}System.out.println(a);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "5");
+	}
+	
+	public void testWhile002() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("boolean a;int c;a=false;c=2;while(a){c=1;}System.out.println(c);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "2");
 	}
 }
