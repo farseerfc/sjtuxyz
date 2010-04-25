@@ -47,16 +47,17 @@ public interface Analysis extends Switch
     void caseARealLtExp(ARealLtExp node);
     void caseATrueLtExp(ATrueLtExp node);
     void caseAFalseLtExp(AFalseLtExp node);
-    void caseAVarExp(AVarExp node);
     void caseAThisExp(AThisExp node);
     void caseASubExpExp(ASubExpExp node);
-    void caseAArraySubExp(AArraySubExp node);
     void caseAArrayLengthExp(AArrayLengthExp node);
     void caseAMemFuncExp(AMemFuncExp node);
-    void caseAFieldExp(AFieldExp node);
     void caseANewIntArExp(ANewIntArExp node);
     void caseANewRealArExp(ANewRealArExp node);
     void caseANewObjectExp(ANewObjectExp node);
+    void caseALeftValueExp(ALeftValueExp node);
+    void caseAVarLeftValue(AVarLeftValue node);
+    void caseAFieldLeftValue(AFieldLeftValue node);
+    void caseAArrSubLeftValue(AArrSubLeftValue node);
 
     void caseTIf(TIf node);
     void caseTElse(TElse node);

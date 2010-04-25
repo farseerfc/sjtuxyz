@@ -5,22 +5,26 @@ package xyzlex.node;
 import xyzlex.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AFieldExp extends PExp
+public final class AFieldLeftValue extends PLeftValue
 {
     private PExp _object_;
+    private TPoint _point_;
     private TId _field_;
 
-    public AFieldExp()
+    public AFieldLeftValue()
     {
         // Constructor
     }
 
-    public AFieldExp(
+    public AFieldLeftValue(
         @SuppressWarnings("hiding") PExp _object_,
+        @SuppressWarnings("hiding") TPoint _point_,
         @SuppressWarnings("hiding") TId _field_)
     {
         // Constructor
         setObject(_object_);
+
+        setPoint(_point_);
 
         setField(_field_);
 
@@ -29,14 +33,15 @@ public final class AFieldExp extends PExp
     @Override
     public Object clone()
     {
-        return new AFieldExp(
+        return new AFieldLeftValue(
             cloneNode(this._object_),
+            cloneNode(this._point_),
             cloneNode(this._field_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAFieldExp(this);
+        ((Analysis) sw).caseAFieldLeftValue(this);
     }
 
     public PExp getObject()
@@ -62,6 +67,31 @@ public final class AFieldExp extends PExp
         }
 
         this._object_ = node;
+    }
+
+    public TPoint getPoint()
+    {
+        return this._point_;
+    }
+
+    public void setPoint(TPoint node)
+    {
+        if(this._point_ != null)
+        {
+            this._point_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._point_ = node;
     }
 
     public TId getField()
@@ -94,6 +124,7 @@ public final class AFieldExp extends PExp
     {
         return ""
             + toString(this._object_)
+            + toString(this._point_)
             + toString(this._field_);
     }
 
@@ -104,6 +135,12 @@ public final class AFieldExp extends PExp
         if(this._object_ == child)
         {
             this._object_ = null;
+            return;
+        }
+
+        if(this._point_ == child)
+        {
+            this._point_ = null;
             return;
         }
 
@@ -123,6 +160,12 @@ public final class AFieldExp extends PExp
         if(this._object_ == oldChild)
         {
             setObject((PExp) newChild);
+            return;
+        }
+
+        if(this._point_ == oldChild)
+        {
+            setPoint((TPoint) newChild);
             return;
         }
 

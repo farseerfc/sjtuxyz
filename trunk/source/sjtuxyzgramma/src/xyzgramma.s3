@@ -138,8 +138,8 @@ Productions
 		 				{-> New state.while(cond,clause)} 
 		 | {print}	print l_p exp r_p semi
 		 				{-> New state.print(exp)}
-		 | {assign}	id array_index? assign_opr exp semi
-		 				{-> New state.assign(id,array_index.exp,exp)}	
+		 | {assign}	[target]:left_value assign_opr exp semi
+		 				{-> New state.assign(target.left_value,exp)}	
 		 ; 
 			   
 	array_index {-> exp} = l_sq exp r_sq {-> exp} ;
@@ -203,24 +203,28 @@ Productions
 				  | {real_lt} 		real_lt 	{-> New exp.real_lt(real_lt)}
 				  | {true_lt} 		true 		{-> New exp.true_lt(true)}
 				  | {false_lt} 		false 		{-> New exp.false_lt(false)}
-				  | {var} 			id 			{-> New exp.var(id)}
 				  | {this}			this		{-> New exp.this(this)}
 				  | {sub_exp} 		l_p exp r_p {-> exp.exp}
-				  | {array_sub}		[array]:term l_sq [index]:exp r_sq 	
-				  	{-> New exp.array_sub(array.exp,index.exp,l_sq,r_sq)}
 				  | {array_length} 	[array]:term point length
 				  	{-> New exp.array_length(array.exp,length)}
 				  | {mem_func}		[object]:term point [func]:id l_p [args]:exp_list? r_p
 					{-> New exp.mem_func(object.exp,func,[args.exp])}
-				  | {field}			[object]:term point [field]:id
-				  	{-> New exp.field(object.exp,field)}
 				  | {new_int_ar} 	new int l_sq [size]:exp r_sq
 					{-> New exp.new_int_ar(size.exp,new)}
 				  | {new_real_ar} 	new real l_sq [size]:exp r_sq
 					{-> New exp.new_real_ar(size.exp,new)}
 				  | {new_object} 	new [type]:id l_p r_p
 				  	{-> New exp.new_object(type,new)}
+				  | {left_value}	left_value 
+				  	{-> New exp.left_value(left_value)}
 				  ;
+				  
+	left_value = {var} id  {-> New left_value.var(id)}
+			   | {field} [object]:term point [field]:id
+			   		{-> New left_value.field(object.exp,point,field)}
+			   | {arr_sub} [array]:term l_sq [index]:exp r_sq
+			   		{-> New left_value.arr_sub(array.exp,l_sq,index.exp,r_sq)}
+			   ; 	
 			
 	/*ExpList ¡ú Exp ExpRest*
      *      ¡ú
@@ -265,7 +269,7 @@ Abstract Syntax Tree
 		  | {if}		[cond]:exp [then]:state [else]:state
 		  | {while}		[cond]:exp [clause]:state
 		  | {print}		exp
-		  | {assign}	id [index]:exp? [value]:exp
+		  | {assign}	[target]:left_value [value]:exp
 		  ; 
 		 
 	exp = {or_opr} 		or_opr			[first]:exp [rest]:exp
@@ -281,14 +285,17 @@ Abstract Syntax Tree
 		| {real_lt} 	real_lt
 		| {true_lt}		true
 		| {false_lt}	false
-		| {var} 		[var]:id
 		| {this}		this
 		| {sub_exp} 	exp
-		| {array_sub}		[array]:exp [index]:exp l_sq r_sq
 		| {array_length} 	[array]:exp length
 		| {mem_func}		[object]:exp [func]:id [args]:exp*
-		| {field}		[object]:exp [field]:id
 		| {new_int_ar} 	[size]:exp new
 		| {new_real_ar} [size]:exp new
 		| {new_object} 	[type]:id new
+		| {left_value}	left_value
 		;
+		
+	left_value = {var} id 
+			   | {field} [object]:exp point [field]:id
+			   | {arr_sub} [array]:exp l_sq [index]:exp r_sq
+			   ; 	

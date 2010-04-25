@@ -7,8 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class AAssignState extends PState
 {
-    private TId _id_;
-    private PExp _index_;
+    private PLeftValue _target_;
     private PExp _value_;
 
     public AAssignState()
@@ -17,14 +16,11 @@ public final class AAssignState extends PState
     }
 
     public AAssignState(
-        @SuppressWarnings("hiding") TId _id_,
-        @SuppressWarnings("hiding") PExp _index_,
+        @SuppressWarnings("hiding") PLeftValue _target_,
         @SuppressWarnings("hiding") PExp _value_)
     {
         // Constructor
-        setId(_id_);
-
-        setIndex(_index_);
+        setTarget(_target_);
 
         setValue(_value_);
 
@@ -34,8 +30,7 @@ public final class AAssignState extends PState
     public Object clone()
     {
         return new AAssignState(
-            cloneNode(this._id_),
-            cloneNode(this._index_),
+            cloneNode(this._target_),
             cloneNode(this._value_));
     }
 
@@ -44,16 +39,16 @@ public final class AAssignState extends PState
         ((Analysis) sw).caseAAssignState(this);
     }
 
-    public TId getId()
+    public PLeftValue getTarget()
     {
-        return this._id_;
+        return this._target_;
     }
 
-    public void setId(TId node)
+    public void setTarget(PLeftValue node)
     {
-        if(this._id_ != null)
+        if(this._target_ != null)
         {
-            this._id_.parent(null);
+            this._target_.parent(null);
         }
 
         if(node != null)
@@ -66,32 +61,7 @@ public final class AAssignState extends PState
             node.parent(this);
         }
 
-        this._id_ = node;
-    }
-
-    public PExp getIndex()
-    {
-        return this._index_;
-    }
-
-    public void setIndex(PExp node)
-    {
-        if(this._index_ != null)
-        {
-            this._index_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._index_ = node;
+        this._target_ = node;
     }
 
     public PExp getValue()
@@ -123,8 +93,7 @@ public final class AAssignState extends PState
     public String toString()
     {
         return ""
-            + toString(this._id_)
-            + toString(this._index_)
+            + toString(this._target_)
             + toString(this._value_);
     }
 
@@ -132,15 +101,9 @@ public final class AAssignState extends PState
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._id_ == child)
+        if(this._target_ == child)
         {
-            this._id_ = null;
-            return;
-        }
-
-        if(this._index_ == child)
-        {
-            this._index_ = null;
+            this._target_ = null;
             return;
         }
 
@@ -157,15 +120,9 @@ public final class AAssignState extends PState
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._id_ == oldChild)
+        if(this._target_ == oldChild)
         {
-            setId((TId) newChild);
-            return;
-        }
-
-        if(this._index_ == oldChild)
-        {
-            setIndex((PExp) newChild);
+            setTarget((PLeftValue) newChild);
             return;
         }
 

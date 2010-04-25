@@ -244,11 +244,6 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAVarExp(AVarExp node)
-    {
-        defaultCase(node);
-    }
-
     public void caseAThisExp(AThisExp node)
     {
         defaultCase(node);
@@ -259,22 +254,12 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAArraySubExp(AArraySubExp node)
-    {
-        defaultCase(node);
-    }
-
     public void caseAArrayLengthExp(AArrayLengthExp node)
     {
         defaultCase(node);
     }
 
     public void caseAMemFuncExp(AMemFuncExp node)
-    {
-        defaultCase(node);
-    }
-
-    public void caseAFieldExp(AFieldExp node)
     {
         defaultCase(node);
     }
@@ -290,6 +275,26 @@ public class AnalysisAdapter implements Analysis
     }
 
     public void caseANewObjectExp(ANewObjectExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseALeftValueExp(ALeftValueExp node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAVarLeftValue(AVarLeftValue node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAFieldLeftValue(AFieldLeftValue node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAArrSubLeftValue(AArrSubLeftValue node)
     {
         defaultCase(node);
     }

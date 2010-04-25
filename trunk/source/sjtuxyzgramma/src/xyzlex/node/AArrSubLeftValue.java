@@ -5,30 +5,30 @@ package xyzlex.node;
 import xyzlex.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AArraySubExp extends PExp
+public final class AArrSubLeftValue extends PLeftValue
 {
     private PExp _array_;
-    private PExp _index_;
     private TLSq _lSq_;
+    private PExp _index_;
     private TRSq _rSq_;
 
-    public AArraySubExp()
+    public AArrSubLeftValue()
     {
         // Constructor
     }
 
-    public AArraySubExp(
+    public AArrSubLeftValue(
         @SuppressWarnings("hiding") PExp _array_,
-        @SuppressWarnings("hiding") PExp _index_,
         @SuppressWarnings("hiding") TLSq _lSq_,
+        @SuppressWarnings("hiding") PExp _index_,
         @SuppressWarnings("hiding") TRSq _rSq_)
     {
         // Constructor
         setArray(_array_);
 
-        setIndex(_index_);
-
         setLSq(_lSq_);
+
+        setIndex(_index_);
 
         setRSq(_rSq_);
 
@@ -37,16 +37,16 @@ public final class AArraySubExp extends PExp
     @Override
     public Object clone()
     {
-        return new AArraySubExp(
+        return new AArrSubLeftValue(
             cloneNode(this._array_),
-            cloneNode(this._index_),
             cloneNode(this._lSq_),
+            cloneNode(this._index_),
             cloneNode(this._rSq_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAArraySubExp(this);
+        ((Analysis) sw).caseAArrSubLeftValue(this);
     }
 
     public PExp getArray()
@@ -74,31 +74,6 @@ public final class AArraySubExp extends PExp
         this._array_ = node;
     }
 
-    public PExp getIndex()
-    {
-        return this._index_;
-    }
-
-    public void setIndex(PExp node)
-    {
-        if(this._index_ != null)
-        {
-            this._index_.parent(null);
-        }
-
-        if(node != null)
-        {
-            if(node.parent() != null)
-            {
-                node.parent().removeChild(node);
-            }
-
-            node.parent(this);
-        }
-
-        this._index_ = node;
-    }
-
     public TLSq getLSq()
     {
         return this._lSq_;
@@ -122,6 +97,31 @@ public final class AArraySubExp extends PExp
         }
 
         this._lSq_ = node;
+    }
+
+    public PExp getIndex()
+    {
+        return this._index_;
+    }
+
+    public void setIndex(PExp node)
+    {
+        if(this._index_ != null)
+        {
+            this._index_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._index_ = node;
     }
 
     public TRSq getRSq()
@@ -154,8 +154,8 @@ public final class AArraySubExp extends PExp
     {
         return ""
             + toString(this._array_)
-            + toString(this._index_)
             + toString(this._lSq_)
+            + toString(this._index_)
             + toString(this._rSq_);
     }
 
@@ -169,15 +169,15 @@ public final class AArraySubExp extends PExp
             return;
         }
 
-        if(this._index_ == child)
-        {
-            this._index_ = null;
-            return;
-        }
-
         if(this._lSq_ == child)
         {
             this._lSq_ = null;
+            return;
+        }
+
+        if(this._index_ == child)
+        {
+            this._index_ = null;
             return;
         }
 
@@ -200,15 +200,15 @@ public final class AArraySubExp extends PExp
             return;
         }
 
-        if(this._index_ == oldChild)
-        {
-            setIndex((PExp) newChild);
-            return;
-        }
-
         if(this._lSq_ == oldChild)
         {
             setLSq((TLSq) newChild);
+            return;
+        }
+
+        if(this._index_ == oldChild)
+        {
+            setIndex((PExp) newChild);
             return;
         }
 

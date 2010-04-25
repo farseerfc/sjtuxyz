@@ -5,45 +5,45 @@ package xyzlex.node;
 import xyzlex.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AVarExp extends PExp
+public final class AVarLeftValue extends PLeftValue
 {
-    private TId _var_;
+    private TId _id_;
 
-    public AVarExp()
+    public AVarLeftValue()
     {
         // Constructor
     }
 
-    public AVarExp(
-        @SuppressWarnings("hiding") TId _var_)
+    public AVarLeftValue(
+        @SuppressWarnings("hiding") TId _id_)
     {
         // Constructor
-        setVar(_var_);
+        setId(_id_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AVarExp(
-            cloneNode(this._var_));
+        return new AVarLeftValue(
+            cloneNode(this._id_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAVarExp(this);
+        ((Analysis) sw).caseAVarLeftValue(this);
     }
 
-    public TId getVar()
+    public TId getId()
     {
-        return this._var_;
+        return this._id_;
     }
 
-    public void setVar(TId node)
+    public void setId(TId node)
     {
-        if(this._var_ != null)
+        if(this._id_ != null)
         {
-            this._var_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -56,23 +56,23 @@ public final class AVarExp extends PExp
             node.parent(this);
         }
 
-        this._var_ = node;
+        this._id_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._var_);
+            + toString(this._id_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._var_ == child)
+        if(this._id_ == child)
         {
-            this._var_ = null;
+            this._id_ = null;
             return;
         }
 
@@ -83,9 +83,9 @@ public final class AVarExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._var_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setVar((TId) newChild);
+            setId((TId) newChild);
             return;
         }
 

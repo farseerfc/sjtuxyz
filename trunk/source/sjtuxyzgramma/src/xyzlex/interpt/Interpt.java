@@ -14,15 +14,13 @@ import xyzlex.parser.ParserException;
 import xyzlex.utils.Consts;
 
 public class Interpt extends DepthFirstAdapter {
-
-	private List<HashMap<String, Value>> symbol;
+	private List<RuntimeStack> symbol;
 	private List<SemanticError> errors;
 	private List<String> outputs;
-	
-	private HashMap<String,AClassDecl> classDecls;
-	
 
-	public List<HashMap<String, Value>> getSymbol() {
+	private HashMap<String, AClassDecl> classDecls;
+
+	public List<RuntimeStack> getSymbol() {
 		return symbol;
 	}
 
@@ -34,13 +32,12 @@ public class Interpt extends DepthFirstAdapter {
 		return outputs;
 	}
 
-	
-	private void init(){
-		symbol = new ArrayList<HashMap<String, Value>>();
-		symbol.add(new HashMap<String, Value>());
+	private void init() {
+		symbol = new ArrayList<RuntimeStack>();
+		symbol.add(new RuntimeStack());
 		errors = new ArrayList<SemanticError>();
 		outputs = new ArrayList<String>();
-		classDecls=new HashMap<String,AClassDecl>();
+		classDecls = new HashMap<String, AClassDecl>();
 	}
 
 	public Interpt() {
@@ -60,12 +57,12 @@ public class Interpt extends DepthFirstAdapter {
 	}
 
 	public Map<String, Value> currentScope() {
-		return symbol.get(symbol.size() - 1);
+		return symbol.get(symbol.size() - 1).getSymbol();
 	}
 
 	@Override
 	public void outAVarDecl(AVarDecl node) {
-		String name = node.getId().getText();
+		String name = node.getId().getText().trim();
 		PType typeDecl = node.getType();
 		if (currentScope().containsKey(name)) {
 			errors.add(new SemanticError("Variable already declared! ", node,
@@ -83,7 +80,7 @@ public class Interpt extends DepthFirstAdapter {
 	public void outAIntLtExp(AIntLtExp node) {
 		Value v = new Value();
 		v.setType(TypeNodes.aIntType);
-		v.setValue(Integer.valueOf(node.getIntLt().getText()));
+		v.setValue(Integer.valueOf(node.getIntLt().getText().trim()));
 		setOut(node, v);
 	}
 
@@ -91,7 +88,7 @@ public class Interpt extends DepthFirstAdapter {
 	public void outARealLtExp(ARealLtExp node) {
 		Value v = new Value();
 		v.setType(TypeNodes.aRealType);
-		v.setValue(Double.valueOf(node.getRealLt().getText()));
+		v.setValue(Double.valueOf(node.getRealLt().getText().trim()));
 		setOut(node, v);
 	}
 
@@ -112,14 +109,41 @@ public class Interpt extends DepthFirstAdapter {
 	}
 
 	@Override
-	public void outAVarExp(AVarExp node) {
-		String name = node.getVar().getText();
+	public void outAVarLeftValue(AVarLeftValue node) {
+		String name = node.getId().getText().trim();
 		if (currentScope().containsKey(name)) {
 			setOut(node, currentScope().get(name));
 		} else {
 			errors.add(new SemanticError("Variable not defined!", node, node
-					.getVar()));
+					.getId()));
 		}
+	}
+
+	@Override
+	public void outAArrSubLeftValue(AArrSubLeftValue node) {
+		Value array = (Value) getOut(node.getArray());
+		Value result = ((Value[]) array.getValue())[Convert2Int.getInstance()
+				.convert((Value) getOut(node.getIndex()))];
+		setOut(node, result);
+	}
+
+	@Override
+	public void outAFieldLeftValue(AFieldLeftValue node) {
+		Value obj = (Value) getOut(node.getObject());
+		String fieldName = node.getField().getText().trim();
+		HashMap<String, Value> fields = (HashMap<String, Value>) obj.getValue();
+		if (fields.containsKey(fieldName)) {
+			setOut(node, fields.get(fieldName));
+		} else {
+			errors.add(new SemanticError("object '" + obj.getValue()
+					+ "' don't contain field '" + node.getField() + "'", node,
+					node.getField()));
+		}
+	}
+	
+	@Override
+	public void outALeftValueExp(ALeftValueExp node) {
+		setOut(node,getOut(node.getLeftValue()));
 	}
 
 	@Override
@@ -134,7 +158,7 @@ public class Interpt extends DepthFirstAdapter {
 		my.setType(TypeNodes.aBooleanType);
 		try {
 			my.setValue(!(Convert2Boolean.getInstance().convert(v)));
-			setOut(node,my);
+			setOut(node, my);
 		} catch (TypeCastException tce) {
 			errors.add(new SemanticError(tce.getMessage(), node, node
 					.getNotOpr()));
@@ -181,7 +205,7 @@ public class Interpt extends DepthFirstAdapter {
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
-			setOut(node,result);
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getMultiplyOpr()));
@@ -222,8 +246,8 @@ public class Interpt extends DepthFirstAdapter {
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
-			
-			setOut(node,result);
+
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getDivideOpr()));
@@ -264,8 +288,8 @@ public class Interpt extends DepthFirstAdapter {
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
-			
-			setOut(node,result);
+
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getPlusOpr()));
@@ -306,8 +330,8 @@ public class Interpt extends DepthFirstAdapter {
 					throw new TypeCastException(r.getType(), TypeNodes.aIntType);
 			} else
 				throw new TypeCastException(l.getType(), TypeNodes.aIntType);
-			
-			setOut(node,result);
+
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getMinusOpr()));
@@ -324,7 +348,7 @@ public class Interpt extends DepthFirstAdapter {
 			result
 					.setValue(Convert2Real.getInstance().convert(l) > Convert2Real
 							.getInstance().convert(r));
-			setOut(node,result);
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getGreaterOpr()));
@@ -341,7 +365,7 @@ public class Interpt extends DepthFirstAdapter {
 			result
 					.setValue(Convert2Real.getInstance().convert(l) < Convert2Real
 							.getInstance().convert(r));
-			setOut(node,result);
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getLessOpr()));
@@ -354,8 +378,14 @@ public class Interpt extends DepthFirstAdapter {
 		Value result = new Value();
 		result.setType(TypeNodes.aIntArrayType);
 		try {
-			result.setValue(new int[Convert2Int.getInstance().convert(exp)]);
-			setOut(node,result);
+			Value[] array = new Value[Convert2Int.getInstance().convert(exp)];
+			for (int i = 0; i < array.length; ++i) {
+				array[i] = new Value();
+				array[i].setType(TypeNodes.aIntType);
+				array[i].setValue(0);
+			}
+			result.setValue(array);
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getNew()));
@@ -368,61 +398,36 @@ public class Interpt extends DepthFirstAdapter {
 		Value result = new Value();
 		result.setType(TypeNodes.aRealArrayType);
 		try {
-			result.setValue(new double[Convert2Int.getInstance().convert(exp)]);
-			setOut(node,result);
+			Value[] array = new Value[Convert2Int.getInstance().convert(exp)];
+			for (int i = 0; i < array.length; ++i) {
+				array[i] = new Value();
+				array[i].setType(TypeNodes.aRealType);
+				array[i].setValue(0.0);
+			}
+			result.setValue(array);
+			setOut(node, result);
 		} catch (TypeCastException tc) {
 			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
 					.getNew()));
 		}
 	}
 
-	@Override
-	public void outAArraySubExp(AArraySubExp node) {
-		Value array = (Value) getOut(node.getArray());
-		Value index = (Value) getOut(node.getIndex());
-		Value result = new Value();
-		int indexInt = 0;
-		try {
-			indexInt = Convert2Int.getInstance().convert(index);
-		} catch (TypeCastException tc) {
-			errors.add(new SemanticError(tc.getMessage(), tc.getFrom(), node
-					.getLSq()));
-			return;
-		}
-		if (WhatType.getInstance()
-				.is(array.getType(), TypeNodes.aIntArrayType)) {
-			result.setType(TypeNodes.aIntType);
-			result.setValue(((int[]) array.getValue())[indexInt]);
-		} else if (WhatType.getInstance().is(array.getType(),
-				TypeNodes.aRealArrayType)) {
-			result.setType(TypeNodes.aRealType);
-			result.setValue(((double[]) array.getValue())[indexInt]);
-		} else {
-			errors.add(new SemanticError("Value is not array", node.getArray(),
-					node.getLSq()));
-			return;
-		}
-		setOut(node,result);
-	}
 
 	@Override
 	public void outAArrayLengthExp(AArrayLengthExp node) {
 		Value array = (Value) getOut(node.getArray());
 		Value result = new Value();
-		if (WhatType.getInstance()
-				.is(array.getType(), TypeNodes.aIntArrayType)) {
+		if (WhatType.getInstance().is(array.getType(), TypeNodes.aIntArrayType)
+				|| (WhatType.getInstance().is(array.getType(),
+						TypeNodes.aRealArrayType))) {
 			result.setType(TypeNodes.aIntType);
-			result.setValue(((int[]) array.getValue()).length);
-		} else if (WhatType.getInstance().is(array.getType(),
-				TypeNodes.aRealArrayType)) {
-			result.setType(TypeNodes.aIntType);
-			result.setValue(((double[]) array.getValue()).length);
+			result.setValue(((Value[]) array.getValue()).length);
 		} else {
 			errors.add(new SemanticError("Value is not array", node.getArray(),
 					node.getLength()));
 			return;
 		}
-		setOut(node,result);
+		setOut(node, result);
 	}
 
 	@Override
@@ -473,56 +478,19 @@ public class Interpt extends DepthFirstAdapter {
 		PrintValue.getInstance().print(v, outputs);
 	}
 
+		
 	@Override
 	public void outAAssignState(AAssignState node) {
-		String name = node.getId().getText();
-		if (!currentScope().containsKey(name)) {
-			errors.add(new SemanticError(
-					"Current Scope don't contain variable of name '" + name
-							+ "'", node, node.getId()));
-			return;
-		}
-		Value old = currentScope().get(name);
-		if (node.getIndex() != null) {
-			if (WhatType.getInstance().is(old.getType(),
-					TypeNodes.aIntArrayType)) {
-				((int[]) (old.getValue()))[Convert2Int.getInstance().convert(
-						(Value) getOut(node.getIndex()))] = Convert2Int
-						.getInstance().convert((Value) getOut(node.getValue()));
-			} else if (WhatType.getInstance().is(old.getType(),
-					TypeNodes.aRealArrayType)) {
-				((double[]) (old.getValue()))[Convert2Int.getInstance().convert(
-						(Value) getOut(node.getIndex()))] = Convert2Real
-						.getInstance().convert((Value) getOut(node.getValue()));
-			} else {
-				errors.add(new SemanticError("Variable '" + name
-						+ "' is not an array!", node, node.getId()));
-				return;
-			}
-		} else {
-			if (WhatType.getInstance().is(old.getType(), TypeNodes.aIntType)) {
-				old.setValue(Convert2Int.getInstance().convert(
-						(Value) getOut(node.getValue())));
-			} else if (WhatType.getInstance().is(old.getType(),
-					TypeNodes.aRealType)) {
-				old.setValue(Convert2Real.getInstance().convert(
-						(Value) getOut(node.getValue())));
-			} else if (WhatType.getInstance().is(old.getType(),
-					TypeNodes.aBooleanType)) {
-				old.setValue(Convert2Boolean.getInstance().convert(
-						(Value) getOut(node.getValue())));
-			} else if (WhatType.getInstance().is(old.getType(),
-					((Value) getOut(node.getValue())).getType())) {
-				old.setValue(((Value) getOut(node.getValue())).getValue());
-			} else {
-				errors.add(new SemanticError("Variable '"
-						+ name
-						+ "' can not assign type"
-						+ ((Value) getOut(node.getValue())).getType()
-								.toString() + "!", node, node.getId()));
-				return;
-			}
-
+		Value old=(Value)getOut(node.getTarget());
+		Value value=(Value)(getOut(node.getValue()));
+		if(WhatType.getInstance().is(old.getType(),TypeNodes.aIntType)){
+			old.setValue(Convert2Int.getInstance().convert(value));
+		}else if(WhatType.getInstance().is(old.getType(),TypeNodes.aRealType)){
+			old.setValue(Convert2Real.getInstance().convert(value));
+		}else if(WhatType.getInstance().is(old.getType(),TypeNodes.aBooleanType)){
+			old.setValue(Convert2Boolean.getInstance().convert(value));
+		}else{
+			old.setValue(value.getValue());
 		}
 	}
 
@@ -565,19 +533,31 @@ public class Interpt extends DepthFirstAdapter {
 		}
 		outAWhileState(node);
 	}
-	
+
 	@Override
 	public void caseABodyProgram(ABodyProgram node) {
 		super.caseABodyProgram(node);
 	}
-	
+
 	@Override
-	public void caseAClassProgram(AClassProgram node)
-	{
-		List<PClassDecl> list=node.getClassDecl();
-		for(PClassDecl classDecl : list){
-			AClassDecl aClass = (AClassDecl)classDecl;
-			
+	public void caseAClassProgram(AClassProgram node) {
+		inAClassProgram(node);
+		for (PClassDecl classDecl : node.getClassDecl()) {
+			classDecl.apply(this);
 		}
+
+		if (node.getMainClass() != null) {
+			node.getMainClass().apply(this);
+		}
+		outAClassProgram(node);
 	}
+
+	@Override
+	public void caseAClassDecl(AClassDecl node) {
+		inAClassDecl(node);
+		String className = node.getId().getText().trim();
+		classDecls.put(className, node);
+		outAClassDecl(node);
+	}
+
 }
