@@ -86,11 +86,11 @@ Productions
      *     ¡ú real
      *     ¡ú id
 	 */
-	type = {int_array}	int l_sq r_sq	{-> New type.int_array()}
-		 | {real_array}	real l_sq r_sq	{-> New type.real_array()}
-		 | {boolean}	boolean			{-> New type.boolean()}
-		 | {int}		int				{-> New type.int()}
-		 | {real}		real			{-> New type.real()}
+	type = {int_array}	int l_sq r_sq	{-> New type.int_array(int,l_sq,r_sq)}
+		 | {real_array}	real l_sq r_sq	{-> New type.real_array(real,l_sq,r_sq)}
+		 | {boolean}	boolean			{-> New type.boolean(boolean)}
+		 | {int}		int				{-> New type.int(int)}
+		 | {real}		real			{-> New type.real(real)}
 		 | {class}		id				{-> New type.class(id)}
 		 ;				
 	 
@@ -129,66 +129,66 @@ Productions
      *     ¡ú ( Exp )
 	 */
 	exp  {-> exp} = {or_opr} [first]:exp or_opr [rest]:exp1
-					{-> New exp.or_opr(first.exp,rest.exp)}
+					{-> New exp.or_opr(or_opr,first.exp,rest.exp)}
 				  | {single} exp1
 				 	{-> exp1.exp} 
 				  ;
 				  
 	exp1 {-> exp} = {and_opr} [first]:exp1 and_opr [rest]:exp2
-					{-> New exp.and_opr(first.exp,rest.exp)}
+					{-> New exp.and_opr(and_opr,first.exp,rest.exp)}
 				  | {single} exp2
 				 	{-> exp2.exp} 
 				  ;
 				  
-	exp2 {-> exp} = {not_opr} [first]:exp3
-					{-> New exp.not_opr(first.exp)}
+	exp2 {-> exp} = {not_opr} not_opr [first]:exp2
+					{-> New exp.not_opr(not_opr,first.exp)}
 				  | {single} exp3
 				 	{-> exp3.exp} 
 				  ;
 				  
 	exp3 {-> exp} = {greater_opr} [first]:exp3 greater_opr [rest]:exp4
-					{-> New exp.greater_opr(first.exp,rest.exp)}
+					{-> New exp.greater_opr(greater_opr,first.exp,rest.exp)}
 				  | {less_opr}    [first]:exp3 less_opr [rest]:exp4
-					{-> New exp.less_opr(first.exp,rest.exp)}
+					{-> New exp.less_opr(less_opr,first.exp,rest.exp)}
 				  | {single} exp4
 				 	{-> exp4.exp} 
 				  ;
 	
 	exp4 {-> exp} = {plus_opr}  [first]:exp4 plus_opr [rest]:exp5
-					{-> New exp.plus_opr(first.exp,rest.exp)}
+					{-> New exp.plus_opr(plus_opr,first.exp,rest.exp)}
 				  | {minus_opr} [first]:exp4 minus_opr [rest]:exp5
-					{-> New exp.minus_opr(first.exp,rest.exp)}
+					{-> New exp.minus_opr(minus_opr,first.exp,rest.exp)}
 				  | {single} exp5
 				 	{-> exp5.exp} 
 				  ;
 				   
 	exp5 {-> exp} = {multiply_opr}  [first]:exp5 multiply_opr [rest]:term
-					{-> New exp.multiply_opr(first.exp,rest.exp)}
+					{-> New exp.multiply_opr(multiply_opr,first.exp,rest.exp)}
 				  | {divide_opr} [first]:exp5 divide_opr [rest]:term
-					{-> New exp.divide_opr(first.exp,rest.exp)}
+					{-> New exp.divide_opr(divide_opr,first.exp,rest.exp)}
 				  | {single} term
 				 	{-> term.exp} 
 				  ;
 			
 	term {-> exp} = {int_lt} 		int_lt		{-> New exp.int_lt(int_lt)}
 				  | {real_lt} 		real_lt 	{-> New exp.real_lt(real_lt)}
-				  | {true_lt} 		true 		{-> New exp.true_lt()}
-				  | {false_lt} 		false 		{-> New exp.false_lt()}
+				  | {true_lt} 		true 		{-> New exp.true_lt(true)}
+				  | {false_lt} 		false 		{-> New exp.false_lt(false)}
 				  | {var} 			id 			{-> New exp.var(id)}
-				  | {this}			this		{-> New exp.this()}
+				  | {this}			this		{-> New exp.this(this)}
 				  | {sub_exp} 		l_p exp r_p {-> exp.exp}
 				  | {array_sub}		[array]:term l_sq [index]:exp r_sq 	
-				  	{-> New exp.array_sub(array.exp,index.exp)}
+				  	{-> New exp.array_sub(array.exp,index.exp,l_sq,r_sq)}
 				  | {array_length} 	[array]:term point length
-				  	{-> New exp.array_length(array.exp)}
+				  	{-> New exp.array_length(array.exp,length)}
 				  | {mem_func}		[object]:term point [func]:id l_p [args]:exp_list? r_p
-					{-> New exp.mem_func(object.exp,func,[args.exp])}
+					{-> New exp.mem_func(object.exp,func,[args.exp],point)}
 				  | {new_int_ar} 	new int l_sq [size]:exp r_sq
-					{-> New exp.new_int_ar(size.exp)}
+					{-> New exp.new_int_ar(size.exp,new)}
 				  | {new_real_ar} 	new real l_sq [size]:exp r_sq
-					{-> New exp.new_real_ar(size.exp)}
+					{-> New exp.new_real_ar(size.exp,new)}
 				  | {new_object} 	new [type]:id l_p r_p
-				  	{-> New exp.new_object(type)}
+				  	{-> New exp.new_object(type,new)}
 				  ;
 			
 	/*ExpList ¡ú Exp ExpRest*
@@ -205,12 +205,12 @@ Abstract Syntax Tree
 	
 	var_decl = type id ; //¡ú Type id ;
 	
-	type = {int_array}
-		 | {real_array}
-		 | {boolean}
-		 | {int}
-		 | {real}
-		 | {class} id
+	type = {int_array} 	int l_sq r_sq
+		 | {real_array}	real l_sq r_sq
+		 | {boolean}	boolean
+		 | {int}		int
+		 | {real}		real
+		 | {class} 		id	
 		 ;
 		 
 	state = {block} 	[list]:state*
@@ -220,26 +220,26 @@ Abstract Syntax Tree
 		  | {assign}	id [index]:exp? [value]:exp
 		  ; 
 		 
-	exp = {or_opr} 		[first]:exp [rest]:exp
-		| {and_opr} 	[first]:exp [rest]:exp
-		| {not_opr} 	[first]:exp
-		| {greater_opr} [first]:exp [rest]:exp
-		| {less_opr} 	[first]:exp [rest]:exp
-		| {plus_opr} 	[first]:exp [rest]:exp
-		| {minus_opr} 	[first]:exp [rest]:exp
-		| {multiply_opr} [first]:exp [rest]:exp
-		| {divide_opr} 	[first]:exp [rest]:exp
+	exp = {or_opr} 		or_opr			[first]:exp [rest]:exp
+		| {and_opr} 	and_opr			[first]:exp [rest]:exp
+		| {not_opr} 	not_opr			[first]:exp
+		| {greater_opr} greater_opr		[first]:exp [rest]:exp
+		| {less_opr} 	less_opr		[first]:exp [rest]:exp
+		| {plus_opr} 	plus_opr		[first]:exp [rest]:exp
+		| {minus_opr} 	minus_opr		[first]:exp [rest]:exp
+		| {multiply_opr} multiply_opr	[first]:exp [rest]:exp
+		| {divide_opr} 	divide_opr		[first]:exp [rest]:exp
 		| {int_lt} 		int_lt
 		| {real_lt} 	real_lt
-		| {true_lt}
-		| {false_lt}
+		| {true_lt}		true
+		| {false_lt}	false
 		| {var} 		[var]:id
-		| {this}
+		| {this}		this
 		| {sub_exp} 	exp
-		| {array_sub}		[array]:exp [index]:exp
-		| {array_length} 	[array]:exp
-		| {mem_func}		[object]:exp [func]:id [args]:exp*
-		| {new_int_ar} 	[size]:exp
-		| {new_real_ar} [size]:exp
-		| {new_object} 	[type]:id
+		| {array_sub}		[array]:exp [index]:exp l_sq r_sq
+		| {array_length} 	[array]:exp length
+		| {mem_func}		[object]:exp [func]:id [args]:exp* point
+		| {new_int_ar} 	[size]:exp new
+		| {new_real_ar} [size]:exp new
+		| {new_object} 	[type]:id new
 		;
