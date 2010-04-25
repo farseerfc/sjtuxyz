@@ -373,7 +373,7 @@ public class Interpt extends DepthFirstAdapter {
 			return;
 		}
 		if (WhatType.getInstance()
-				.is(result.getType(), TypeNodes.aIntArrayType)) {
+				.is(array.getType(), TypeNodes.aIntArrayType)) {
 			result.setType(TypeNodes.aIntType);
 			result.setValue(((int[]) array.getValue())[indexInt]);
 		} else if (WhatType.getInstance().is(result.getType(),
@@ -496,7 +496,7 @@ public class Interpt extends DepthFirstAdapter {
 						(Value) getOut(node.getValue())));
 			} else if (WhatType.getInstance().is(old.getType(),
 					((Value) getOut(node.getValue())).getType())) {
-				old.setValue((Value) getOut(node.getValue()));
+				old.setValue(((Value) getOut(node.getValue())).getValue());
 			} else {
 				errors.add(new SemanticError("Variable '"
 						+ name
