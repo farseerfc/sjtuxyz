@@ -3,7 +3,7 @@
  */
 package xyzlex.interpt;
 
-enum Types {
+public enum Types {
 	Unknown, Int, Real, Boolean, IntAr, RealAr, Class
 	
 }

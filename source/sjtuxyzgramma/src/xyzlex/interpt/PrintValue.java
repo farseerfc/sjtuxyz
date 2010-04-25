@@ -1,5 +1,6 @@
 package xyzlex.interpt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,12 @@ public class PrintValue extends AnalysisAdapter {
 	
 	@Override
 	public void caseAIntArrayType(AIntArrayType node) {
-		o.add(Arrays.toString((int[])v.getValue()));
+		Value [] array=(Value[])v.getValue();
+		List<String> result=new ArrayList<String>();
+		for(Value v :array){
+			print(v,result);
+		}
+		o.add(Arrays.toString(result.toArray()));
 	}
 	
 	@Override
@@ -47,7 +53,12 @@ public class PrintValue extends AnalysisAdapter {
 	
 	@Override
 	public void caseARealArrayType(ARealArrayType node) {
-		o.add(Arrays.toString((double[])v.getValue()));
+		Value [] array=(Value[])v.getValue();
+		List<String> result=new ArrayList<String>();
+		for(Value v :array){
+			print(v,result);
+		}
+		o.add(Arrays.toString(result.toArray()));
 	}
 	
 	@Override

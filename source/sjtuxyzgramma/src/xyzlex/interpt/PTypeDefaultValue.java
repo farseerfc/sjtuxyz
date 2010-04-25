@@ -12,7 +12,7 @@ import xyzlex.node.ARealArrayType;
 import xyzlex.node.ARealType;
 import xyzlex.node.Switchable;
 
-class PTypeDefaultValue extends AnalysisAdapter {
+public class PTypeDefaultValue extends AnalysisAdapter {
 	public static PTypeDefaultValue instance = null;
 
 	public static PTypeDefaultValue getInstance() {
