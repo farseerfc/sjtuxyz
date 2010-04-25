@@ -36,20 +36,277 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outStart(node);
     }
 
-    public void inAProgram(AProgram node)
+    public void inAClassProgram(AClassProgram node)
     {
         defaultIn(node);
     }
 
-    public void outAProgram(AProgram node)
+    public void outAClassProgram(AClassProgram node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseAProgram(AProgram node)
+    public void caseAClassProgram(AClassProgram node)
     {
-        inAProgram(node);
+        inAClassProgram(node);
+        if(node.getMainClass() != null)
+        {
+            node.getMainClass().apply(this);
+        }
+        {
+            List<PClassDecl> copy = new ArrayList<PClassDecl>(node.getClassDecl());
+            for(PClassDecl e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outAClassProgram(node);
+    }
+
+    public void inABodyProgram(ABodyProgram node)
+    {
+        defaultIn(node);
+    }
+
+    public void outABodyProgram(ABodyProgram node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseABodyProgram(ABodyProgram node)
+    {
+        inABodyProgram(node);
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        outABodyProgram(node);
+    }
+
+    public void inAMainClass(AMainClass node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAMainClass(AMainClass node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAMainClass(AMainClass node)
+    {
+        inAMainClass(node);
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        outAMainClass(node);
+    }
+
+    public void inAClassDecl(AClassDecl node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAClassDecl(AClassDecl node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAClassDecl(AClassDecl node)
+    {
+        inAClassDecl(node);
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        if(node.getExtendsClause() != null)
+        {
+            node.getExtendsClause().apply(this);
+        }
+        {
+            List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
+            for(PVarDecl e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        {
+            List<PMethodDecl> copy = new ArrayList<PMethodDecl>(node.getMethodDecl());
+            for(PMethodDecl e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        outAClassDecl(node);
+    }
+
+    public void inAExtendsClause(AExtendsClause node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAExtendsClause(AExtendsClause node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAExtendsClause(AExtendsClause node)
+    {
+        inAExtendsClause(node);
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        outAExtendsClause(node);
+    }
+
+    public void inAMethodDecl(AMethodDecl node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAMethodDecl(AMethodDecl node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAMethodDecl(AMethodDecl node)
+    {
+        inAMethodDecl(node);
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        {
+            List<PArg> copy = new ArrayList<PArg>(node.getArg());
+            for(PArg e : copy)
+            {
+                e.apply(this);
+            }
+        }
+        if(node.getPreDecl() != null)
+        {
+            node.getPreDecl().apply(this);
+        }
+        if(node.getPostDecl() != null)
+        {
+            node.getPostDecl().apply(this);
+        }
+        if(node.getBody() != null)
+        {
+            node.getBody().apply(this);
+        }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        outAMethodDecl(node);
+    }
+
+    public void inAArg(AArg node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAArg(AArg node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAArg(AArg node)
+    {
+        inAArg(node);
+        if(node.getType() != null)
+        {
+            node.getType().apply(this);
+        }
+        if(node.getId() != null)
+        {
+            node.getId().apply(this);
+        }
+        outAArg(node);
+    }
+
+    public void inAPreDecl(APreDecl node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAPreDecl(APreDecl node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAPreDecl(APreDecl node)
+    {
+        inAPreDecl(node);
+        if(node.getPre() != null)
+        {
+            node.getPre().apply(this);
+        }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        outAPreDecl(node);
+    }
+
+    public void inAPostDecl(APostDecl node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAPostDecl(APostDecl node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAPostDecl(APostDecl node)
+    {
+        inAPostDecl(node);
+        if(node.getPost() != null)
+        {
+            node.getPost().apply(this);
+        }
+        if(node.getExp() != null)
+        {
+            node.getExp().apply(this);
+        }
+        outAPostDecl(node);
+    }
+
+    public void inABody(ABody node)
+    {
+        defaultIn(node);
+    }
+
+    public void outABody(ABody node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseABody(ABody node)
+    {
+        inABody(node);
         {
             List<PVarDecl> copy = new ArrayList<PVarDecl>(node.getVarDecl());
             for(PVarDecl e : copy)
@@ -64,7 +321,7 @@ public class DepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
-        outAProgram(node);
+        outABody(node);
     }
 
     public void inAVarDecl(AVarDecl node)

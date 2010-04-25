@@ -12,7 +12,16 @@ public interface Analysis extends Switch
     void setOut(Node node, Object o);
 
     void caseStart(Start node);
-    void caseAProgram(AProgram node);
+    void caseAClassProgram(AClassProgram node);
+    void caseABodyProgram(ABodyProgram node);
+    void caseAMainClass(AMainClass node);
+    void caseAClassDecl(AClassDecl node);
+    void caseAExtendsClause(AExtendsClause node);
+    void caseAMethodDecl(AMethodDecl node);
+    void caseAArg(AArg node);
+    void caseAPreDecl(APreDecl node);
+    void caseAPostDecl(APostDecl node);
+    void caseABody(ABody node);
     void caseAVarDecl(AVarDecl node);
     void caseAIntArrayType(AIntArrayType node);
     void caseARealArrayType(ARealArrayType node);
@@ -55,7 +64,7 @@ public interface Analysis extends Switch
     void caseTReal(TReal node);
     void caseTPre(TPre node);
     void caseTPost(TPost node);
-    void caseTClass(TClass node);
+    void caseTClassKey(TClassKey node);
     void caseTExtends(TExtends node);
     void caseTPublic(TPublic node);
     void caseTStatic(TStatic node);

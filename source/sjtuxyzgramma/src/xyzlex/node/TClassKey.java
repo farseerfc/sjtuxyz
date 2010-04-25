@@ -5,14 +5,14 @@ package xyzlex.node;
 import xyzlex.analysis.*;
 
 @SuppressWarnings("nls")
-public final class TClass extends Token
+public final class TClassKey extends Token
 {
-    public TClass()
+    public TClassKey()
     {
         super.setText("class");
     }
 
-    public TClass(int line, int pos)
+    public TClassKey(int line, int pos)
     {
         super.setText("class");
         setLine(line);
@@ -22,17 +22,17 @@ public final class TClass extends Token
     @Override
     public Object clone()
     {
-      return new TClass(getLine(), getPos());
+      return new TClassKey(getLine(), getPos());
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseTClass(this);
+        ((Analysis) sw).caseTClassKey(this);
     }
 
     @Override
     public void setText(@SuppressWarnings("unused") String text)
     {
-        throw new RuntimeException("Cannot change TClass text.");
+        throw new RuntimeException("Cannot change TClassKey text.");
     }
 }
