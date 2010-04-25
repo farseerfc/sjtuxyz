@@ -35,7 +35,7 @@ public class Convert2Boolean extends AnalysisAdapter {
 
 	@Override
 	public void caseABooleanType(ABooleanType node) {
-		returnValue = (Boolean) value.getValue();
+		returnValue = (Boolean)( value.getValue());
 	}
 
 	@Override

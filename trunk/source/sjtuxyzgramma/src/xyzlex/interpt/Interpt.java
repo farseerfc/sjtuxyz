@@ -117,6 +117,7 @@ public class Interpt extends DepthFirstAdapter {
 		my.setType(TypeNodes.aBooleanType);
 		try {
 			my.setValue(!(Convert2Boolean.getInstance().convert(v)));
+			setOut(node,my);
 		} catch (TypeCastException tce) {
 			errors.add(new SemanticError(tce.getMessage(), node, node
 					.getNotOpr()));
@@ -299,7 +300,7 @@ public class Interpt extends DepthFirstAdapter {
 	@Override
 	public void outAGreaterOprExp(AGreaterOprExp node) {
 		Value l = (Value) getOut(node.getFirst());
-		Value r = (Value) getOut(node.getFirst());
+		Value r = (Value) getOut(node.getRest());
 		Value result = new Value();
 		result.setType(TypeNodes.aBooleanType);
 		try {
@@ -316,7 +317,7 @@ public class Interpt extends DepthFirstAdapter {
 	@Override
 	public void outALessOprExp(ALessOprExp node) {
 		Value l = (Value) getOut(node.getFirst());
-		Value r = (Value) getOut(node.getFirst());
+		Value r = (Value) getOut(node.getRest());
 		Value result = new Value();
 		result.setType(TypeNodes.aBooleanType);
 		try {
@@ -468,12 +469,12 @@ public class Interpt extends DepthFirstAdapter {
 		if (node.getIndex() != null) {
 			if (WhatType.getInstance().is(old.getType(),
 					TypeNodes.aIntArrayType)) {
-				((int[]) old.getValue())[Convert2Int.getInstance().convert(
+				((int[]) (old.getValue()))[Convert2Int.getInstance().convert(
 						(Value) getOut(node.getIndex()))] = Convert2Int
 						.getInstance().convert((Value) getOut(node.getValue()));
 			} else if (WhatType.getInstance().is(old.getType(),
 					TypeNodes.aIntArrayType)) {
-				((double[]) old.getValue())[Convert2Int.getInstance().convert(
+				((double[]) (old.getValue()))[Convert2Int.getInstance().convert(
 						(Value) getOut(node.getIndex()))] = Convert2Real
 						.getInstance().convert((Value) getOut(node.getValue()));
 			} else {
