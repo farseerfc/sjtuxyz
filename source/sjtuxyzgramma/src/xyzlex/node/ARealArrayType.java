@@ -7,16 +7,36 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class ARealArrayType extends PType
 {
+    private TReal _real_;
+    private TLSq _lSq_;
+    private TRSq _rSq_;
 
     public ARealArrayType()
     {
         // Constructor
     }
 
+    public ARealArrayType(
+        @SuppressWarnings("hiding") TReal _real_,
+        @SuppressWarnings("hiding") TLSq _lSq_,
+        @SuppressWarnings("hiding") TRSq _rSq_)
+    {
+        // Constructor
+        setReal(_real_);
+
+        setLSq(_lSq_);
+
+        setRSq(_rSq_);
+
+    }
+
     @Override
     public Object clone()
     {
-        return new ARealArrayType();
+        return new ARealArrayType(
+            cloneNode(this._real_),
+            cloneNode(this._lSq_),
+            cloneNode(this._rSq_));
     }
 
     public void apply(Switch sw)
@@ -24,16 +44,112 @@ public final class ARealArrayType extends PType
         ((Analysis) sw).caseARealArrayType(this);
     }
 
+    public TReal getReal()
+    {
+        return this._real_;
+    }
+
+    public void setReal(TReal node)
+    {
+        if(this._real_ != null)
+        {
+            this._real_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._real_ = node;
+    }
+
+    public TLSq getLSq()
+    {
+        return this._lSq_;
+    }
+
+    public void setLSq(TLSq node)
+    {
+        if(this._lSq_ != null)
+        {
+            this._lSq_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._lSq_ = node;
+    }
+
+    public TRSq getRSq()
+    {
+        return this._rSq_;
+    }
+
+    public void setRSq(TRSq node)
+    {
+        if(this._rSq_ != null)
+        {
+            this._rSq_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._rSq_ = node;
+    }
+
     @Override
     public String toString()
     {
-        return "";
+        return ""
+            + toString(this._real_)
+            + toString(this._lSq_)
+            + toString(this._rSq_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._real_ == child)
+        {
+            this._real_ = null;
+            return;
+        }
+
+        if(this._lSq_ == child)
+        {
+            this._lSq_ = null;
+            return;
+        }
+
+        if(this._rSq_ == child)
+        {
+            this._rSq_ = null;
+            return;
+        }
+
         throw new RuntimeException("Not a child.");
     }
 
@@ -41,6 +157,24 @@ public final class ARealArrayType extends PType
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._real_ == oldChild)
+        {
+            setReal((TReal) newChild);
+            return;
+        }
+
+        if(this._lSq_ == oldChild)
+        {
+            setLSq((TLSq) newChild);
+            return;
+        }
+
+        if(this._rSq_ == oldChild)
+        {
+            setRSq((TRSq) newChild);
+            return;
+        }
+
         throw new RuntimeException("Not a child.");
     }
 }

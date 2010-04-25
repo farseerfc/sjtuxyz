@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class AMinusOprExp extends PExp
 {
+    private TMinusOpr _minusOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class AMinusOprExp extends PExp
     }
 
     public AMinusOprExp(
+        @SuppressWarnings("hiding") TMinusOpr _minusOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setMinusOpr(_minusOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class AMinusOprExp extends PExp
     public Object clone()
     {
         return new AMinusOprExp(
+            cloneNode(this._minusOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class AMinusOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAMinusOprExp(this);
+    }
+
+    public TMinusOpr getMinusOpr()
+    {
+        return this._minusOpr_;
+    }
+
+    public void setMinusOpr(TMinusOpr node)
+    {
+        if(this._minusOpr_ != null)
+        {
+            this._minusOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._minusOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class AMinusOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._minusOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class AMinusOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._minusOpr_ == child)
+        {
+            this._minusOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class AMinusOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._minusOpr_ == oldChild)
+        {
+            setMinusOpr((TMinusOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

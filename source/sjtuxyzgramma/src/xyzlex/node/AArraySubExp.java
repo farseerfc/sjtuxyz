@@ -9,6 +9,8 @@ public final class AArraySubExp extends PExp
 {
     private PExp _array_;
     private PExp _index_;
+    private TLSq _lSq_;
+    private TRSq _rSq_;
 
     public AArraySubExp()
     {
@@ -17,12 +19,18 @@ public final class AArraySubExp extends PExp
 
     public AArraySubExp(
         @SuppressWarnings("hiding") PExp _array_,
-        @SuppressWarnings("hiding") PExp _index_)
+        @SuppressWarnings("hiding") PExp _index_,
+        @SuppressWarnings("hiding") TLSq _lSq_,
+        @SuppressWarnings("hiding") TRSq _rSq_)
     {
         // Constructor
         setArray(_array_);
 
         setIndex(_index_);
+
+        setLSq(_lSq_);
+
+        setRSq(_rSq_);
 
     }
 
@@ -31,7 +39,9 @@ public final class AArraySubExp extends PExp
     {
         return new AArraySubExp(
             cloneNode(this._array_),
-            cloneNode(this._index_));
+            cloneNode(this._index_),
+            cloneNode(this._lSq_),
+            cloneNode(this._rSq_));
     }
 
     public void apply(Switch sw)
@@ -89,12 +99,64 @@ public final class AArraySubExp extends PExp
         this._index_ = node;
     }
 
+    public TLSq getLSq()
+    {
+        return this._lSq_;
+    }
+
+    public void setLSq(TLSq node)
+    {
+        if(this._lSq_ != null)
+        {
+            this._lSq_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._lSq_ = node;
+    }
+
+    public TRSq getRSq()
+    {
+        return this._rSq_;
+    }
+
+    public void setRSq(TRSq node)
+    {
+        if(this._rSq_ != null)
+        {
+            this._rSq_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._rSq_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
             + toString(this._array_)
-            + toString(this._index_);
+            + toString(this._index_)
+            + toString(this._lSq_)
+            + toString(this._rSq_);
     }
 
     @Override
@@ -110,6 +172,18 @@ public final class AArraySubExp extends PExp
         if(this._index_ == child)
         {
             this._index_ = null;
+            return;
+        }
+
+        if(this._lSq_ == child)
+        {
+            this._lSq_ = null;
+            return;
+        }
+
+        if(this._rSq_ == child)
+        {
+            this._rSq_ = null;
             return;
         }
 
@@ -129,6 +203,18 @@ public final class AArraySubExp extends PExp
         if(this._index_ == oldChild)
         {
             setIndex((PExp) newChild);
+            return;
+        }
+
+        if(this._lSq_ == oldChild)
+        {
+            setLSq((TLSq) newChild);
+            return;
+        }
+
+        if(this._rSq_ == oldChild)
+        {
+            setRSq((TRSq) newChild);
             return;
         }
 

@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class AOrOprExp extends PExp
 {
+    private TOrOpr _orOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class AOrOprExp extends PExp
     }
 
     public AOrOprExp(
+        @SuppressWarnings("hiding") TOrOpr _orOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setOrOpr(_orOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class AOrOprExp extends PExp
     public Object clone()
     {
         return new AOrOprExp(
+            cloneNode(this._orOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class AOrOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAOrOprExp(this);
+    }
+
+    public TOrOpr getOrOpr()
+    {
+        return this._orOpr_;
+    }
+
+    public void setOrOpr(TOrOpr node)
+    {
+        if(this._orOpr_ != null)
+        {
+            this._orOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._orOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class AOrOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._orOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class AOrOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._orOpr_ == child)
+        {
+            this._orOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class AOrOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._orOpr_ == oldChild)
+        {
+            setOrOpr((TOrOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

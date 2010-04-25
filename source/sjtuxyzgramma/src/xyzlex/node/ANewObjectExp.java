@@ -8,6 +8,7 @@ import xyzlex.analysis.*;
 public final class ANewObjectExp extends PExp
 {
     private TId _type_;
+    private TNew _new_;
 
     public ANewObjectExp()
     {
@@ -15,10 +16,13 @@ public final class ANewObjectExp extends PExp
     }
 
     public ANewObjectExp(
-        @SuppressWarnings("hiding") TId _type_)
+        @SuppressWarnings("hiding") TId _type_,
+        @SuppressWarnings("hiding") TNew _new_)
     {
         // Constructor
         setType(_type_);
+
+        setNew(_new_);
 
     }
 
@@ -26,7 +30,8 @@ public final class ANewObjectExp extends PExp
     public Object clone()
     {
         return new ANewObjectExp(
-            cloneNode(this._type_));
+            cloneNode(this._type_),
+            cloneNode(this._new_));
     }
 
     public void apply(Switch sw)
@@ -59,11 +64,37 @@ public final class ANewObjectExp extends PExp
         this._type_ = node;
     }
 
+    public TNew getNew()
+    {
+        return this._new_;
+    }
+
+    public void setNew(TNew node)
+    {
+        if(this._new_ != null)
+        {
+            this._new_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._new_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
-            + toString(this._type_);
+            + toString(this._type_)
+            + toString(this._new_);
     }
 
     @Override
@@ -73,6 +104,12 @@ public final class ANewObjectExp extends PExp
         if(this._type_ == child)
         {
             this._type_ = null;
+            return;
+        }
+
+        if(this._new_ == child)
+        {
+            this._new_ = null;
             return;
         }
 
@@ -86,6 +123,12 @@ public final class ANewObjectExp extends PExp
         if(this._type_ == oldChild)
         {
             setType((TId) newChild);
+            return;
+        }
+
+        if(this._new_ == oldChild)
+        {
+            setNew((TNew) newChild);
             return;
         }
 

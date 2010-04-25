@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class AAndOprExp extends PExp
 {
+    private TAndOpr _andOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class AAndOprExp extends PExp
     }
 
     public AAndOprExp(
+        @SuppressWarnings("hiding") TAndOpr _andOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setAndOpr(_andOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class AAndOprExp extends PExp
     public Object clone()
     {
         return new AAndOprExp(
+            cloneNode(this._andOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class AAndOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAAndOprExp(this);
+    }
+
+    public TAndOpr getAndOpr()
+    {
+        return this._andOpr_;
+    }
+
+    public void setAndOpr(TAndOpr node)
+    {
+        if(this._andOpr_ != null)
+        {
+            this._andOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._andOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class AAndOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._andOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class AAndOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._andOpr_ == child)
+        {
+            this._andOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class AAndOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._andOpr_ == oldChild)
+        {
+            setAndOpr((TAndOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

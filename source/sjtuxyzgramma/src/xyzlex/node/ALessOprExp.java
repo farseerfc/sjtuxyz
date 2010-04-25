@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class ALessOprExp extends PExp
 {
+    private TLessOpr _lessOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class ALessOprExp extends PExp
     }
 
     public ALessOprExp(
+        @SuppressWarnings("hiding") TLessOpr _lessOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setLessOpr(_lessOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class ALessOprExp extends PExp
     public Object clone()
     {
         return new ALessOprExp(
+            cloneNode(this._lessOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class ALessOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseALessOprExp(this);
+    }
+
+    public TLessOpr getLessOpr()
+    {
+        return this._lessOpr_;
+    }
+
+    public void setLessOpr(TLessOpr node)
+    {
+        if(this._lessOpr_ != null)
+        {
+            this._lessOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._lessOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class ALessOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._lessOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class ALessOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._lessOpr_ == child)
+        {
+            this._lessOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class ALessOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._lessOpr_ == oldChild)
+        {
+            setLessOpr((TLessOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

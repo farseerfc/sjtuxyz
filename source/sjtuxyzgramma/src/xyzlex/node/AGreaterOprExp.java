@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class AGreaterOprExp extends PExp
 {
+    private TGreaterOpr _greaterOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class AGreaterOprExp extends PExp
     }
 
     public AGreaterOprExp(
+        @SuppressWarnings("hiding") TGreaterOpr _greaterOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setGreaterOpr(_greaterOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class AGreaterOprExp extends PExp
     public Object clone()
     {
         return new AGreaterOprExp(
+            cloneNode(this._greaterOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class AGreaterOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAGreaterOprExp(this);
+    }
+
+    public TGreaterOpr getGreaterOpr()
+    {
+        return this._greaterOpr_;
+    }
+
+    public void setGreaterOpr(TGreaterOpr node)
+    {
+        if(this._greaterOpr_ != null)
+        {
+            this._greaterOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._greaterOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class AGreaterOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._greaterOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class AGreaterOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._greaterOpr_ == child)
+        {
+            this._greaterOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class AGreaterOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._greaterOpr_ == oldChild)
+        {
+            setGreaterOpr((TGreaterOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

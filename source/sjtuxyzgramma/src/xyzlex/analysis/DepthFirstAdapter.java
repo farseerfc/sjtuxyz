@@ -106,6 +106,18 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAIntArrayType(AIntArrayType node)
     {
         inAIntArrayType(node);
+        if(node.getInt() != null)
+        {
+            node.getInt().apply(this);
+        }
+        if(node.getLSq() != null)
+        {
+            node.getLSq().apply(this);
+        }
+        if(node.getRSq() != null)
+        {
+            node.getRSq().apply(this);
+        }
         outAIntArrayType(node);
     }
 
@@ -123,6 +135,18 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseARealArrayType(ARealArrayType node)
     {
         inARealArrayType(node);
+        if(node.getReal() != null)
+        {
+            node.getReal().apply(this);
+        }
+        if(node.getLSq() != null)
+        {
+            node.getLSq().apply(this);
+        }
+        if(node.getRSq() != null)
+        {
+            node.getRSq().apply(this);
+        }
         outARealArrayType(node);
     }
 
@@ -140,6 +164,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseABooleanType(ABooleanType node)
     {
         inABooleanType(node);
+        if(node.getBoolean() != null)
+        {
+            node.getBoolean().apply(this);
+        }
         outABooleanType(node);
     }
 
@@ -157,6 +185,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAIntType(AIntType node)
     {
         inAIntType(node);
+        if(node.getInt() != null)
+        {
+            node.getInt().apply(this);
+        }
         outAIntType(node);
     }
 
@@ -174,6 +206,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseARealType(ARealType node)
     {
         inARealType(node);
+        if(node.getReal() != null)
+        {
+            node.getReal().apply(this);
+        }
         outARealType(node);
     }
 
@@ -340,6 +376,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAOrOprExp(AOrOprExp node)
     {
         inAOrOprExp(node);
+        if(node.getOrOpr() != null)
+        {
+            node.getOrOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -365,6 +405,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAAndOprExp(AAndOprExp node)
     {
         inAAndOprExp(node);
+        if(node.getAndOpr() != null)
+        {
+            node.getAndOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -390,6 +434,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseANotOprExp(ANotOprExp node)
     {
         inANotOprExp(node);
+        if(node.getNotOpr() != null)
+        {
+            node.getNotOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -411,6 +459,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAGreaterOprExp(AGreaterOprExp node)
     {
         inAGreaterOprExp(node);
+        if(node.getGreaterOpr() != null)
+        {
+            node.getGreaterOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -436,6 +488,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseALessOprExp(ALessOprExp node)
     {
         inALessOprExp(node);
+        if(node.getLessOpr() != null)
+        {
+            node.getLessOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -461,6 +517,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAPlusOprExp(APlusOprExp node)
     {
         inAPlusOprExp(node);
+        if(node.getPlusOpr() != null)
+        {
+            node.getPlusOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -486,6 +546,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAMinusOprExp(AMinusOprExp node)
     {
         inAMinusOprExp(node);
+        if(node.getMinusOpr() != null)
+        {
+            node.getMinusOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -511,6 +575,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAMultiplyOprExp(AMultiplyOprExp node)
     {
         inAMultiplyOprExp(node);
+        if(node.getMultiplyOpr() != null)
+        {
+            node.getMultiplyOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -536,6 +604,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseADivideOprExp(ADivideOprExp node)
     {
         inADivideOprExp(node);
+        if(node.getDivideOpr() != null)
+        {
+            node.getDivideOpr().apply(this);
+        }
         if(node.getFirst() != null)
         {
             node.getFirst().apply(this);
@@ -603,6 +675,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseATrueLtExp(ATrueLtExp node)
     {
         inATrueLtExp(node);
+        if(node.getTrue() != null)
+        {
+            node.getTrue().apply(this);
+        }
         outATrueLtExp(node);
     }
 
@@ -620,6 +696,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAFalseLtExp(AFalseLtExp node)
     {
         inAFalseLtExp(node);
+        if(node.getFalse() != null)
+        {
+            node.getFalse().apply(this);
+        }
         outAFalseLtExp(node);
     }
 
@@ -658,6 +738,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
     public void caseAThisExp(AThisExp node)
     {
         inAThisExp(node);
+        if(node.getThis() != null)
+        {
+            node.getThis().apply(this);
+        }
         outAThisExp(node);
     }
 
@@ -704,6 +788,14 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getIndex().apply(this);
         }
+        if(node.getLSq() != null)
+        {
+            node.getLSq().apply(this);
+        }
+        if(node.getRSq() != null)
+        {
+            node.getRSq().apply(this);
+        }
         outAArraySubExp(node);
     }
 
@@ -724,6 +816,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
         if(node.getArray() != null)
         {
             node.getArray().apply(this);
+        }
+        if(node.getLength() != null)
+        {
+            node.getLength().apply(this);
         }
         outAArrayLengthExp(node);
     }
@@ -757,6 +853,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
                 e.apply(this);
             }
         }
+        if(node.getPoint() != null)
+        {
+            node.getPoint().apply(this);
+        }
         outAMemFuncExp(node);
     }
 
@@ -777,6 +877,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
         if(node.getSize() != null)
         {
             node.getSize().apply(this);
+        }
+        if(node.getNew() != null)
+        {
+            node.getNew().apply(this);
         }
         outANewIntArExp(node);
     }
@@ -799,6 +903,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getSize().apply(this);
         }
+        if(node.getNew() != null)
+        {
+            node.getNew().apply(this);
+        }
         outANewRealArExp(node);
     }
 
@@ -819,6 +927,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
         if(node.getType() != null)
         {
             node.getType().apply(this);
+        }
+        if(node.getNew() != null)
+        {
+            node.getNew().apply(this);
         }
         outANewObjectExp(node);
     }
