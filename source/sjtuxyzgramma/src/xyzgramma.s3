@@ -211,7 +211,9 @@ Productions
 				  | {array_length} 	[array]:term point length
 				  	{-> New exp.array_length(array.exp,length)}
 				  | {mem_func}		[object]:term point [func]:id l_p [args]:exp_list? r_p
-					{-> New exp.mem_func(object.exp,func,[args.exp],point)}
+					{-> New exp.mem_func(object.exp,func,[args.exp])}
+				  | {field}			[object]:term point [field]:id
+				  	{-> New exp.field(object.exp,field)}
 				  | {new_int_ar} 	new int l_sq [size]:exp r_sq
 					{-> New exp.new_int_ar(size.exp,new)}
 				  | {new_real_ar} 	new real l_sq [size]:exp r_sq
@@ -284,7 +286,8 @@ Abstract Syntax Tree
 		| {sub_exp} 	exp
 		| {array_sub}		[array]:exp [index]:exp l_sq r_sq
 		| {array_length} 	[array]:exp length
-		| {mem_func}		[object]:exp [func]:id [args]:exp* point
+		| {mem_func}		[object]:exp [func]:id [args]:exp*
+		| {field}		[object]:exp [field]:id
 		| {new_int_ar} 	[size]:exp new
 		| {new_real_ar} [size]:exp new
 		| {new_object} 	[type]:id new

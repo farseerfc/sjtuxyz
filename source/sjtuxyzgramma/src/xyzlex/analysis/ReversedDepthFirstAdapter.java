@@ -1102,10 +1102,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
     public void caseAMemFuncExp(AMemFuncExp node)
     {
         inAMemFuncExp(node);
-        if(node.getPoint() != null)
-        {
-            node.getPoint().apply(this);
-        }
         {
             List<PExp> copy = new ArrayList<PExp>(node.getArgs());
             Collections.reverse(copy);
@@ -1123,6 +1119,31 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getObject().apply(this);
         }
         outAMemFuncExp(node);
+    }
+
+    public void inAFieldExp(AFieldExp node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAFieldExp(AFieldExp node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAFieldExp(AFieldExp node)
+    {
+        inAFieldExp(node);
+        if(node.getField() != null)
+        {
+            node.getField().apply(this);
+        }
+        if(node.getObject() != null)
+        {
+            node.getObject().apply(this);
+        }
+        outAFieldExp(node);
     }
 
     public void inANewIntArExp(ANewIntArExp node)

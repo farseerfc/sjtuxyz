@@ -19,11 +19,28 @@ public class Interpt extends DepthFirstAdapter {
 	private List<SemanticError> errors;
 	private List<String> outputs;
 	
+	private HashMap<String,AClassDecl> classDecls;
+	
+
+	public List<HashMap<String, Value>> getSymbol() {
+		return symbol;
+	}
+
+	public List<SemanticError> getErrors() {
+		return errors;
+	}
+
+	public List<String> getOutputs() {
+		return outputs;
+	}
+
+	
 	private void init(){
 		symbol = new ArrayList<HashMap<String, Value>>();
 		symbol.add(new HashMap<String, Value>());
 		errors = new ArrayList<SemanticError>();
 		outputs = new ArrayList<String>();
+		classDecls=new HashMap<String,AClassDecl>();
 	}
 
 	public Interpt() {
@@ -349,7 +366,7 @@ public class Interpt extends DepthFirstAdapter {
 	public void outANewRealArExp(ANewRealArExp node) {
 		Value exp = (Value) getOut(node.getSize());
 		Value result = new Value();
-		result.setType(TypeNodes.aIntArrayType);
+		result.setType(TypeNodes.aRealArrayType);
 		try {
 			result.setValue(new double[Convert2Int.getInstance().convert(exp)]);
 			setOut(node,result);
@@ -548,16 +565,19 @@ public class Interpt extends DepthFirstAdapter {
 		}
 		outAWhileState(node);
 	}
-
-	public List<HashMap<String, Value>> getSymbol() {
-		return symbol;
+	
+	@Override
+	public void caseABodyProgram(ABodyProgram node) {
+		super.caseABodyProgram(node);
 	}
-
-	public List<SemanticError> getErrors() {
-		return errors;
-	}
-
-	public List<String> getOutputs() {
-		return outputs;
+	
+	@Override
+	public void caseAClassProgram(AClassProgram node)
+	{
+		List<PClassDecl> list=node.getClassDecl();
+		for(PClassDecl classDecl : list){
+			AClassDecl aClass = (AClassDecl)classDecl;
+			
+		}
 	}
 }

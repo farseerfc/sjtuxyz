@@ -2,47 +2,41 @@
 
 package xyzlex.node;
 
-import java.util.*;
 import xyzlex.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AMemFuncExp extends PExp
+public final class AFieldExp extends PExp
 {
     private PExp _object_;
-    private TId _func_;
-    private final LinkedList<PExp> _args_ = new LinkedList<PExp>();
+    private TId _field_;
 
-    public AMemFuncExp()
+    public AFieldExp()
     {
         // Constructor
     }
 
-    public AMemFuncExp(
+    public AFieldExp(
         @SuppressWarnings("hiding") PExp _object_,
-        @SuppressWarnings("hiding") TId _func_,
-        @SuppressWarnings("hiding") List<PExp> _args_)
+        @SuppressWarnings("hiding") TId _field_)
     {
         // Constructor
         setObject(_object_);
 
-        setFunc(_func_);
-
-        setArgs(_args_);
+        setField(_field_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new AMemFuncExp(
+        return new AFieldExp(
             cloneNode(this._object_),
-            cloneNode(this._func_),
-            cloneList(this._args_));
+            cloneNode(this._field_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAMemFuncExp(this);
+        ((Analysis) sw).caseAFieldExp(this);
     }
 
     public PExp getObject()
@@ -70,16 +64,16 @@ public final class AMemFuncExp extends PExp
         this._object_ = node;
     }
 
-    public TId getFunc()
+    public TId getField()
     {
-        return this._func_;
+        return this._field_;
     }
 
-    public void setFunc(TId node)
+    public void setField(TId node)
     {
-        if(this._func_ != null)
+        if(this._field_ != null)
         {
-            this._func_.parent(null);
+            this._field_.parent(null);
         }
 
         if(node != null)
@@ -92,27 +86,7 @@ public final class AMemFuncExp extends PExp
             node.parent(this);
         }
 
-        this._func_ = node;
-    }
-
-    public LinkedList<PExp> getArgs()
-    {
-        return this._args_;
-    }
-
-    public void setArgs(List<PExp> list)
-    {
-        this._args_.clear();
-        this._args_.addAll(list);
-        for(PExp e : list)
-        {
-            if(e.parent() != null)
-            {
-                e.parent().removeChild(e);
-            }
-
-            e.parent(this);
-        }
+        this._field_ = node;
     }
 
     @Override
@@ -120,8 +94,7 @@ public final class AMemFuncExp extends PExp
     {
         return ""
             + toString(this._object_)
-            + toString(this._func_)
-            + toString(this._args_);
+            + toString(this._field_);
     }
 
     @Override
@@ -134,14 +107,9 @@ public final class AMemFuncExp extends PExp
             return;
         }
 
-        if(this._func_ == child)
+        if(this._field_ == child)
         {
-            this._func_ = null;
-            return;
-        }
-
-        if(this._args_.remove(child))
-        {
+            this._field_ = null;
             return;
         }
 
@@ -158,28 +126,10 @@ public final class AMemFuncExp extends PExp
             return;
         }
 
-        if(this._func_ == oldChild)
+        if(this._field_ == oldChild)
         {
-            setFunc((TId) newChild);
+            setField((TId) newChild);
             return;
-        }
-
-        for(ListIterator<PExp> i = this._args_.listIterator(); i.hasNext();)
-        {
-            if(i.next() == oldChild)
-            {
-                if(newChild != null)
-                {
-                    i.set((PExp) newChild);
-                    newChild.parent(this);
-                    oldChild.parent(null);
-                    return;
-                }
-
-                i.remove();
-                oldChild.parent(null);
-                return;
-            }
         }
 
         throw new RuntimeException("Not a child.");
