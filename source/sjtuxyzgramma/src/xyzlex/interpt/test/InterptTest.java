@@ -24,4 +24,25 @@ public class InterptTest extends TestCase {
 		assertEquals(output.size(), 1);
 		assertEquals(output.get(0), "3");
 	}
+	
+	public void testPrint003() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("System.out.println(3*2);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "6");
+	}
+	
+	public void testPrint004() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("System.out.println(1+3*2);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "7");
+	}
+	
+	public void testInt001() throws ParserException, LexerException, IOException{
+		Interpt interpt=new Interpt("int a;a=1+3*2-2;System.out.println(a);");
+		List<String> output=interpt.getOutputs();
+		assertEquals(output.size(), 1);
+		assertEquals(output.get(0), "5");
+	}
 }
