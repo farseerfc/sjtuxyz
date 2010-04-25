@@ -560,4 +560,5 @@ public class Interpt extends DepthFirstAdapter {
 		outAClassDecl(node);
 	}
 
+	
 }
