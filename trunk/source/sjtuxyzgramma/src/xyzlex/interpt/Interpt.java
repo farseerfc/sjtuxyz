@@ -410,11 +410,11 @@ public class Interpt extends DepthFirstAdapter {
 		Value array = (Value) getOut(node.getArray());
 		Value result = new Value();
 		if (WhatType.getInstance()
-				.is(result.getType(), TypeNodes.aIntArrayType)) {
+				.is(array.getType(), TypeNodes.aIntArrayType)) {
 			result.setType(TypeNodes.aIntType);
 			result.setValue(((int[]) array.getValue()).length);
-		} else if (WhatType.getInstance().is(result.getType(),
-				TypeNodes.aIntArrayType)) {
+		} else if (WhatType.getInstance().is(array.getType(),
+				TypeNodes.aRealArrayType)) {
 			result.setType(TypeNodes.aIntType);
 			result.setValue(((double[]) array.getValue()).length);
 		} else {
