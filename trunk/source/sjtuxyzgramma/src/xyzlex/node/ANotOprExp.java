@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class ANotOprExp extends PExp
 {
+    private TNotOpr _notOpr_;
     private PExp _first_;
 
     public ANotOprExp()
@@ -15,9 +16,12 @@ public final class ANotOprExp extends PExp
     }
 
     public ANotOprExp(
+        @SuppressWarnings("hiding") TNotOpr _notOpr_,
         @SuppressWarnings("hiding") PExp _first_)
     {
         // Constructor
+        setNotOpr(_notOpr_);
+
         setFirst(_first_);
 
     }
@@ -26,12 +30,38 @@ public final class ANotOprExp extends PExp
     public Object clone()
     {
         return new ANotOprExp(
+            cloneNode(this._notOpr_),
             cloneNode(this._first_));
     }
 
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseANotOprExp(this);
+    }
+
+    public TNotOpr getNotOpr()
+    {
+        return this._notOpr_;
+    }
+
+    public void setNotOpr(TNotOpr node)
+    {
+        if(this._notOpr_ != null)
+        {
+            this._notOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._notOpr_ = node;
     }
 
     public PExp getFirst()
@@ -63,6 +93,7 @@ public final class ANotOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._notOpr_)
             + toString(this._first_);
     }
 
@@ -70,6 +101,12 @@ public final class ANotOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._notOpr_ == child)
+        {
+            this._notOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -83,6 +120,12 @@ public final class ANotOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._notOpr_ == oldChild)
+        {
+            setNotOpr((TNotOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

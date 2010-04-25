@@ -11,6 +11,7 @@ public final class AMemFuncExp extends PExp
     private PExp _object_;
     private TId _func_;
     private final LinkedList<PExp> _args_ = new LinkedList<PExp>();
+    private TPoint _point_;
 
     public AMemFuncExp()
     {
@@ -20,7 +21,8 @@ public final class AMemFuncExp extends PExp
     public AMemFuncExp(
         @SuppressWarnings("hiding") PExp _object_,
         @SuppressWarnings("hiding") TId _func_,
-        @SuppressWarnings("hiding") List<PExp> _args_)
+        @SuppressWarnings("hiding") List<PExp> _args_,
+        @SuppressWarnings("hiding") TPoint _point_)
     {
         // Constructor
         setObject(_object_);
@@ -28,6 +30,8 @@ public final class AMemFuncExp extends PExp
         setFunc(_func_);
 
         setArgs(_args_);
+
+        setPoint(_point_);
 
     }
 
@@ -37,7 +41,8 @@ public final class AMemFuncExp extends PExp
         return new AMemFuncExp(
             cloneNode(this._object_),
             cloneNode(this._func_),
-            cloneList(this._args_));
+            cloneList(this._args_),
+            cloneNode(this._point_));
     }
 
     public void apply(Switch sw)
@@ -115,13 +120,39 @@ public final class AMemFuncExp extends PExp
         }
     }
 
+    public TPoint getPoint()
+    {
+        return this._point_;
+    }
+
+    public void setPoint(TPoint node)
+    {
+        if(this._point_ != null)
+        {
+            this._point_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._point_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
             + toString(this._object_)
             + toString(this._func_)
-            + toString(this._args_);
+            + toString(this._args_)
+            + toString(this._point_);
     }
 
     @Override
@@ -142,6 +173,12 @@ public final class AMemFuncExp extends PExp
 
         if(this._args_.remove(child))
         {
+            return;
+        }
+
+        if(this._point_ == child)
+        {
+            this._point_ = null;
             return;
         }
 
@@ -180,6 +217,12 @@ public final class AMemFuncExp extends PExp
                 oldChild.parent(null);
                 return;
             }
+        }
+
+        if(this._point_ == oldChild)
+        {
+            setPoint((TPoint) newChild);
+            return;
         }
 
         throw new RuntimeException("Not a child.");

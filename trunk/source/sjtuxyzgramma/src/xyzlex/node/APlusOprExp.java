@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class APlusOprExp extends PExp
 {
+    private TPlusOpr _plusOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class APlusOprExp extends PExp
     }
 
     public APlusOprExp(
+        @SuppressWarnings("hiding") TPlusOpr _plusOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setPlusOpr(_plusOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class APlusOprExp extends PExp
     public Object clone()
     {
         return new APlusOprExp(
+            cloneNode(this._plusOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class APlusOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAPlusOprExp(this);
+    }
+
+    public TPlusOpr getPlusOpr()
+    {
+        return this._plusOpr_;
+    }
+
+    public void setPlusOpr(TPlusOpr node)
+    {
+        if(this._plusOpr_ != null)
+        {
+            this._plusOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._plusOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class APlusOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._plusOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class APlusOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._plusOpr_ == child)
+        {
+            this._plusOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class APlusOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._plusOpr_ == oldChild)
+        {
+            setPlusOpr((TPlusOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

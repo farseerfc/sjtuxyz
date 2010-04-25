@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class ADivideOprExp extends PExp
 {
+    private TDivideOpr _divideOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class ADivideOprExp extends PExp
     }
 
     public ADivideOprExp(
+        @SuppressWarnings("hiding") TDivideOpr _divideOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setDivideOpr(_divideOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class ADivideOprExp extends PExp
     public Object clone()
     {
         return new ADivideOprExp(
+            cloneNode(this._divideOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class ADivideOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseADivideOprExp(this);
+    }
+
+    public TDivideOpr getDivideOpr()
+    {
+        return this._divideOpr_;
+    }
+
+    public void setDivideOpr(TDivideOpr node)
+    {
+        if(this._divideOpr_ != null)
+        {
+            this._divideOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._divideOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class ADivideOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._divideOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class ADivideOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._divideOpr_ == child)
+        {
+            this._divideOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class ADivideOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._divideOpr_ == oldChild)
+        {
+            setDivideOpr((TDivideOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

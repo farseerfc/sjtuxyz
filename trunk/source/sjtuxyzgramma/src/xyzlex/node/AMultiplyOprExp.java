@@ -7,6 +7,7 @@ import xyzlex.analysis.*;
 @SuppressWarnings("nls")
 public final class AMultiplyOprExp extends PExp
 {
+    private TMultiplyOpr _multiplyOpr_;
     private PExp _first_;
     private PExp _rest_;
 
@@ -16,10 +17,13 @@ public final class AMultiplyOprExp extends PExp
     }
 
     public AMultiplyOprExp(
+        @SuppressWarnings("hiding") TMultiplyOpr _multiplyOpr_,
         @SuppressWarnings("hiding") PExp _first_,
         @SuppressWarnings("hiding") PExp _rest_)
     {
         // Constructor
+        setMultiplyOpr(_multiplyOpr_);
+
         setFirst(_first_);
 
         setRest(_rest_);
@@ -30,6 +34,7 @@ public final class AMultiplyOprExp extends PExp
     public Object clone()
     {
         return new AMultiplyOprExp(
+            cloneNode(this._multiplyOpr_),
             cloneNode(this._first_),
             cloneNode(this._rest_));
     }
@@ -37,6 +42,31 @@ public final class AMultiplyOprExp extends PExp
     public void apply(Switch sw)
     {
         ((Analysis) sw).caseAMultiplyOprExp(this);
+    }
+
+    public TMultiplyOpr getMultiplyOpr()
+    {
+        return this._multiplyOpr_;
+    }
+
+    public void setMultiplyOpr(TMultiplyOpr node)
+    {
+        if(this._multiplyOpr_ != null)
+        {
+            this._multiplyOpr_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._multiplyOpr_ = node;
     }
 
     public PExp getFirst()
@@ -93,6 +123,7 @@ public final class AMultiplyOprExp extends PExp
     public String toString()
     {
         return ""
+            + toString(this._multiplyOpr_)
             + toString(this._first_)
             + toString(this._rest_);
     }
@@ -101,6 +132,12 @@ public final class AMultiplyOprExp extends PExp
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
+        if(this._multiplyOpr_ == child)
+        {
+            this._multiplyOpr_ = null;
+            return;
+        }
+
         if(this._first_ == child)
         {
             this._first_ = null;
@@ -120,6 +157,12 @@ public final class AMultiplyOprExp extends PExp
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
+        if(this._multiplyOpr_ == oldChild)
+        {
+            setMultiplyOpr((TMultiplyOpr) newChild);
+            return;
+        }
+
         if(this._first_ == oldChild)
         {
             setFirst((PExp) newChild);

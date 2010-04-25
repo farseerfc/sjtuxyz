@@ -8,6 +8,7 @@ import xyzlex.analysis.*;
 public final class AArrayLengthExp extends PExp
 {
     private PExp _array_;
+    private TLength _length_;
 
     public AArrayLengthExp()
     {
@@ -15,10 +16,13 @@ public final class AArrayLengthExp extends PExp
     }
 
     public AArrayLengthExp(
-        @SuppressWarnings("hiding") PExp _array_)
+        @SuppressWarnings("hiding") PExp _array_,
+        @SuppressWarnings("hiding") TLength _length_)
     {
         // Constructor
         setArray(_array_);
+
+        setLength(_length_);
 
     }
 
@@ -26,7 +30,8 @@ public final class AArrayLengthExp extends PExp
     public Object clone()
     {
         return new AArrayLengthExp(
-            cloneNode(this._array_));
+            cloneNode(this._array_),
+            cloneNode(this._length_));
     }
 
     public void apply(Switch sw)
@@ -59,11 +64,37 @@ public final class AArrayLengthExp extends PExp
         this._array_ = node;
     }
 
+    public TLength getLength()
+    {
+        return this._length_;
+    }
+
+    public void setLength(TLength node)
+    {
+        if(this._length_ != null)
+        {
+            this._length_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._length_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
-            + toString(this._array_);
+            + toString(this._array_)
+            + toString(this._length_);
     }
 
     @Override
@@ -73,6 +104,12 @@ public final class AArrayLengthExp extends PExp
         if(this._array_ == child)
         {
             this._array_ = null;
+            return;
+        }
+
+        if(this._length_ == child)
+        {
+            this._length_ = null;
             return;
         }
 
@@ -86,6 +123,12 @@ public final class AArrayLengthExp extends PExp
         if(this._array_ == oldChild)
         {
             setArray((PExp) newChild);
+            return;
+        }
+
+        if(this._length_ == oldChild)
+        {
+            setLength((TLength) newChild);
             return;
         }
 
