@@ -6,17 +6,17 @@ import java.util.*;
 import xyzlex.analysis.*;
 
 @SuppressWarnings("nls")
-public final class AProgram extends PProgram
+public final class ABody extends PBody
 {
     private final LinkedList<PVarDecl> _varDecl_ = new LinkedList<PVarDecl>();
     private final LinkedList<PState> _state_ = new LinkedList<PState>();
 
-    public AProgram()
+    public ABody()
     {
         // Constructor
     }
 
-    public AProgram(
+    public ABody(
         @SuppressWarnings("hiding") List<PVarDecl> _varDecl_,
         @SuppressWarnings("hiding") List<PState> _state_)
     {
@@ -30,14 +30,14 @@ public final class AProgram extends PProgram
     @Override
     public Object clone()
     {
-        return new AProgram(
+        return new ABody(
             cloneList(this._varDecl_),
             cloneList(this._state_));
     }
 
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseAProgram(this);
+        ((Analysis) sw).caseABody(this);
     }
 
     public LinkedList<PVarDecl> getVarDecl()

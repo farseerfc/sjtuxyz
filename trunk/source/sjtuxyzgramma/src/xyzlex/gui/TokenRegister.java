@@ -63,7 +63,7 @@ public class TokenRegister {
 		add(new TokenDescriber(TAssignOpr.class,		"AssignOpr(=)        ", normal));
 		add(new TokenDescriber(TBlanks.class,			"Blank               ", normal));
 		add(new TokenDescriber(TBoolean.class,			"Keyword(boolean)    ", keyword));
-		add(new TokenDescriber(TClass.class,			"Keyword(class)      ", keyword));
+		add(new TokenDescriber(TClassKey.class,			"Keyword(class)      ", keyword));
 		add(new TokenDescriber(TColon.class,			"Colon(:)            ", normal));
 		add(new TokenDescriber(TComma.class,			"Comma(,)            ", normal));
 		add(new TokenDescriber(TComment.class,			"Comment(new body)   ", comment));

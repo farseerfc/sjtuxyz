@@ -30,7 +30,7 @@ Tokens
 	real = 'real';
 	pre = 'pre';
 	post = 'post';
-	class = 'class';
+	class_key = 'class';
 	extends = 'extends';
 	public = 'public';
 	static = 'static';
@@ -75,7 +75,36 @@ Ignored Tokens
 	comment;
 		
 Productions
-	program = var_decl* state* {-> New program ([var_decl],[state])} ;
+	program = 	{class} main_class class_decl* 
+				{-> New program.class (main_class, [class_decl])}
+			| 	{body} body {-> New program.body(body)}
+			;
+	
+	main_class = class_key id [lb1]:l_b public static void main l_p r_p [lb2]:l_b body [rb1]:r_b [rb2]:r_b
+			{-> New main_class(id,body)}
+			   ; 
+			   
+	class_decl = class_key id extends_clause? l_b var_decl* method_decl* r_b
+			{-> New class_decl(id,extends_clause,[var_decl],[method_decl])}
+			   ;
+			   
+	extends_clause = extends id {-> New extends_clause(id)};
+	
+	method_decl = public type id l_p formal_list r_p l_b
+					pre_decl post_decl body return exp semi r_b
+				{-> New method_decl (type,id,[formal_list.arg],pre_decl,post_decl,body,exp) }
+				;
+				
+	formal_list{-> arg*} = arg formal_rest*
+				{-> [arg,formal_rest.arg]}
+				;
+	arg = type id {-> New arg(type,id)};
+	formal_rest{-> arg} = comma type id {-> New arg(type,id)};
+	
+	pre_decl = pre colon exp semi {-> New pre_decl(pre,exp)};
+	post_decl = post colon exp semi {-> New post_decl(post,exp)};
+	
+	body = var_decl* state* {-> New body ([var_decl],[state])} ;
 	
 	var_decl = type id semi {-> New var_decl (type,id)}; //¡ú Type id ;
 	
@@ -201,7 +230,24 @@ Productions
     
 Abstract Syntax Tree
 
-	program = var_decl* state*;
+	program = 	{class} main_class class_decl* 
+			| 	{body} body
+			;
+	
+	main_class = id body ; 
+			   
+	class_decl = id extends_clause? var_decl* method_decl* ;
+			   
+	extends_clause = id ;
+	
+	method_decl = type id arg* pre_decl post_decl body exp;
+	
+	arg = type id;
+				
+	pre_decl = pre exp;
+	post_decl = post exp;
+
+	body = var_decl* state*;
 	
 	var_decl = type id ; //¡ú Type id ;
 	

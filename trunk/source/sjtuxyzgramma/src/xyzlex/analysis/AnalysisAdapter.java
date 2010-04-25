@@ -69,7 +69,52 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseAProgram(AProgram node)
+    public void caseAClassProgram(AClassProgram node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseABodyProgram(ABodyProgram node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAMainClass(AMainClass node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAClassDecl(AClassDecl node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAExtendsClause(AExtendsClause node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAMethodDecl(AMethodDecl node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAArg(AArg node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAPreDecl(APreDecl node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseAPostDecl(APostDecl node)
+    {
+        defaultCase(node);
+    }
+
+    public void caseABody(ABody node)
     {
         defaultCase(node);
     }
@@ -279,7 +324,7 @@ public class AnalysisAdapter implements Analysis
         defaultCase(node);
     }
 
-    public void caseTClass(TClass node)
+    public void caseTClassKey(TClassKey node)
     {
         defaultCase(node);
     }

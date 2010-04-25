@@ -52,7 +52,7 @@ class TokenIndex extends AnalysisAdapter
     }
 
     @Override
-    public void caseTClass(@SuppressWarnings("unused") TClass node)
+    public void caseTClassKey(@SuppressWarnings("unused") TClassKey node)
     {
         this.index = 7;
     }
