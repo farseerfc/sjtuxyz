@@ -35,7 +35,12 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.html.*;
 
 import xyzlex.counter.Counter;
+import xyzlex.interpt.Interpt;
+import xyzlex.interpt.SemanticError;
+import xyzlex.lexer.LexerException;
 import xyzlex.node.Token;
+import xyzlex.parser.ParserException;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -80,7 +85,7 @@ public class XyzlexEditor extends JFrame {
 		new Timer(500, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//if (needFormat)
+				// if (needFormat)
 				formatText();
 			}
 		}).start();
@@ -117,17 +122,17 @@ public class XyzlexEditor extends JFrame {
 		grammaResult = new JTextPane();
 		grammaResult.setAutoscrolls(true);
 		grammaResult.setEditable(false);
-		
-		JSplitPane spr = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,true,
-				new JScrollPane(txtText),new JScrollPane(grammaResult));
-		
+
+		JSplitPane spr = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
+				new JScrollPane(txtText), new JScrollPane(grammaResult));
+
 		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true,
 				new JScrollPane(txtResult), spr);
 		spr.setDividerLocation(440);
 		spr.resetToPreferredSizes();
-		
+
 		sp.setDividerLocation(220);
-		sp.resetToPreferredSizes();		
+		sp.resetToPreferredSizes();
 		panel.add(sp, BorderLayout.CENTER);
 	}
 
@@ -228,35 +233,29 @@ public class XyzlexEditor extends JFrame {
 			}
 		});
 		menu.add(menuItem_4);
-		
-		JMenu menuHelp=new JMenu("Help");
+
+		JMenu menuHelp = new JMenu("Help");
 		menuBar.add(menuHelp);
-		JMenuItem menuAbout=new JMenuItem("About ...");
-		menuAbout.addActionListener(new ActionListener(){
+		JMenuItem menuAbout = new JMenuItem("About ...");
+		menuAbout.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				showAboutDialog();
 			}
-			
+
 		});
 		menuHelp.add(menuAbout);
 	}
-	
 
 	private void showAboutDialog() {
-		JOptionPane.showMessageDialog(mainFrame,
-				"XYZ is a compiler\n" +
-				"for compiler course in SE of SJTU\n" +
-				"Made By\n" +
-				"5070379019 Wu Ye\n" +
-				"5070379022 Yang JiaChen\n" +
-				"5070379025 Zhan Hui Zhou ",
-				"About XYZ",
+		JOptionPane.showMessageDialog(mainFrame, "XYZ is a compiler\n"
+				+ "for compiler course in SE of SJTU\n" + "Made By\n"
+				+ "5070379019 Wu Ye\n" + "5070379022 Yang JiaChen\n"
+				+ "5070379025 Zhan Hui Zhou ", "About XYZ",
 				JOptionPane.CLOSED_OPTION);
-		
-	}
 
+	}
 
 	private void buildToolbar() {
 		JToolBar toolbar = new JToolBar();
@@ -314,6 +313,43 @@ public class XyzlexEditor extends JFrame {
 			}
 
 		});
+
+		toolbar.add(new AbstractAction("Run!") {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				runProgram();
+			}
+
+		});
+	}
+
+	private void runProgram() {
+		TokenRegister tr = new TokenRegister();
+		Document doc;
+		doc = grammaResult.getDocument();
+		try {
+			doc.remove(0, doc.getLength());
+			Interpt interpt = new Interpt(text);
+			for (String output : interpt.getOutputs()) {
+				doc.insertString(doc.getLength(), output + "\n", tr.get(null)
+						.getColor());
+			}
+			for (SemanticError error : interpt.getErrors()) {
+				String dis = "Error in [" + error.getToken().getLine() + ":"
+						+ error.getToken().getPos() + "] "
+						+ error.getDiscription() + ":" + error.getSource();
+				doc.insertString(doc.getLength(), dis + "\n", tr.get(null)
+						.getColor());
+			}
+		} catch (Exception e) {
+			try {
+				doc.insertString(doc.getLength(), e.getMessage(), tr.get(null)
+						.getColor());
+			} catch (BadLocationException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	private void buildStatusLabel() {
@@ -362,8 +398,8 @@ public class XyzlexEditor extends JFrame {
 			Document doc = txtText.getDocument();
 			text = doc.getText(0, doc.getLength());
 			TokenRegister tr = new TokenRegister();
-			Counter counter= new Counter(text);
-			if(needFormat || !doc.getText(0, doc.getLength()).equals(text)){
+			Counter counter = new Counter(text);
+			if (needFormat || !doc.getText(0, doc.getLength()).equals(text)) {
 				// format txtText
 				if (counter.getException() == null) {
 					int lastPos = txtText.getCaretPosition();
@@ -375,25 +411,26 @@ public class XyzlexEditor extends JFrame {
 					}
 					txtText.setCaretPosition(lastPos);
 				}
-				needFormat=false;
+				needFormat = false;
+
 			}
-			//refresh statue bar
-			int lineNum=1;
-			int rowNum=0;
-			int p=txtText.getCaretPosition()-1;
-			while(p>=0 && text.charAt(p)!='\n'){
+			// refresh statue bar
+			int lineNum = 1;
+			int rowNum = 0;
+			int p = txtText.getCaretPosition() - 1;
+			while (p >= 0 && text.charAt(p) != '\n') {
 				rowNum++;
 				p--;
 			}
-			while(p>=0){
-				if(text.charAt(p)=='\n')
+			while (p >= 0) {
+				if (text.charAt(p) == '\n')
 					lineNum++;
 				p--;
 			}
-			labelText="Line: "+lineNum+" Row: "+rowNum;
+			labelText = "Line: " + lineNum + " Row: " + rowNum;
 
 			// format txtResult
-			
+
 			doc = txtResult.getDocument();
 			doc.remove(0, doc.getLength());
 			for (Class<? extends Token> tokenClass : counter.getTokenKinds()) {
@@ -411,8 +448,7 @@ public class XyzlexEditor extends JFrame {
 						.getMessage(), tr.get(null).getColor());
 				labelText += " Error:" + counter.getException().getMessage();
 			}
-				
-			
+
 			statusLabel.setText(labelText);
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
