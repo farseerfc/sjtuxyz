@@ -31,6 +31,12 @@ public class WhatType extends AnalysisAdapter {
 		return middle != Types.Unknown && result != Types.Unknown
 				&& middle == result;
 	}
+	
+	public boolean isClass(Node type){
+		result = Types.Unknown;
+		type.apply(this);
+		return result==Types.Class;		
+	}
 
 	@Override
 	public void caseAIntType(AIntType node) {

@@ -90,7 +90,7 @@ Productions
 			   
 	extends_clause = extends id {-> New extends_clause(id)};
 	
-	method_decl = public type id l_p formal_list r_p l_b
+	method_decl = public type id l_p formal_list? r_p l_b
 					pre_decl post_decl body return exp semi r_b
 				{-> New method_decl (type,id,[formal_list.arg],pre_decl,post_decl,body,exp) }
 				;

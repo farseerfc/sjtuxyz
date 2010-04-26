@@ -4,23 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.AbstractAction;
-import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
@@ -30,9 +29,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.Position;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.html.*;
 
 import xyzlex.counter.Counter;
 import xyzlex.interpt.Interpt;
@@ -40,13 +36,8 @@ import xyzlex.interpt.SemanticError;
 import xyzlex.lexer.LexerException;
 import xyzlex.node.Token;
 import xyzlex.parser.ParserException;
-
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.event.MenuListener;
-import javax.swing.event.MenuEvent;
-import javax.swing.ImageIcon;
+import xyzlex.weight.CountStatement;
+import xyzlex.weight.Weight;
 
 public class XyzlexEditor extends JFrame {
 	private JTextPane txtResult;
@@ -326,8 +317,7 @@ public class XyzlexEditor extends JFrame {
 
 	private void runProgram() {
 		TokenRegister tr = new TokenRegister();
-		Document doc;
-		doc = grammaResult.getDocument();
+		Document doc = grammaResult.getDocument();
 		try {
 			doc.remove(0, doc.getLength());
 			Interpt interpt = new Interpt(text);
@@ -427,7 +417,24 @@ public class XyzlexEditor extends JFrame {
 					lineNum++;
 				p--;
 			}
-			labelText = "Line: " + lineNum + " Row: " + rowNum;
+			
+			Weight w;String csResult="";
+			try {
+				w = new Weight(text);
+				CountStatement cs=new CountStatement(text);
+				csResult+=" Weight: "+w.getWeight()+" CountStatement: "+cs.getCount();
+			} catch (ParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			labelText = "Line: " + lineNum + " Row: " + rowNum +csResult;
 
 			// format txtResult
 

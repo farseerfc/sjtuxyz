@@ -17,8 +17,7 @@ public class Interpt extends DepthFirstAdapter {
 	private List<RuntimeStack> symbol;
 	private List<SemanticError> errors;
 	private List<String> outputs;
-
-	private HashMap<String, AClassDecl> classDecls;
+	private HashMap<String, ClassDecl> classDecls;
 
 	public List<RuntimeStack> getSymbol() {
 		return symbol;
@@ -37,7 +36,7 @@ public class Interpt extends DepthFirstAdapter {
 		symbol.add(new RuntimeStack());
 		errors = new ArrayList<SemanticError>();
 		outputs = new ArrayList<String>();
-		classDecls = new HashMap<String, AClassDecl>();
+		classDecls = new HashMap<String, ClassDecl>();
 	}
 
 	public Interpt() {
@@ -56,15 +55,15 @@ public class Interpt extends DepthFirstAdapter {
 				.getConst(Consts.InputStreamBufferSize)));
 	}
 
-	public Map<String, Value> currentScope() {
-		return symbol.get(symbol.size() - 1).getSymbol();
+	public RuntimeStack currentScope() {
+		return symbol.get(symbol.size() - 1);
 	}
 
 	@Override
 	public void outAVarDecl(AVarDecl node) {
 		String name = node.getId().getText().trim();
 		PType typeDecl = node.getType();
-		if (currentScope().containsKey(name)) {
+		if (currentScope().getSymbol().containsKey(name)) {
 			errors.add(new SemanticError("Variable already declared! ", node,
 					node.getId()));
 			return;
@@ -72,7 +71,45 @@ public class Interpt extends DepthFirstAdapter {
 			Value v = new Value();
 			v.setType(typeDecl);
 			v.setValue(PTypeDefaultValue.getInstance().defaultValue(typeDecl));
-			currentScope().put(name, v);
+			currentScope().getSymbol().put(name, v);
+		}
+	}
+
+	@Override
+	public void outAVarLeftValue(AVarLeftValue node) {
+		String name = node.getId().getText().trim();
+		HashMap<String, Value> thisScope = currentScope().getThisValue() != null ? (HashMap<String, Value>) currentScope()
+				.getThisValue().getValue()
+				: null;
+		if (currentScope().getSymbol().containsKey(name)) {
+			setOut(node, currentScope().getSymbol().get(name));
+		} else if (thisScope != null && thisScope.containsKey(name)) {
+			setOut(node, thisScope.get(name));
+		} else {
+			errors.add(new SemanticError("Variable not found!", node, node
+					.getId()));
+		}
+	}
+
+	@Override
+	public void outAArrSubLeftValue(AArrSubLeftValue node) {
+		Value array = (Value) getOut(node.getArray());
+		Value result = ((Value[]) array.getValue())[Convert2Int.getInstance()
+				.convert((Value) getOut(node.getIndex()))];
+		setOut(node, result);
+	}
+
+	@Override
+	public void outAFieldLeftValue(AFieldLeftValue node) {
+		Value obj = (Value) getOut(node.getObject());
+		String fieldName = node.getField().getText().trim();
+		HashMap<String, Value> fields = (HashMap<String, Value>) obj.getValue();
+		if (fields.containsKey(fieldName)) {
+			setOut(node, fields.get(fieldName));
+		} else {
+			errors.add(new SemanticError("object '" + obj.getValue()
+					+ "' don't contain field '" + node.getField() + "'", node,
+					node.getField()));
 		}
 	}
 
@@ -109,41 +146,8 @@ public class Interpt extends DepthFirstAdapter {
 	}
 
 	@Override
-	public void outAVarLeftValue(AVarLeftValue node) {
-		String name = node.getId().getText().trim();
-		if (currentScope().containsKey(name)) {
-			setOut(node, currentScope().get(name));
-		} else {
-			errors.add(new SemanticError("Variable not defined!", node, node
-					.getId()));
-		}
-	}
-
-	@Override
-	public void outAArrSubLeftValue(AArrSubLeftValue node) {
-		Value array = (Value) getOut(node.getArray());
-		Value result = ((Value[]) array.getValue())[Convert2Int.getInstance()
-				.convert((Value) getOut(node.getIndex()))];
-		setOut(node, result);
-	}
-
-	@Override
-	public void outAFieldLeftValue(AFieldLeftValue node) {
-		Value obj = (Value) getOut(node.getObject());
-		String fieldName = node.getField().getText().trim();
-		HashMap<String, Value> fields = (HashMap<String, Value>) obj.getValue();
-		if (fields.containsKey(fieldName)) {
-			setOut(node, fields.get(fieldName));
-		} else {
-			errors.add(new SemanticError("object '" + obj.getValue()
-					+ "' don't contain field '" + node.getField() + "'", node,
-					node.getField()));
-		}
-	}
-	
-	@Override
 	public void outALeftValueExp(ALeftValueExp node) {
-		setOut(node,getOut(node.getLeftValue()));
+		setOut(node, getOut(node.getLeftValue()));
 	}
 
 	@Override
@@ -167,8 +171,13 @@ public class Interpt extends DepthFirstAdapter {
 
 	@Override
 	public void outAThisExp(AThisExp node) {
-		errors.add(new SemanticError("'this' keyword not supported yet! ",
-				node, node.getThis()));
+		if (symbol.get(symbol.size() - 1).getThisValue() == null) {
+			errors.add(new SemanticError(
+					"'this' keyword not supported in main method! ", node, node
+							.getThis()));
+		} else {
+			setOut(node, symbol.get(symbol.size() - 1).getThisValue());
+		}
 	}
 
 	@Override
@@ -412,6 +421,40 @@ public class Interpt extends DepthFirstAdapter {
 		}
 	}
 
+	@Override
+	public void outANewObjectExp(ANewObjectExp node) {
+		String className = node.getType().getText().trim();
+		Value result = new Value();
+		result.setType(new AClassType(classDecls.get(className).getAClassDecl()
+				.getId()));
+		HashMap<String, Value> obj = new HashMap<String, Value>();
+		try {
+			List<String> supers = new ArrayList<String>();
+			do {
+				supers.add(className);
+				ClassDecl cd = classDecls.get(className);
+				className = cd.getSuperClass();
+			} while (className != null);
+			Collections.reverse(supers);
+
+			for (String name : supers) {
+				ClassDecl cd = classDecls.get(name);
+				for (String var : cd.getVars().keySet()) {
+					Value v = new Value();
+					PType type = cd.getVars().get(var).getType();
+					v.setType(type);
+					v.setValue(PTypeDefaultValue.getInstance().defaultValue(
+							type));
+					obj.put(var, v);
+				}
+			}
+		} catch (NullPointerException npe) {
+			errors.add(new SemanticError("Class or superclass '" + className
+					+ "' not found!", node, node.getType()));
+		}
+		result.setValue(obj);
+		setOut(node,result);
+	}
 
 	@Override
 	public void outAArrayLengthExp(AArrayLengthExp node) {
@@ -430,6 +473,93 @@ public class Interpt extends DepthFirstAdapter {
 		setOut(node, result);
 	}
 
+	@Override
+	public void outAMemFuncExp(AMemFuncExp node) {
+		Value thisObject = (Value) getOut(node.getObject());
+		symbol.add(new RuntimeStack());
+		currentScope().setThisValue(thisObject);
+
+		AClassType thisType = (AClassType) thisObject.getType();
+		String className = thisType.getId().getText().trim();
+		ClassDecl cd = classDecls.get(className);
+		AMethodDecl method = cd.getMethods().get(
+				node.getFunc().getText().trim());
+
+		Value returnValue = new Value();
+		returnValue.setType(method.getType());
+		returnValue.setValue(PTypeDefaultValue.getInstance().defaultValue(
+				method.getType()));
+		currentScope().setReturnValue(returnValue);
+		
+		//compare args
+		int formArgs=method.getArg()==null?0:method.getArg().size();
+		int realArgs=node.getArgs()==null?0:node.getArgs().size();
+		
+		if(formArgs!=realArgs){
+			errors.add(new SemanticError("Args count not equal!",node,node.getFunc()));
+			symbol.remove(symbol.size()-1);
+			return;
+		}
+		
+		//assign args
+		for(int i=0;i<formArgs;++i){
+			AArg formal=(AArg)method.getArg().get(i);
+			Value arg=(Value)getOut(node.getArgs().get(i));
+			if(!WhatType.getInstance().is(formal.getType(),arg.getType())){
+				errors.add(new SemanticError("Args type not equal!",node,node.getFunc()));
+				symbol.remove(symbol.size()-1);
+				return;
+			}
+			currentScope().getSymbol().put(formal.getId().getText().trim(), arg);
+							
+		}
+		
+		if(method.getPreDecl()!=null){
+			method.getPreDecl().apply(this);
+			Value v=(Value)getOut(method.getPreDecl());
+			boolean cond=Convert2Boolean.getInstance().convert(v);
+			if(!cond){
+				errors.add(new SemanticError("Pre condition failed!",method,method.getId()));
+				symbol.remove(symbol.size()-1);
+				return;
+			}
+		}
+		
+		if(method.getBody()!=null){
+			method.getBody().apply(this);
+		}
+		
+		if(method.getPostDecl()!=null){
+			method.getPostDecl().apply(this);
+			Value v=(Value)getOut(method.getPostDecl());
+			boolean cond=Convert2Boolean.getInstance().convert(v);
+			if(!cond){
+				errors.add(new SemanticError("Post condition failed!",method,method.getId()));
+				symbol.remove(symbol.size()-1);
+				return;
+			}
+		}
+		
+		if(method.getExp()!=null){
+			method.getExp().apply(this);
+			returnValue.setValue(((Value)getOut(method.getExp())).getValue());			
+		}
+		
+		symbol.remove(symbol.size()-1);
+		setOut(node,returnValue);
+	}
+
+	
+	@Override
+	public void outAPreDecl(APreDecl node) {
+		setOut(node,getOut(node.getExp()));
+	}
+	
+	@Override
+	public void outAPostDecl(APostDecl node) {
+		setOut(node,getOut(node.getExp()));
+	}
+	
 	@Override
 	public void caseAAndOprExp(AAndOprExp node) {
 		inAAndOprExp(node);
@@ -478,19 +608,57 @@ public class Interpt extends DepthFirstAdapter {
 		PrintValue.getInstance().print(v, outputs);
 	}
 
-		
 	@Override
 	public void outAAssignState(AAssignState node) {
-		Value old=(Value)getOut(node.getTarget());
-		Value value=(Value)(getOut(node.getValue()));
-		if(WhatType.getInstance().is(old.getType(),TypeNodes.aIntType)){
+		Value old = (Value) getOut(node.getTarget());
+		Value value = (Value) (getOut(node.getValue()));
+		if (WhatType.getInstance().is(old.getType(), TypeNodes.aIntType)) {
 			old.setValue(Convert2Int.getInstance().convert(value));
-		}else if(WhatType.getInstance().is(old.getType(),TypeNodes.aRealType)){
+		} else if (WhatType.getInstance()
+				.is(old.getType(), TypeNodes.aRealType)) {
 			old.setValue(Convert2Real.getInstance().convert(value));
-		}else if(WhatType.getInstance().is(old.getType(),TypeNodes.aBooleanType)){
+		} else if (WhatType.getInstance().is(old.getType(),
+				TypeNodes.aBooleanType)) {
 			old.setValue(Convert2Boolean.getInstance().convert(value));
-		}else{
-			old.setValue(value.getValue());
+		} else {
+			PType type;
+			type = value.getType();
+			while (true) {
+				if (WhatType.getInstance().is(old.getType(), type)) {
+					old.setValue(value.getValue());
+					return;
+				}
+				if (WhatType.getInstance().isClass(old.getType())
+						&& WhatType.getInstance().isClass(type)) {
+					AClassDecl aClass = classDecls.get(
+							((AClassType) type).getId().getText().trim())
+							.getAClassDecl();
+					if (aClass.getExtendsClause() != null) {
+						aClass.getExtendsClause().apply(this);
+						String superClassName = (String) getOut(aClass
+								.getExtendsClause());
+						type = new AClassType(classDecls.get(superClassName)
+								.getAClassDecl().getId());
+						if (type == null) {
+							errors.add(new SemanticError(
+									"Can't find superclass '" + superClassName
+											+ "'", node, aClass.getId()));
+							return;
+						}
+					} else {
+						errors.add(new SemanticError("Type '" + value.getType()
+								+ "' can not conver to Type" + old.getType(),
+								node, null));
+						return;
+					}
+				} else {
+					errors.add(new SemanticError("Type '" + value.getType()
+							+ "' can not conver to Type" + old.getType(), node,
+							null));
+					return;
+				}
+			}
+
 		}
 	}
 
@@ -556,9 +724,48 @@ public class Interpt extends DepthFirstAdapter {
 	public void caseAClassDecl(AClassDecl node) {
 		inAClassDecl(node);
 		String className = node.getId().getText().trim();
-		classDecls.put(className, node);
+		ClassDecl cd = new ClassDecl();
+		cd.setAClassDecl(node);
+
+		symbol.add(new RuntimeStack());
+		if (node.getVarDecl() != null) {
+			for (PVarDecl vd : node.getVarDecl()) {
+				vd.apply(this);
+			}
+		}
+		HashMap<String, Value> vars = symbol.get(symbol.size() - 1).getSymbol();
+		symbol.remove(symbol.size() - 1);
+		cd.setVars(vars);
+
+		cd.setMethods(new HashMap<String, AMethodDecl>());
+		if (node.getMethodDecl() != null) {
+			for (PMethodDecl md : node.getMethodDecl()) {
+				md.apply(this);
+				AMethodDecl aMethod = (AMethodDecl) getOut(md);
+				cd.getMethods().put(aMethod.getId().getText().trim(), aMethod);
+			}
+		}
+
+		if (node.getExtendsClause() != null) {
+			String superClass = (String) getOut(node.getExtendsClause());
+			cd.setSuperClass(superClass);
+		}
+
+		classDecls.put(className, cd);
 		outAClassDecl(node);
 	}
 
-	
+	@Override
+	public void caseAMethodDecl(AMethodDecl node) {
+		setOut(node, node);
+	}
+
+	@Override
+	public void outAExtendsClause(AExtendsClause node) {
+		setOut(node, node.getId().getText().trim());
+	}
+
+	public HashMap<String, ClassDecl> getClassDecls() {
+		return classDecls;
+	}
 }
