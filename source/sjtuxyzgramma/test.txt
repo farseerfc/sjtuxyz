@@ -1,0 +1,87 @@
+class A{
+
+    public static void main(){
+    
+        System.out.println(new B().test(0.25,0.5));
+
+        System.out.println(new C().add(1,2,3));
+	
+    }
+
+}
+
+class B{
+
+    public real test(real a,real b){
+
+	pre:a<b;
+
+        post:b>0;
+
+	if(a<1000){//if must be matched whith else
+
+	    while(a<b){
+
+		   if(b<100){
+
+		   b=a*b;
+
+		   a=b;
+
+		   }
+
+		   else{
+
+		   a=b;
+
+		   }
+
+		}
+
+	    }
+
+	    else{
+
+		b=b-a;
+
+	    }
+
+	return a*b;
+
+	}
+
+}
+
+class C{
+
+	public int add(int a,int b,int c){
+
+	    pre:a+b+c>0;
+
+	    post:a*b*c>0;
+
+	    if(a<b&&c<b||c<a){
+
+		a=b+c;
+
+		b=a+c;
+
+		c=a+b;
+
+	    }
+
+	    else{
+
+		a=b*c;
+
+		b=c*a;
+
+		c=a*b;
+
+	    }
+
+	return a+b+c;
+
+	}
+
+}
