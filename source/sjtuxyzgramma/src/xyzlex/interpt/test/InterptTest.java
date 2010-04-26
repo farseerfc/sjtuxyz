@@ -301,6 +301,7 @@ public class InterptTest extends TestCase {
 
 	public void testClassDecl002() throws ParserException, LexerException,
 			IOException {
+		
 		Interpt interpt = new Interpt(
 				"class F {"
 						+ "public static void main() {"
