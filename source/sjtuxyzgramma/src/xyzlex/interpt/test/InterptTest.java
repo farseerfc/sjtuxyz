@@ -306,10 +306,21 @@ public class InterptTest extends TestCase {
 						+ "public static void main() {"
 						+ " System.out.println((new A()).f(1)); "
 						+ "}}"
-						+ "class A{public int f(int a){pre:true;post:true;return a+1;}}"
-						);
-		
+						+ "class A{public int f(int a){pre:true;post:true;return a+1;}}");
+
 		assertEquals(interpt.getOutputs().size(), 1);
 		assertEquals(interpt.getOutputs().get(0), "2");
+	}
+
+	public void testClassDecl003() throws ParserException, LexerException,
+			IOException {
+		Interpt interpt = new Interpt("class F{" + "public static void main(){"
+				+ "System.out.println(new C().f(1000)-0.5);" + "}" + "}"
+				+ "class C{" + "public int f(int max){" + "pre:max>0;"
+				+ "post:max>0;" + "int a; int b; int c;" + "b=1;"
+				+ "while(a<max){" + "a=b+c;" + "c=b;" + "b=a;"
+				+ "System.out.println(a);" + "}" + "return a;" + "}" + "}");
+
+		System.out.println(interpt.getStart());
 	}
 }
