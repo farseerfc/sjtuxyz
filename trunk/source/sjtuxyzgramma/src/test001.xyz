@@ -1,0 +1,20 @@
+class F{
+  public static void main(){
+    System.out.println(new C().f(1000)-0.5);
+  }
+}
+class C{
+  public int f(int max){
+  pre:max>0;
+  post:max>0;
+    int a; int b; int c;
+    b=1;
+    while(a<max){
+      a=b+c;
+      c=b;
+      b=a;
+      System.out.println(a);
+    }
+    return a;
+  }
+}

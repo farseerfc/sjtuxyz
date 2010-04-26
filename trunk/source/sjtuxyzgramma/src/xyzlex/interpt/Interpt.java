@@ -18,6 +18,7 @@ public class Interpt extends DepthFirstAdapter {
 	private List<SemanticError> errors;
 	private List<String> outputs;
 	private HashMap<String, ClassDecl> classDecls;
+	private Start start;
 
 	public List<RuntimeStack> getSymbol() {
 		return symbol;
@@ -46,7 +47,8 @@ public class Interpt extends DepthFirstAdapter {
 	public Interpt(PushbackReader in) throws ParserException, LexerException,
 			IOException {
 		init();
-		new Parser(new Lexer(in)).parse().apply(this);
+		start=new Parser(new Lexer(in)).parse();
+		start.apply(this);
 	}
 
 	public Interpt(String input) throws ParserException, LexerException,
@@ -767,5 +769,9 @@ public class Interpt extends DepthFirstAdapter {
 
 	public HashMap<String, ClassDecl> getClassDecls() {
 		return classDecls;
+	}
+
+	public Start getStart() {
+		return start;
 	}
 }
