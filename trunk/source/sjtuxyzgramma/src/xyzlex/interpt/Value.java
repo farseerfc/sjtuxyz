@@ -26,16 +26,24 @@ public class Value implements Cloneable {
 	}
 
 	@Override
-	public Value clone() throws CloneNotSupportedException {
-		Value result = new Value();
+	public Value clone()  {
+		Value result=null;
+		try {
+			result = (Value)super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
 		result.type = (PType) type.clone();
 		if (value instanceof Node) {
-			result.value = ((Node)value).clone();
+			result.value = ((Node)result.value).clone();
 		}else if (value instanceof Value) {
-			result.value = ((Value)value).clone();
-		}else{
-			result.value=value;
+			result.value = ((Value)result.value).clone();
 		}
 		return result;
+	}
+	
+	@Override
+	public String toString() {		
+		return type.toString()+":"+value.toString();
 	}
 }
