@@ -322,6 +322,20 @@ public class InterptTest extends TestCase {
 				+ "while(a<max){" + "a=b+c;" + "c=b;" + "b=a;"
 				+ "System.out.println(a);" + "}" + "return a;" + "}" + "}");
 
-		System.out.println(interpt.getStart());
+		//System.out.println(interpt.getStart());
 	}
+	
+	public void testClassDecl004() throws ParserException, LexerException,
+	IOException {
+Interpt interpt = new Interpt("class F{" + "public static void main(){"
+		+ "System.out.println(new C().f(1));" + "}" + "}"
+		+ "class C{" + "public int f(int max){" + "pre:max>0;"
+		+ "post:max>0;" + "System.out.println(new C().d(1));" +
+		 "return max;" + "}"+ "public int d(int max){" + "pre:max>0;"
+			+ "post:max>0;" + "System.out.println(1);" +
+			 "return max;" + "}"
+		 + "}");
+
+//System.out.println(interpt.getStart());
+}
 }

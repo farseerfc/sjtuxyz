@@ -178,7 +178,7 @@ public class Interpt extends DepthFirstAdapter {
 					"'this' keyword not supported in main method! ", node, node
 							.getThis()));
 		} else {
-			setOut(node, symbol.get(symbol.size() - 1).getThisValue());
+			setOut(node, currentScope().getThisValue());
 		}
 	}
 
@@ -427,8 +427,8 @@ public class Interpt extends DepthFirstAdapter {
 	public void outANewObjectExp(ANewObjectExp node) {
 		String className = node.getType().getText().trim();
 		Value result = new Value();
-		result.setType(new AClassType(classDecls.get(className).getAClassDecl()
-				.getId()));
+		result.setType(new AClassType((TId)classDecls.get(className).getAClassDecl()
+				.getId().clone()));
 		HashMap<String, Value> obj = new HashMap<String, Value>();
 		try {
 			List<String> supers = new ArrayList<String>();
@@ -544,7 +544,7 @@ public class Interpt extends DepthFirstAdapter {
 		
 		if(method.getExp()!=null){
 			method.getExp().apply(this);
-			returnValue.setValue(((Value)getOut(method.getExp())).getValue());			
+			returnValue=(Value)getOut(method.getExp());			
 		}
 		
 		symbol.remove(symbol.size()-1);
@@ -639,8 +639,8 @@ public class Interpt extends DepthFirstAdapter {
 						aClass.getExtendsClause().apply(this);
 						String superClassName = (String) getOut(aClass
 								.getExtendsClause());
-						type = new AClassType(classDecls.get(superClassName)
-								.getAClassDecl().getId());
+						type = new AClassType((TId)classDecls.get(superClassName)
+								.getAClassDecl().getId().clone());
 						if (type == null) {
 							errors.add(new SemanticError(
 									"Can't find superclass '" + superClassName
@@ -725,7 +725,7 @@ public class Interpt extends DepthFirstAdapter {
 	@Override
 	public void caseAClassDecl(AClassDecl node) {
 		inAClassDecl(node);
-		String className = node.getId().getText().trim();
+		String className = ((TId)node.getId().clone()).getText().trim();
 		ClassDecl cd = new ClassDecl();
 		cd.setAClassDecl(node);
 
