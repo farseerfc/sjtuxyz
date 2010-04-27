@@ -1,6 +1,7 @@
 package xyzlex.interpt.test;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -301,7 +302,7 @@ public class InterptTest extends TestCase {
 
 	public void testClassDecl002() throws ParserException, LexerException,
 			IOException {
-		
+
 		Interpt interpt = new Interpt(
 				"class F {"
 						+ "public static void main() {"
@@ -322,20 +323,45 @@ public class InterptTest extends TestCase {
 				+ "while(a<max){" + "a=b+c;" + "c=b;" + "b=a;"
 				+ "System.out.println(a);" + "}" + "return a;" + "}" + "}");
 
-		//System.out.println(interpt.getStart());
+		assertEquals(interpt.getErrors().size(), 0);
 	}
-	
-	public void testClassDecl004() throws ParserException, LexerException,
-	IOException {
-Interpt interpt = new Interpt("class F{" + "public static void main(){"
-		+ "System.out.println(new C().f(1));" + "}" + "}"
-		+ "class C{" + "public int f(int max){" + "pre:max>0;"
-		+ "post:max>0;" + "System.out.println(new C().d(1));" +
-		 "return max;" + "}"+ "public int d(int max){" + "pre:max>0;"
-			+ "post:max>0;" + "System.out.println(1);" +
-			 "return max;" + "}"
-		 + "}");
 
-//System.out.println(interpt.getStart());
-}
+	public void testClassDecl004() throws ParserException, LexerException,
+			IOException {
+		Interpt interpt = new Interpt("class F{" + "public static void main(){"
+				+ "System.out.println(new C().f(1));" + "}" + "}" + "class C{"
+				+ "public int f(int max){" + "pre:max>0;" + "post:max>0;"
+				+ "System.out.println(new C().d(1));" + "return max;" + "}"
+				+ "public int d(int max){" + "pre:max>0;" + "post:max>0;"
+				+ "System.out.println(1);" + "return max;" + "}" + "}");
+
+		assertEquals(interpt.getErrors().size(), 0);
+	}
+
+	public void testClassDecl006() throws ParserException, LexerException,
+			IOException {
+		Interpt interpt = new Interpt("class Factorial {"
+				+ "public static void main() {"
+				+ "System.out.println(new Fac().ComputeFac(10));" + "}" + "}"
+				+ "class Fac {" + "public int ComputeFac(int num) {"
+				+ "pre: true;" + "post: true;" + "int num_aux;"
+				+ "if(num>0)num_aux=(num*this.ComputeFac(num-1));else{num_aux=1;}System.out.println(num_aux); "
+				+ "return num_aux;" + "}} ");
+		System.out.println(interpt.getOutputs());
+		assertEquals(interpt.getErrors().size(), 0);
+		assertEquals(interpt.getSymbol().size(), 1);
+	}
+
+	public void testClassDecl000() throws ParserException, LexerException,
+			IOException {
+		Interpt interpt = new Interpt("class Factorial {"
+				+ "public static void main() {"
+				+ "System.out.println(new Fac().ComputeFac(10));" + "}" + "}"
+				+ "class Fac {" + "public int ComputeFac(int num) {"
+				+ "pre: num > 0;" + "post: num_aux > 0;" + "int num_aux;"
+				+ "if (num > 2)" + "num_aux = num * (this.ComputeFac(num-1));"
+				+ "else" + " num_aux = 1;" + "return num_aux;" + "}} ");
+
+		assertEquals(interpt.getErrors().size(), 0);
+	}
 }

@@ -500,6 +500,7 @@ public class Interpt extends DepthFirstAdapter {
 		if(formArgs!=realArgs){
 			errors.add(new SemanticError("Args count not equal!",node,node.getFunc()));
 			symbol.remove(symbol.size()-1);
+			setOut(node,returnValue);
 			return;
 		}
 		
@@ -510,9 +511,11 @@ public class Interpt extends DepthFirstAdapter {
 			if(!WhatType.getInstance().is(formal.getType(),arg.getType())){
 				errors.add(new SemanticError("Args type not equal!",node,node.getFunc()));
 				symbol.remove(symbol.size()-1);
+				setOut(node,returnValue);
 				return;
 			}
-			currentScope().getSymbol().put(formal.getId().getText().trim(), arg);
+			
+			currentScope().getSymbol().put(formal.getId().getText().trim(), arg.clone());
 							
 		}
 		
@@ -523,6 +526,7 @@ public class Interpt extends DepthFirstAdapter {
 			if(!cond){
 				errors.add(new SemanticError("Pre condition failed!",method,method.getId()));
 				symbol.remove(symbol.size()-1);
+				setOut(node,returnValue);
 				return;
 			}
 		}
@@ -538,6 +542,7 @@ public class Interpt extends DepthFirstAdapter {
 			if(!cond){
 				errors.add(new SemanticError("Post condition failed!",method,method.getId()));
 				symbol.remove(symbol.size()-1);
+				setOut(node,returnValue);
 				return;
 			}
 		}
@@ -644,7 +649,7 @@ public class Interpt extends DepthFirstAdapter {
 						if (type == null) {
 							errors.add(new SemanticError(
 									"Can't find superclass '" + superClassName
-											+ "'", node, aClass.getId()));
+											+ "'", node, (TId)aClass.getId().clone()));
 							return;
 						}
 					} else {
@@ -744,7 +749,7 @@ public class Interpt extends DepthFirstAdapter {
 			for (PMethodDecl md : node.getMethodDecl()) {
 				md.apply(this);
 				AMethodDecl aMethod = (AMethodDecl) getOut(md);
-				cd.getMethods().put(aMethod.getId().getText().trim(), aMethod);
+				cd.getMethods().put(((TId)aMethod.getId().clone()).getText().trim(), aMethod);
 			}
 		}
 

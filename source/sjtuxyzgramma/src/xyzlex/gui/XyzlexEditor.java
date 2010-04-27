@@ -334,7 +334,7 @@ public class XyzlexEditor extends JFrame {
 			}
 		} catch (Exception e) {
 			try {
-				doc.insertString(doc.getLength(), e.getMessage(), tr.get(null)
+				doc.insertString(doc.getLength(), e.toString(), tr.get(null)
 						.getColor());
 			} catch (BadLocationException e1) {
 				e1.printStackTrace();
